@@ -4,8 +4,8 @@
 	{
 		public Guid Id { get; set; }
 
-		public Guid UserTypeId { get; set; }
-		public UserType UserType { get; set; }
+		public Guid UserId { get; set; }
+		public User User { get; set; }
 
 		public Guid PromotionId { get; set; }
 		public Promotion Promotion { get; set;}
