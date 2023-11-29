@@ -5,6 +5,8 @@ import Layout from "../Admin/Layout";
 import ProductAdd from "../Admin/Product/ProductAdd";
 import ProductList from "../Admin/Product/ProductList";
 import AccountList from "../Admin/Account/AccountList";
+import Register from "../Login/Register";
+
 const Router = () => { 
     return (
         <>
@@ -12,7 +14,7 @@ const Router = () => {
                 <Routes>
                     <Route path="login" >
                         <Route index element={<Login />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        {/* <Route path="dashboard" element={<Dashboard />} /> */}
                     </Route>
 
                     <Route>
@@ -23,6 +25,13 @@ const Router = () => {
                             <Route path="accounts" element={<AccountList/>} />
                         </Route>
                     </Route> 
+                    <Route path="register" >
+                        <Route index element={<Register/>} />
+                    </Route>
+
+                    <Route path="dashboard" >
+                        <Route index element={<Dashboard />} />
+                    </Route>
 
                 </Routes>
             </BrowserRouter>
