@@ -25,7 +25,6 @@ const Register = () => {
         e.preventDefault();
         try {
             const response = await AxiosClient.post('/Users/register', account);
-            console.log(account);
             if (response.status === 200) {
                 navigate('/dashboard');
             } else {

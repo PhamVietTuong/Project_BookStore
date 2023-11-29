@@ -119,14 +119,13 @@ namespace BookStore.Controllers
 
 		[HttpPost]
 		[Route("login")]
-		//public async Task<IActionResult> Login(string Username, string Password)
-		public async Task<IActionResult> Login([Bind("Username, Password")] LoginDto account)
+		public async Task<IActionResult> Login(LoginDto login)
 		{
 			if (ModelState.IsValid)
 			{
-				var user = await _userManager.FindByNameAsync(account.Username);
+				var user = await _userManager.FindByNameAsync(login.Username);
 
-				if (user != null && await _userManager.CheckPasswordAsync(user, account.Password))
+				if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
 				{
 					var userRoles = await _userManager.GetRolesAsync(user);
 
