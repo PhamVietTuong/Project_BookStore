@@ -57,6 +57,9 @@ namespace BookStore.Migrations
                     b.Property<bool>("Favourite")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("ImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -81,6 +84,8 @@ namespace BookStore.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("ImageId");
+
                     b.HasIndex("PublisherId");
 
                     b.ToTable("Books");
@@ -102,7 +107,6 @@ namespace BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -153,7 +157,6 @@ namespace BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -173,9 +176,6 @@ namespace BookStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BookId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("FilePDF")
                         .HasColumnType("nvarchar(max)");
 
@@ -183,8 +183,6 @@ namespace BookStore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookId");
 
                     b.ToTable("Images");
                 });
@@ -216,14 +214,17 @@ namespace BookStore.Migrations
                     b.Property<double>("Total")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("UserTypeId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PromotionId");
 
-                    b.HasIndex("UserTypeId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Invoices");
                 });
@@ -308,7 +309,6 @@ namespace BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -336,7 +336,6 @@ namespace BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -361,7 +360,6 @@ namespace BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UserId1")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -381,6 +379,9 @@ namespace BookStore.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -410,13 +411,7 @@ namespace BookStore.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
@@ -438,9 +433,6 @@ namespace BookStore.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<Guid>("UserTypeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -451,26 +443,7 @@ namespace BookStore.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("UserTypeId");
-
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("BookStore.Models.UserType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -620,6 +593,12 @@ namespace BookStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BookStore.Models.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BookStore.Models.Publisher", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
@@ -629,6 +608,8 @@ namespace BookStore.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Category");
+
+                    b.Navigation("Image");
 
                     b.Navigation("Publisher");
                 });
@@ -643,9 +624,7 @@ namespace BookStore.Migrations
 
                     b.HasOne("BookStore.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Book");
 
@@ -666,26 +645,13 @@ namespace BookStore.Migrations
 
                     b.HasOne("BookStore.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Book");
 
                     b.Navigation("ParentComment");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BookStore.Models.Image", b =>
-                {
-                    b.HasOne("BookStore.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("BookStore.Models.Invoice", b =>
@@ -696,15 +662,13 @@ namespace BookStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookStore.Models.UserType", "UserType")
+                    b.HasOne("BookStore.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Promotion");
 
-                    b.Navigation("UserType");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BookStore.Models.InvoiceDetail", b =>
@@ -736,9 +700,7 @@ namespace BookStore.Migrations
 
                     b.HasOne("BookStore.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Book");
 
@@ -755,9 +717,7 @@ namespace BookStore.Migrations
 
                     b.HasOne("BookStore.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("Book");
 
@@ -768,22 +728,9 @@ namespace BookStore.Migrations
                 {
                     b.HasOne("BookStore.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BookStore.Models.User", b =>
-                {
-                    b.HasOne("BookStore.Models.UserType", "UserType")
-                        .WithMany()
-                        .HasForeignKey("UserTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
