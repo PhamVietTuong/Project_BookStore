@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BookStore.Dto;
 
 namespace BookStore.Controllers
 {
@@ -33,9 +32,22 @@ namespace BookStore.Controllers
 			_configuration = configuration;
 		}
 
+		[HttpGet]
+		public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+		{
+			return await _userManager.Users.ToListAsync();
+		}
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<User>> GetUser(string id)
+		{
+			return await _userManager.FindByIdAsync(id);
+		}
+
+
 		[HttpPost]
 		[Route("login")]
-		public async Task<IActionResult> Login(LoginDto login)
+		public async Task<IActionResult> Login(LoginViewModel login)
 		{
 			if (ModelState.IsValid)
 			{
@@ -81,7 +93,7 @@ namespace BookStore.Controllers
 
 		[HttpPost]
 		[Route("register")]
-		public async Task<IActionResult> Register(RegisterDto re)
+		public async Task<IActionResult> Register(RegisterViewModel re)
 		{
 			var userExists = await _userManager.FindByNameAsync(re.UserName);
 			if (userExists != null)

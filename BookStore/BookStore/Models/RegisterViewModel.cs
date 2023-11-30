@@ -1,7 +1,7 @@
-﻿namespace BookStore.Dto
+﻿namespace BookStore.Models
 {
-	public class RegisterDto
-	{
+    public class RegisterViewModel
+    {
         public string UserName { get; set; }
 
         public string PassWord { get; set; }
