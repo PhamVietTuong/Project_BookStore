@@ -6,6 +6,9 @@ import ProductAdd from "../Admin/Product/ProductAdd";
 import ProductList from "../Admin/Product/ProductList";
 import AccountList from "../Admin/Account/AccountList";
 import Register from "../Login/Register";
+import CategoryList from "../Admin/Categories/CategoryList";
+import CategoryCreate from "../Admin/Categories/CategoryCreate";
+import CategoryEdit from "../Admin/Categories/CategoryEdit";
 
 const Router = () => { 
     return (
@@ -21,8 +24,11 @@ const Router = () => {
                         <Route path="admin" element={<Layout />} exact>
                             <Route path="products" element={<ProductList/>} />
                             <Route path="products/add" element={<ProductAdd/>}/>
-
-                            <Route path="accounts" element={<AccountList/>} />
+                            <Route path="accounts" element={<AccountList />} />
+                            
+                            <Route path="category" element={<CategoryList />} />
+                            <Route path="category/add" element={<CategoryCreate />} />
+                            <Route path="category/edit/:id" element={<CategoryEdit />} />
                         </Route>
                     </Route> 
                     <Route path="register" >
