@@ -57,9 +57,6 @@ namespace BookStore.Migrations
                     b.Property<bool>("Favourite")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ImageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,8 +80,6 @@ namespace BookStore.Migrations
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("ImageId");
 
                     b.HasIndex("PublisherId");
 
@@ -176,6 +171,9 @@ namespace BookStore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("BookId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("FilePDF")
                         .HasColumnType("nvarchar(max)");
 
@@ -183,6 +181,8 @@ namespace BookStore.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("Images");
                 });
@@ -593,12 +593,6 @@ namespace BookStore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BookStore.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BookStore.Models.Publisher", "Publisher")
                         .WithMany()
                         .HasForeignKey("PublisherId")
@@ -608,8 +602,6 @@ namespace BookStore.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Image");
 
                     b.Navigation("Publisher");
                 });
@@ -652,6 +644,17 @@ namespace BookStore.Migrations
                     b.Navigation("ParentComment");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("BookStore.Models.Image", b =>
+                {
+                    b.HasOne("BookStore.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
                 });
 
             modelBuilder.Entity("BookStore.Models.Invoice", b =>
