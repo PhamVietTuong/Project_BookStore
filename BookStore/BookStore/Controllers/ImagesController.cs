@@ -23,7 +23,7 @@ namespace BookStore.Controllers
 
         // GET: api/Images
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImage()
+        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
         {
             return await _context.Images.ToListAsync();
         }
