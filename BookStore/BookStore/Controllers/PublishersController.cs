@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/Publishers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Publisher>> GetPublisher(Guid id)
+        public async Task<ActionResult<Publisher>> GetPublisher(int id)
         {
             var publisher = await _context.Publishers.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Publishers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPublisher(Guid id, Publisher publisher)
+        public async Task<IActionResult> PutPublisher(int id, Publisher publisher)
         {
             if (id != publisher.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Publishers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePublisher(Guid id)
+        public async Task<IActionResult> DeletePublisher(int id)
         {
             var publisher = await _context.Publishers.FindAsync(id);
             if (publisher == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool PublisherExists(Guid id)
+        private bool PublisherExists(int id)
         {
             return _context.Publishers.Any(e => e.Id == id);
         }

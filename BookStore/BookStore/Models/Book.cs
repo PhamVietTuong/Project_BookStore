@@ -2,15 +2,15 @@
 {
 	public class Book
 	{
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 
-		public Guid PublisherId { get; set; }
+		public int PublisherId { get; set; }
 		public Publisher Publisher { get; set; }
 
-		public Guid AuthorId { get; set; }
+		public int AuthorId { get; set; }
 		public Author Author{ get; set; }
 
-		public Guid CategoryId { get; set; }
+		public int CategoryId { get; set; }
 		public Category Category { get; set; }	
 		
 
@@ -26,7 +26,7 @@
 
 		public double Star { get; set; }
 
-		public int Status{ get; set; }
+		public bool Status{ get; set; }
 
 	}
 }

@@ -10,6 +10,6 @@ namespace BookStore.Models
 
         public DateTime Birthday { get; set; }
 
-        public int Status { get; set; }
+        public bool Status { get; set; }
 	}
 }

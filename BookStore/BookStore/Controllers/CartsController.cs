@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/Carts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cart>> GetCart(Guid id)
+        public async Task<ActionResult<Cart>> GetCart(int id)
         {
             var cart = await _context.Carts.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Carts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCart(Guid id, Cart cart)
+        public async Task<IActionResult> PutCart(int id, Cart cart)
         {
             if (id != cart.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Carts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCart(Guid id)
+        public async Task<IActionResult> DeleteCart(int id)
         {
             var cart = await _context.Carts.FindAsync(id);
             if (cart == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool CartExists(Guid id)
+        private bool CartExists(int id)
         {
             return _context.Carts.Any(e => e.Id == id);
         }

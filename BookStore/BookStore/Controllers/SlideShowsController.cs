@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/SlideShows/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<SlideShow>> GetSlideShow(Guid id)
+        public async Task<ActionResult<SlideShow>> GetSlideShow(int id)
         {
             var slideShow = await _context.SlideShows.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/SlideShows/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSlideShow(Guid id, SlideShow slideShow)
+        public async Task<IActionResult> PutSlideShow(int id, SlideShow slideShow)
         {
             if (id != slideShow.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/SlideShows/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSlideShow(Guid id)
+        public async Task<IActionResult> DeleteSlideShow(int id)
         {
             var slideShow = await _context.SlideShows.FindAsync(id);
             if (slideShow == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool SlideShowExists(Guid id)
+        private bool SlideShowExists(int id)
         {
             return _context.SlideShows.Any(e => e.Id == id);
         }

@@ -2,12 +2,12 @@
 {
 	public class Invoice
 	{
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 
-		public Guid UserId { get; set; }
+		public string UserId { get; set; }
 		public User User { get; set; }
 
-		public Guid PromotionId { get; set; }
+		public int PromotionId { get; set; }
 		public Promotion Promotion { get; set;}
 
 		public string Code { get; set; }
@@ -20,6 +20,8 @@
 
 		public double Total { get; set; }
 
-		public int Status { get; set; }
+        public string ApproveOrder { get; set; }
+
+        public bool Status { get; set; }
 	}
 }
