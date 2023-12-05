@@ -123,9 +123,7 @@ const CategoryList = () => {
                                                                     <Button variant="primary" onClick={() => handleShow(item.id)}>
                                                                         <FontAwesomeIcon icon={faInfoCircle} />
                                                                     </Button>
-                                                                    {' | '}
                                                                     <Link to={`edit/${item.id}`} className="btn btn-secondary m-2"><FontAwesomeIcon icon={faEdit} /></Link>
-                                                                    {' | '}
                                                                     <Button variant="danger" onClick={() => handleShowDelete(item.id)} ><FontAwesomeIcon icon={faTrash} /></Button>
                                                                 </td>
                                                             </tr>

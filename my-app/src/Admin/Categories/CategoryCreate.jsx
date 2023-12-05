@@ -8,7 +8,7 @@ const CategoryCreate = () => {
 
     const [category, setCategory] = useState({
         name: "",
-        status: 1
+        status: true
     });
 
     const handleChange = (e) => {
