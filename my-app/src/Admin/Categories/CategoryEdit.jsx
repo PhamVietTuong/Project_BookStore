@@ -1,10 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
-import '../../dist/css/adminlte.min.css'
-import '../../plugins/fontawesome-free/css/all.min.css'
-
+import { Button, Col, Form, Row } from "react-bootstrap";
 const CategoryEdit = () => {
     const { id } = useParams();
 
@@ -42,15 +39,25 @@ const CategoryEdit = () => {
 
     return ( 
         <>
-            <Form className="col-md-4" onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Form.Label>Name:</Form.Label>
-                    <Form.Control type="text" name="name" onChange={handleChange} value={category.name} />
-                </Form.Group>
-                <div className="mt-2">
-                    <Button type="submit" variant="success">Save</Button>
-                </div>
-            </Form>
+            <div className="card">
+                <Form className="col-md-4" onSubmit={handleSubmit}>
+                    <div className="card-body">
+                        <h4 class="card-title">Thông tin loại sản phẩm</h4>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm={3} className="text-right control-label col-form-label">Tên</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control placeholder="Name" type="text" name="name" onChange={handleChange} value={category.name} />
+                            </Col>
+                        </Form.Group>
+                    </div>
+                    <div class="border-top">
+                        <div className="mt-2 card-body">
+                            <button type="submit" class="btn btn-primary">Sửa</button>
+                        </div>
+                    </div>
+
+                </Form>
+            </div>
         </>
      );
 }

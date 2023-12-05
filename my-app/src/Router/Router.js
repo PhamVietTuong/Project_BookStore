@@ -9,6 +9,7 @@ import Register from "../Login/Register";
 import CategoryList from "../Admin/Categories/CategoryList";
 import CategoryCreate from "../Admin/Categories/CategoryCreate";
 import CategoryEdit from "../Admin/Categories/CategoryEdit";
+import Index from "../Admin/Index";
 
 const Router = () => { 
     return (
@@ -21,7 +22,7 @@ const Router = () => {
                     </Route>
 
                     <Route>
-                        <Route path="admin" element={<Layout />} exact>
+                        <Route path="admin" element={<Index />} exact>
                             <Route path="products" element={<ProductList/>} />
                             <Route path="products/add" element={<ProductAdd/>}/>
                             <Route path="accounts" element={<AccountList />} />
