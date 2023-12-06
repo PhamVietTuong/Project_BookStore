@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, FormControl } from "react-bootstrap";
 
-const ProductAdd = () => {
+const ProductEdit = () => {
+  const { id } = useParams();
+
   const [Products, setProducts] = useState({
     favourite: true,
     star: 4,
     status: true,
+    author: {},
+    category: {},
+    publisher: {},
   });
+
+  useEffect(() => {
+    AxiosClient.get(`/Books/${id}`).then((res) => {
+      setProducts(res.data);
+    });
+  }, []);
 
   const [Categories, setCategories] = useState([]);
   const [Authors, setAuthors] = useState([]);
@@ -27,9 +38,10 @@ const ProductAdd = () => {
     let checked = e.target.checked;
     setProducts((prev) => ({ ...prev, [name]: checked }));
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    AxiosClient.post(`/Books`, Products).then(() => {
+    AxiosClient.put(`/Books/${id}`, Products).then(() => {
       navigate("/admin/products");
     });
   };
@@ -56,13 +68,12 @@ const ProductAdd = () => {
   }, []);
 
   var widthInput = {
-    width: "70%"
-  }
+    width: "70%",
+  };
 
   var content = {
-    display: "flex"
-  }
-
+    display: "flex",
+  };
   return (
     <>
       <section className="content">
@@ -76,19 +87,20 @@ const ProductAdd = () => {
                 {/* /.card-header */}
                 {/* form start */}
                 <Form onSubmit={handleSubmit}>
-                <div className="card-body" style={content}>
-                    <div style={{width:"50%"}}>
+                  <div className="card-body" style={content}>
+                    <div style={{ width: "50%" }}>
                       <Form.Group>
                         <Form.Label>Tên sách:</Form.Label>
                         <Form.Control
                           type="text"
                           name="name"
                           onChange={handleChange}
+                          placeholder="Nhập tên"
+                          value={Products.name}
                           style={widthInput}
-                          placeholder="Nhập tên"                       
                         />
                       </Form.Group>
-                      
+
                       <Form.Group>
                         <Form.Label>Giá:</Form.Label>
                         <Form.Control
@@ -97,6 +109,7 @@ const ProductAdd = () => {
                           onChange={handleChange}
                           style={widthInput}
                           placeholder="Nhập giá"
+                          value={Products.price}
                         />
                       </Form.Group>
 
@@ -108,6 +121,7 @@ const ProductAdd = () => {
                           onChange={handleChange}
                           style={widthInput}
                           placeholder="Nhập số lượng"
+                          value={Products.quantity}
                         />
                       </Form.Group>
 
@@ -118,7 +132,7 @@ const ProductAdd = () => {
                           name="authorId"
                           style={widthInput}
                         >
-                          <option value="">-- Chọn --</option>
+                          <option value="">{Products.author.name}</option>
                           {Authors.map((item) => {
                             return <option value={item.id}>{item.name}</option>;
                           })}
@@ -132,7 +146,7 @@ const ProductAdd = () => {
                           name="categoryId"
                           style={widthInput}
                         >
-                          <option value="">-- Chọn --</option>
+                          <option value="">{Products.category.name}</option>
                           {Categories.map((item) => {
                             return <option value={item.id}>{item.name}</option>;
                           })}
@@ -146,7 +160,7 @@ const ProductAdd = () => {
                           name="publisherId"
                           style={widthInput}
                         >
-                          <option value="">-- Chọn --</option>
+                          <option value="">{Products.publisher.name}</option>
                           {Publishers.map((item) => {
                             return <option value={item.id}>{item.name}</option>;
                           })}
@@ -162,21 +176,22 @@ const ProductAdd = () => {
                           onChange={handleChange}
                           style={widthInput}
                           placeholder="Mô tả"
+                          value={Products.description}
                         />
                       </Form.Group>
                     </div>
-                    <div style={{width:"50%"}}>
+                    <div style={{ width: "50%" }}>
                       <Form.Group className="mb-3">
                         <Form.Label>Chọn tệp tin:</Form.Label>
-                        <Form.Control type="file" style={widthInput}/>
+                        <Form.Control type="file" style={widthInput} />
                       </Form.Group>
-                      <img src="https://localhost:7106/Images/TrenDuongBang.png" style={{width: "70%"}}/>
+                      <img src="#" style={{ width: "200px" }} />
                     </div>
                   </div>
                   {/* /.card-body */}
                   <div className="card-footer">
                     <Button type="submit" variant="btn btn-primary">
-                      Thêm
+                      Sửa thông tin sản phẩm
                     </Button>
                   </div>
                 </Form>
@@ -185,8 +200,82 @@ const ProductAdd = () => {
           </div>
         </div>
       </section>
+      {/* <Form className="col-md-4" onSubmit={handleSubmit}>
+        <Form.Group>
+          <Form.Label>Name:</Form.Label>
+          <Form.Control
+            type="text"
+            name="name"
+            onChange={handleChange}
+            value={Products.name}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Price:</Form.Label>
+          <Form.Control
+            type="number"
+            name="price"
+            onChange={handleChange}
+            value={Products.price}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Quantity:</Form.Label>
+          <Form.Control
+            type="number"
+            name="quantity"
+            onChange={handleChange}
+            value={Products.quantity}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Author:</Form.Label>
+          <Form.Select onChange={handleChange} name="authorId">
+            <option value="">{Products.author.name}</option>
+            {Authors.map((item) => {
+              return <option value={item.id}>{item.name}</option>;
+            })}
+          </Form.Select>
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Category:</Form.Label>
+          <Form.Select onChange={handleChange} name="categoryId">
+            <option value="">{Products.category.name}</option>
+            {Categories.map((item) => {
+              return <option value={item.id}>{item.name}</option>;
+            })}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Publisher:</Form.Label>
+          <Form.Select onChange={handleChange} name="publisherId">
+            <option value="">{Products.publisher.name}</option>
+            {Publishers.map((item) => {
+              return <option value={item.id}>{item.name}</option>;
+            })}
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Label>Description:</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={4}
+            name="description"
+            onChange={handleChange}
+            value={Products.description}
+          />
+        </Form.Group>
+
+        <div className="mt-2">
+          <Button type="submit" variant="success">
+            Edit
+          </Button>
+        </div>
+      </Form> */}
     </>
   );
 };
 
-export default ProductAdd;
+export default ProductEdit;
