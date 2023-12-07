@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using System.Security.Principal;
 
 namespace BookStore.Controllers
 {
@@ -23,18 +24,24 @@ namespace BookStore.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
-            return await _context.Books.ToListAsync();
-        }
+			return await _context.Books.Include(a => a.Author)
+			   .Include(a => a.Publisher)
+			   .Include(a => a.Category)
+               .Where(a => a.Status)
+			   .ToListAsync();
+		}
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(Guid id)
+        public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+			var book = await _context.Books.Include(a => a.Author)
+				.Include(a => a.Category).Include(a => a.Publisher)
+				.FirstOrDefaultAsync(a => a.Id == id);
 
-            if (book == null)
+			if (book == null)
             {
                 return NotFound();
             }
@@ -45,7 +52,7 @@ namespace BookStore.Controllers
         // PUT: api/Books/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBook(Guid id, Book book)
+        public async Task<IActionResult> PutBook(int id, Book book)
         {
             if (id != book.Id)
             {
@@ -86,21 +93,21 @@ namespace BookStore.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBook(Guid id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
             var book = await _context.Books.FindAsync(id);
             if (book == null)
             {
                 return NotFound();
             }
-
-            _context.Books.Remove(book);
+			book.Status = false;
+			_context.Books.Update(book);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool BookExists(Guid id)
+        private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.Id == id);
         }

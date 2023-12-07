@@ -23,14 +23,14 @@ namespace BookStore.Controllers
 
         // GET: api/Images
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
+        public async Task<ActionResult<IEnumerable<Image>>> GetImage()
         {
             return await _context.Images.ToListAsync();
         }
 
         // GET: api/Images/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Image>> GetImage(Guid id)
+        public async Task<ActionResult<Image>> GetImage(int id)
         {
             var image = await _context.Images.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Images/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutImage(Guid id, Image image)
+        public async Task<IActionResult> PutImage(int id, Image image)
         {
             if (id != image.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Images/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteImage(Guid id)
+        public async Task<IActionResult> DeleteImage(int id)
         {
             var image = await _context.Images.FindAsync(id);
             if (image == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool ImageExists(Guid id)
+        private bool ImageExists(int id)
         {
             return _context.Images.Any(e => e.Id == id);
         }

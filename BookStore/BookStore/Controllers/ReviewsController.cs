@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/Reviews/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(Guid id)
+        public async Task<ActionResult<Review>> GetReview(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Reviews/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(Guid id, Review review)
+        public async Task<IActionResult> PutReview(int id, Review review)
         {
             if (id != review.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Reviews/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReview(Guid id)
+        public async Task<IActionResult> DeleteReview(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
             if (review == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool ReviewExists(Guid id)
+        private bool ReviewExists(int id)
         {
             return _context.Reviews.Any(e => e.Id == id);
         }

@@ -2,7 +2,7 @@
 {
 	public class Promotion
 	{
-		public Guid Id { get; set; }
+		public int Id { get; set; }
 
 		public DateTime DateFrom { get; set; }
 

@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
-import '../../dist/css/adminlte.min.css'
-import '../../plugins/fontawesome-free/css/all.min.css'
 
 const CategoryCreate = () => {
     const navigate = useNavigate();
 
     const [category, setCategory] = useState({
         name: "",
-        status: 1
+        status: true
     });
 
     const handleChange = (e) => {
@@ -25,29 +23,29 @@ const CategoryCreate = () => {
             });
     }
 
-    return ( 
+    return (
         <>
-            <Form className="col-md-4" onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label>Name:</Form.Label>
-                    <Form.Control type="text" name="name" onChange={handleChange} value={category.name} />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Status:</Form.Label>
-                    <Form.Check
-                        type="checkbox"
-                        name="status"
-                        label="Active"
-                        checked={category.status}
-                        onChange={(e) => setCategory({ ...category, status: e.target.checked })}
-                    />
-                </Form.Group>
-                <div className="mt-2">
-                    <Button type="submit" variant="success">Create</Button>
-                </div>
-            </Form>
+            <div className="card">
+                <Form className="col-md-4" onSubmit={handleSubmit}>
+                    <div className="card-body">
+                        <h4 class="card-title">Tạo loại sản phẩm</h4>
+                        <Form.Group as={Row} className="mb-3">
+                            <Form.Label column sm={3} className="text-right control-label col-form-label">Tên</Form.Label>
+                            <Col sm={9}>
+                                <Form.Control placeholder="Name" type="text" name="name" onChange={handleChange}/>
+                            </Col>
+                        </Form.Group>
+                    </div>
+                    <div class="border-top">
+                        <div className="mt-2 card-body">
+                            <button type="submit" class="btn btn-primary">Tạo</button>
+                        </div>
+                    </div>
+
+                </Form>
+            </div>
         </>
-     );
+    );
 }
- 
+
 export default CategoryCreate;

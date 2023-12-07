@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/Promotions/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Promotion>> GetPromotion(Guid id)
+        public async Task<ActionResult<Promotion>> GetPromotion(int id)
         {
             var promotion = await _context.Promotions.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Promotions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPromotion(Guid id, Promotion promotion)
+        public async Task<IActionResult> PutPromotion(int id, Promotion promotion)
         {
             if (id != promotion.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Promotions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePromotion(Guid id)
+        public async Task<IActionResult> DeletePromotion(int id)
         {
             var promotion = await _context.Promotions.FindAsync(id);
             if (promotion == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool PromotionExists(Guid id)
+        private bool PromotionExists(int id)
         {
             return _context.Promotions.Any(e => e.Id == id);
         }

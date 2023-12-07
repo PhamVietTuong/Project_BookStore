@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/Categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(Guid id)
+        public async Task<ActionResult<Category>> GetCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(Guid id, Category category)
+        public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(Guid id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool CategoryExists(Guid id)
+        private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
         }

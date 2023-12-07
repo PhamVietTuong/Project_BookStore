@@ -30,7 +30,7 @@ namespace BookStore.Controllers
 
         // GET: api/Invoices/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Invoice>> GetInvoice(Guid id)
+        public async Task<ActionResult<Invoice>> GetInvoice(int id)
         {
             var invoice = await _context.Invoices.FindAsync(id);
 
@@ -45,7 +45,7 @@ namespace BookStore.Controllers
         // PUT: api/Invoices/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInvoice(Guid id, Invoice invoice)
+        public async Task<IActionResult> PutInvoice(int id, Invoice invoice)
         {
             if (id != invoice.Id)
             {
@@ -86,7 +86,7 @@ namespace BookStore.Controllers
 
         // DELETE: api/Invoices/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInvoice(Guid id)
+        public async Task<IActionResult> DeleteInvoice(int id)
         {
             var invoice = await _context.Invoices.FindAsync(id);
             if (invoice == null)
@@ -100,7 +100,7 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        private bool InvoiceExists(Guid id)
+        private bool InvoiceExists(int id)
         {
             return _context.Invoices.Any(e => e.Id == id);
         }

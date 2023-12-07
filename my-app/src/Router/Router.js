@@ -4,11 +4,13 @@ import Dashboard from "../Dashboard";
 import Layout from "../Admin/Layout";
 import ProductAdd from "../Admin/Product/ProductAdd";
 import ProductList from "../Admin/Product/ProductList";
+import ProductEdit from "../Admin/Product/ProductEdit";
 import AccountList from "../Admin/Account/AccountList";
 import Register from "../Login/Register";
 import CategoryList from "../Admin/Categories/CategoryList";
 import CategoryCreate from "../Admin/Categories/CategoryCreate";
 import CategoryEdit from "../Admin/Categories/CategoryEdit";
+import Index from "../Admin/Index";
 
 const Router = () => { 
     return (
@@ -21,9 +23,10 @@ const Router = () => {
                     </Route>
 
                     <Route>
-                        <Route path="admin" element={<Layout />} exact>
+                        <Route path="admin" element={<Index />} exact>
                             <Route path="products" element={<ProductList/>} />
                             <Route path="products/add" element={<ProductAdd/>}/>
+                            <Route path="products/edit/:id" element={<ProductEdit/>}/>
                             <Route path="accounts" element={<AccountList />} />
                             
                             <Route path="category" element={<CategoryList />} />
