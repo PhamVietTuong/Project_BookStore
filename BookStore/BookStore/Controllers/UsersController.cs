@@ -35,7 +35,22 @@ namespace BookStore.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<User>>> GetUsers()
 		{
-			return await _userManager.Users.ToListAsync();
+			//return await _userManager.Users.ToListAsync();
+			var users = await _userManager.Users.ToListAsync();
+			List<UserViewModel> list = new List<UserViewModel>();
+			foreach (var user in users)
+			{
+				list.Add(new UserViewModel 
+				{ 
+					Id = user.Id, 
+					UserName = user.UserName,
+					FullName = user.FullName,
+					Birthday = user.Birthday,
+					Email = user.Email,
+					Status= user.Status,
+				});
+			}
+			return Ok(list);
 		}
 
 		[HttpGet("{id}")]
@@ -43,7 +58,6 @@ namespace BookStore.Controllers
 		{
 			return await _userManager.FindByIdAsync(id);
 		}
-
 
 		[HttpPost]
 		[Route("login")]
@@ -104,7 +118,9 @@ namespace BookStore.Controllers
 				Email = re.Email,
 				SecurityStamp = Guid.NewGuid().ToString(),
 				UserName = re.UserName,
-				FullName = re.FullName
+				FullName = re.FullName,
+				Status= re.Status
+			
 			};
 			var result = await _userManager.CreateAsync(user, re.PassWord);
 			if (!result.Succeeded)
@@ -115,7 +131,7 @@ namespace BookStore.Controllers
 
 		[HttpPost]
 		[Route("register-admin")]
-		public async Task<IActionResult> RegisterAdmin(string Username, string Password, string Email)
+		public async Task<IActionResult> RegisterAdmin(string Username, string Password, string Email, bool Status)
 		{
 			var userExists = await _userManager.FindByNameAsync(Username);
 			if (userExists != null)
@@ -125,7 +141,8 @@ namespace BookStore.Controllers
 			{
 				Email = Email,
 				SecurityStamp = Guid.NewGuid().ToString(),
-				UserName = Username
+				UserName = Username,
+				Status = Status
 			};
 			var result = await _userManager.CreateAsync(user, Password);
 			if (!result.Succeeded)
@@ -143,5 +160,11 @@ namespace BookStore.Controllers
 
 			return Ok();
 		}
+
+		private bool UserExists(string id)
+		{
+			return _context.Users.Any(e => e.Id == id);
+		}
+
 	}
 }
