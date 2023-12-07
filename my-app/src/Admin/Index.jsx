@@ -149,6 +149,14 @@ const Index = () => {
                                             </a>
                                         </li>
                                     </Link>
+                                    <Link to="accounts" className="nav-link">
+                                        <li className="sidebar-item">
+                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
+                                                <i className="mdi mdi-library-books"></i>
+                                                <span className="hide-menu">Loại tài khoản</span>
+                                            </a>
+                                        </li>
+                                    </Link>
                                     <Link to="products" className="nav-link">
                                         <li className="sidebar-item">
                                             <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
