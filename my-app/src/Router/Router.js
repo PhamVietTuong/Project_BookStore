@@ -22,7 +22,6 @@ const Router = () => {
                         <Route index element={<Login />} />
                         {/* <Route path="dashboard" element={<Dashboard />} /> */}
                     </Route>
-
                     <Route>
                         <Route path="admin" element={<Index />} exact>
                             <Route path="products" element={<ProductList/>} />
@@ -44,7 +43,6 @@ const Router = () => {
                     <Route path="dashboard" >
                         <Route index element={<Dashboard />} />
                     </Route>
-
                 </Routes>
             </BrowserRouter>
         </>

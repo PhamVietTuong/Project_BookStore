@@ -2,7 +2,7 @@ import { Button, Col, Modal, Row, Table } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import AxiosClient from "../../Axios/AxiosClient"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
+import {  faPlus, faTrash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 const AccountList = () => {
@@ -13,10 +13,8 @@ const AccountList = () => {
     const handleShow = (id) => {
         setSelectedUsers(users.find(u => u.id === id));
         setShow(true);
-
     }
     const handleClose = () => setShow(false);
-
     useEffect(() => {
         AxiosClient.get(`/Users`)
             .then((res) => {
@@ -53,6 +51,7 @@ const AccountList = () => {
                                                 <tr>
                                                     <th>STT</th>
                                                     <th>Tên</th>
+                                                    <th>Email</th>
                                                     <th>Chức năng</th>
                                                 </tr>
                                             </thead>
@@ -69,10 +68,6 @@ const AccountList = () => {
                                                                         <Button variant="info" onClick={() => handleShow(item.id)} className="ml-2">
                                                                             <FontAwesomeIcon icon={faUser} />
                                                                         </Button>
-
-                                                                        <Link to={`edit/${item.id}`} className="btn btn-warning ml-2">
-                                                                            <FontAwesomeIcon icon={faEdit} />
-                                                                        </Link>
                                                                         <Button variant="danger ml-2">
                                                                             <FontAwesomeIcon icon={faTrash} />
                                                                         </Button>
@@ -82,7 +77,6 @@ const AccountList = () => {
                                                         )
                                                     })
                                                 }
-
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -117,21 +111,6 @@ const AccountList = () => {
                                                 </Button>
                                             </Modal.Footer>
                                         </Modal>
-
-                                        {/* <Modal show={showDelete} onHide={handleCloseDelete} centered>
-                                            <Modal.Header closeButton>
-                                                <Modal.Title>Xác nhận xóa</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>Bạn có chắc muốn xóa loại sản phẩm <span style={{ fontWeight: "bold" }}>{selectedCategory.name}</span> ?</Modal.Body>
-                                            <Modal.Footer>
-                                                <Button variant="danger" onClick={handleDelete}>
-                                                    <FontAwesomeIcon icon={faCheck} /> Đồng ý
-                                                </Button>
-                                                <Button variant="secondary" onClick={handleCloseDelete}>
-                                                    <FontAwesomeIcon icon={faTimes} /> Hủy bỏ
-                                                </Button>
-                                            </Modal.Footer>
-                                        </Modal> */}
                                     </div>
                                 </div>
                             </div>
