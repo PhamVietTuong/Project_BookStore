@@ -11,6 +11,7 @@ import CategoryList from "../Admin/Categories/CategoryList";
 import CategoryCreate from "../Admin/Categories/CategoryCreate";
 import CategoryEdit from "../Admin/Categories/CategoryEdit";
 import Index from "../Admin/Index";
+import AccountAdd from "../Admin/Account/AccountAdd";
 
 const Router = () => { 
     return (
@@ -27,7 +28,9 @@ const Router = () => {
                             <Route path="products" element={<ProductList/>} />
                             <Route path="products/add" element={<ProductAdd/>}/>
                             <Route path="products/edit/:id" element={<ProductEdit/>}/>
+
                             <Route path="accounts" element={<AccountList />} />
+                            <Route path="accounts/add" element={<AccountAdd/>}/>
                             
                             <Route path="category" element={<CategoryList />} />
                             <Route path="category/add" element={<CategoryCreate />} />
