@@ -3,6 +3,7 @@ import Login from "../Login/Login";
 import Dashboard from "../Dashboard";
 import ProductAdd from "../Admin/Product/ProductAdd";
 import ProductList from "../Admin/Product/ProductList";
+import ProductEdit from "../Admin/Product/ProductEdit";
 import AccountList from "../Admin/Account/AccountList";
 import Register from "../Login/Register";
 import CategoryList from "../Admin/Categories/CategoryList";
@@ -13,6 +14,7 @@ import SlideshowList from "../Admin/Slideshow/SlideshowList";
 import IndexUser from "../User/IndexUser";
 import InfoUser from "../User/Account/InfoUser";
 import Main from "../User/Main";
+import AccountAdd from "../Admin/Account/AccountAdd";
 
 const Router = () => { 
     return (    
@@ -22,12 +24,14 @@ const Router = () => {
                     <Route path="login" >
                         <Route index element={<Login />} />
                     </Route>
-
                     <Route>
                         <Route path="admin" element={<Index />} exact>
                             <Route path="products" element={<ProductList/>} />
                             <Route path="products/add" element={<ProductAdd/>}/>
+                            <Route path="products/edit/:id" element={<ProductEdit/>}/>
+
                             <Route path="accounts" element={<AccountList />} />
+                            <Route path="accounts/add" element={<AccountAdd/>}/>
                             
                             <Route path="category" element={<CategoryList />} />
                             <Route path="category/add" element={<CategoryCreate />} />

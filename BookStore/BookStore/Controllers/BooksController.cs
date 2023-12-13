@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using System.Security.Principal;
 
 namespace BookStore.Controllers
 {
@@ -25,16 +26,22 @@ namespace BookStore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Book>>> GetBook()
         {
-            return await _context.Books.ToListAsync();
-        }
+			return await _context.Books.Include(a => a.Author)
+			   .Include(a => a.Publisher)
+			   .Include(a => a.Category)
+               .Where(a => a.Status)
+			   .ToListAsync();
+		}
 
         // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Book>> GetBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+			var book = await _context.Books.Include(a => a.Author)
+				.Include(a => a.Category).Include(a => a.Publisher)
+				.FirstOrDefaultAsync(a => a.Id == id);
 
-            if (book == null)
+			if (book == null)
             {
                 return NotFound();
             }
@@ -93,8 +100,8 @@ namespace BookStore.Controllers
             {
                 return NotFound();
             }
-
-            _context.Books.Remove(book);
+			book.Status = false;
+			_context.Books.Update(book);
             await _context.SaveChangesAsync();
 
             return NoContent();
