@@ -1,5 +1,19 @@
-const product = () => {
-    return ( 
+import { useEffect, useState } from "react";
+import AxiosClient from "../../Axios/AxiosClient";
+import { Link } from "react-router-dom";
+
+export default function Product() {
+    const [Products, setProducts] = useState([]);
+    const [Images, setImages] = useState();
+
+    useEffect(() => {
+        AxiosClient.get(`/Books/listBook`)
+            .then((res) => {
+                setProducts(res.data);
+            });
+    }, []);
+
+    return (
         <>
             <section className="product">
                 <div className="container">
@@ -70,246 +84,71 @@ const product = () => {
                             </nav>
 
                             <div className="row product__panel">
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/600my-hero-academia-hoc-vien-sieu-anh-hung.jpg" alt=""
-                                                className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="product.html" className="product__panel-link">My Hero Academia - Tập 27:
-                                                One’s Justice</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
+                                {
+                                    Products.map(item => {
+                                        return (
+                                            <>
+                                                    <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
+                                                    <Link to={`detail/${item.id}`} className="card card-hover">
+                                                        <div className="product__panel-item-wrap">
+                                                            <div className="product__panel-img-wrap">
+                                                                <div className="image-wrapper">
+                                                                    <img src={`https://localhost:7106/images/${item.imageName}`} alt=""
+                                                                        className="product__panel-img" style={{ width: "100%", height: "100%", opacity: "1" }} />
+                                                                </div>
+                                                            </div>
+                                                            <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
+                                                                <div className="product-info">
+                                                                    <div className="product-name-star-sold">
+                                                                        <h3 className="product__panel-link">
+                                                                            {item.name}
+                                                                        </h3>
+                                                                        <div className="product_star_sold">
+                                                                            <div className="product__panel-rate-wrap">
+                                                                                <i className="fas fa-star product__panel-rate"></i>
+                                                                                <i className="fas fa-star product__panel-rate"></i>
+                                                                                <i className="fas fa-star product__panel-rate"></i>
+                                                                                <i className="fas fa-star product__panel-rate"></i>
+                                                                                <i className="fas fa-star product__panel-rate"></i>
+                                                                            </div>
+                                                                            <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div>
+                                                                        <div className="price-discount has-discount">
+                                                                            <div className="price-discount_price">
+                                                                                {item.price}
+                                                                                <sup>₫</sup>
+                                                                            </div>
 
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-old">
-                                                20.000đ
-                                            </span>
-                                            <span className="product__panel-price-current">
-                                                19.580đ
-                                            </span>
-                                        </div>
+                                                                            <div className="product__panel-price-sale-off">
+                                                                                -11%
+                                                                            </div>
+                                                                        </div>
+                                                                    </div >
 
-                                        <div className="product__panel-price-sale-off">
-                                            -11%
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/cau-ma-nha-xi-hanako---tap-1.jpg" alt=""
-                                                className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">"Cậu" Ma Nhà Xí Hanako - Tập 1</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
+                                                                </div>
 
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-old">
-                                                28.000đ
-                                            </span>
-                                            <span className="product__panel-price-current">
-                                                22.400đ
-                                            </span>
-                                        </div>
-                                        <div className="product__panel-price-sale-off">
-                                            -20%
-                                        </div>
-                                    </div>
+                                                                <div style={{ marginInline: "8px" }}>
+                                                                    <div className="product-now">
+                                                                        <img width="32" height="16" src="images1/now.png" alt="" />
+                                                                        <span>Giao siêu tốc 2h</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                </Link>
+                                                </div>
 
-                                </div>
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/one-piece-tap-95_chuyen-chu-du-cua-oden_1.jpg" alt=""
-                                                className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">One Piece - Tập 95 (Bản Bìa Rời)</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
-
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-old">
-                                                19.500đ
-                                            </span>
-                                            <span className="product__panel-price-current">
-                                                16.575đ
-                                            </span>
-                                        </div>
-                                        <div className="product__panel-price-sale-off">
-                                            -15%
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/mob-psycho-100_tap-3.jpg" alt=""
-                                                className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">Mob Psycho 100 - Tập 3</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
-
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-old">
-                                                30.000đ
-                                            </span>
-                                            <span className="product__panel-price-current">
-                                                21.000đ
-                                            </span>
-                                        </div>
-
-                                        <div className="product__panel-price-sale-off">
-                                            -30%
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/thanh-guom-diet-quy-tap-12.jpg" alt=""
-                                                className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">Thanh Gươm Diệt Quỷ - Tập 12: Các Thượng
-                                                Huyền Tập Hợp</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
-
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-current">
-                                                25.000đ
-                                            </span>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/image_186914.jpg" alt="" className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">My Hero Academia - Tập 5: Todoroki
-                                                Shoto: Khởi Đầu (Tái Bản)</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
-
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-current">
-                                                20.000đ
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/image_186912.jpg" alt="" className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">My Hero Academia - Tập 3: All Might (Tái
-                                                Bản)</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
-
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-current">
-                                                20.000đ
-                                            </span>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                                <div className="product__panel-item col-lg-3 col-md-4 col-sm-6">
-                                    <div className="product__panel-item-wrap">
-                                        <div className="product__panel-img-wrap">
-                                            <img src="images1/product/one-22.jpg" alt="" className="product__panel-img" />
-                                        </div>
-                                        <h3 className="product__panel-heading">
-                                            <a href="#" className="product__panel-link">One-Punch Man Tập 22: Ánh Sáng</a>
-                                        </h3>
-                                        <div className="product__panel-rate-wrap">
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                            <i className="fas fa-star product__panel-rate"></i>
-                                        </div>
-
-                                        <div className="product__panel-price">
-                                            <span className="product__panel-price-current">
-                                                21.000đ
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                </div>
+                                            </>
+                                        )
+                                    })
+                                }
                             </div>
                         </article>
                     </div>
                 </div>
             </section>
         </>
-     );
+    );
 }
- 
-export default product;

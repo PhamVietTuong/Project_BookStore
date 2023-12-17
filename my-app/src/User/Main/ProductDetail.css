@@ -1,0 +1,61 @@
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    font-size: 14px;
+    text-transform: none !important;
+    letter-spacing: 0;
+    font-variant: initial;
+    line-height: 1;
+    position: absolute;
+    top: 47%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 8px;
+    border-radius: 12px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    z-index: 2;
+    background-color: rgb(255, 255, 255);
+}
+
+.image_active.active {
+    border: 2px solid rgb(10, 104, 255);;
+}
+
+.image_active {
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    width: 54px;
+    height: 54px;
+    padding: 4px;
+    border-radius: 4px;
+    border: 1px solid rgb(235, 235, 240);
+    overflow: hidden;
+}
+
+.hEzlHi .group-input button:hover {
+    background-color: rgb(236, 236, 236);
+    color: rgb(108, 117, 125) !important;
+}
+
+
+.btn-outline-secondary:not(:disabled):not(.disabled).active,
+.btn-outline-secondary:not(:disabled):not(.disabled):active,
+.show>.btn-outline-secondary.dropdown-toggle {
+    color: rgb(108, 117, 125) !important;
+    background-color: rgb(236, 236, 236) !important;
+    border-color: rgb(166, 166, 176) !important;
+}

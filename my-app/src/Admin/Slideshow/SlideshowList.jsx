@@ -17,9 +17,15 @@ const SlideshowList = () => {
     const handleFileSelect = (e) => {
         const file = e.target.files[0];
         const formData = new FormData(); 
-        formData.append('name', file.name);
-        formData.append('userId', "d3fc03fa-c73f-404a-90f1-e11ad4fe8843");
-        AxiosClient.post(`/Slideshows`, formData).then(() => { window.location.reload(); });
+        formData.append('fileName', file.name);
+        formData.append('file', file);
+        console.log(file);
+        formData.append('userId', "7a2094c3-078f-4418-a25a-3f2d90e7c5c3");
+        AxiosClient.post(`/Slideshows`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        }).then(() => { window.location.reload(); });
     }
 
     const handleShowDelete = (id) => {
@@ -71,7 +77,7 @@ const SlideshowList = () => {
                                                         <div class="col-lg-3 col-md-6">
                                                             <div class="card">
                                                                 <div class="el-card-item">
-                                                                    <div class="el-card-avatar el-overlay-1"> <img src={`https://localhost:7106/images/${item.name}`} alt="" style={{ width: "100%" }} />
+                                                                    <div class="el-card-avatar el-overlay-1"> <img src={`https://localhost:7106/images/${item.fileName}`} alt="" style={{ width: "100%" }} />
                                                                         <div class="el-overlay">
                                                                             <ul class="list-style-none el-info">
                                                                                 <li class="el-item"><a class="btn default btn-outline el-link" href="javascript:void(0);" onClick={() => handleShowDelete(item.id)}><FontAwesomeIcon icon={faTrash} /></a></li>
@@ -87,6 +93,7 @@ const SlideshowList = () => {
                                             })
                                         }
                                         <div className="col-md-6 col-lg-2 col-xlg-3" >
+                                            <form encType="multipart/form-data">
                                             <input
                                                 type="file"
                                                 ref={fileInputRef}
@@ -98,6 +105,7 @@ const SlideshowList = () => {
                                                     <h1 className="font-light text-black"><FontAwesomeIcon icon={faPlus} /></h1>
                                                 </div>
                                             </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
 using System.Security.Principal;
+using Microsoft.AspNetCore.Identity;
+using System.Drawing;
+using static System.Reflection.Metadata.BlobBuilder;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BookStore.Controllers
 {
@@ -17,7 +21,7 @@ namespace BookStore.Controllers
     {
         private readonly BookStoreContext _context;
 
-        public BooksController(BookStoreContext context)
+		public BooksController(BookStoreContext context)
         {
             _context = context;
         }
@@ -111,5 +115,76 @@ namespace BookStore.Controllers
         {
             return _context.Books.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet]
+		[Route("listBook")]
+		public async Task<ActionResult<IEnumerable<Book>>> GetListBook()
+		{
+            var books = await _context.Books.Include(a => a.Author)
+                                            .Include(a => a.Publisher)
+                                            .Include(a => a.Category)
+											.Where(a => a.Status)
+											.ToListAsync();  
+
+			var rows = new List<BookViewModel>();
+			foreach (Book book in books)
+            {
+                Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				rows.Add(new BookViewModel
+                {
+                    Id = book.Id,
+                    PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Favourite = book.Favourite,
+					Star = book.Star,
+					Status = book.Status,
+                    ImageName = image?.Name,
+					FilePDF = image?.FilePDF
+				});
+			}
+			return Ok(rows);
+		}
+
+		[HttpGet("detail/{id}")]
+        public async Task<ActionResult<BookViewModel>> GetDetailBook(int id)
+		{
+            var book = await _context.Books
+                         .Include(a => a.Author)
+                .Include(a => a.Category)
+                         .Include(a => a.Publisher)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            Models.Image image = await _context.Images
+                                                        .FirstOrDefaultAsync(i => i.BookId == book.Id);
+
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            var detailBook = new BookViewModel
+            {
+                Id = book.Id,
+                PublisherName = book.Publisher.Name,
+                AuthorName = book.Author.Name,
+                CategoryName = book.Category.Name,
+                Name = book.Name,
+                Quantity = book.Quantity,
+                Description = book.Description,
+                Price = book.Price,
+                Favourite = book.Favourite,
+                Star = book.Star,
+                Status = book.Status,
+                ImageName = image?.Name,
+                FilePDF = image?.FilePDF,
+			};
+
+            return Ok(detailBook);
+        }
+	}
 }

@@ -15,6 +15,7 @@ import IndexUser from "../User/IndexUser";
 import InfoUser from "../User/Account/InfoUser";
 import Main from "../User/Main";
 import AccountAdd from "../Admin/Account/AccountAdd";
+import ProductDetail from "../User/Main/ProductDetail";
 
 const Router = () => { 
     return (    
@@ -53,6 +54,7 @@ const Router = () => {
                             <Route index path="" element={<Main/>} />
                             <Route path="order" element={<InfoUser />} />
                             <Route path="info" element={<InfoUser />} />
+                            <Route path="detail/:id" element={<ProductDetail />} />
                         </Route>
                     </Route>
                 </Routes>
