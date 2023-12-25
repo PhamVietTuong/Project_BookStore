@@ -12,6 +12,7 @@
 
 		public string CategoryName { get; set; }
 		public Category Category { get; set; }
+
 		public string Name { get; set; }
 
 		public int Quantity { get; set; }
@@ -24,9 +25,12 @@
 
 		public double Star { get; set; }
 
-        public string ImageName { get; set; }
+        public string FileName { get; set; }
+
         public string FilePDF { get; set; }
 
-		public bool Status { get; set; }
+        public List<ImageViewModel> Images { get; set; }
+
+        public bool Status { get; set; }
 	}
 }

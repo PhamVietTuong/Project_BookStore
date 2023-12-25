@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 
 const Header = () => {
-    return ( 
+    return (
         <>
             <header id="header">
-                    <div className="container">
+                <div className="container">
                     <section className="row">
                         <div className="col-lg-2 col-md-4 col-sm-12 header__logo">
                             <h1 className="header__heading">
@@ -24,8 +24,8 @@ const Header = () => {
                         </div>
 
                         <div className="col-lg-3 header__call">
-                            
-                            
+
+
                             <Link to="" className="header__call-icon-wrap">
                                 <i className="fas fa-home header__call-icon"></i>
                                 <div className="header__call-info">
@@ -47,8 +47,7 @@ const Header = () => {
                                     </div>
                                 </div>
                             </Link>
-
-                            <a href="#" className="header__call-icon-wrap ml-3">
+                            <Link to="cart" className="header__call-icon-wrap ml-3">
                                 <span className="header__notice">4</span>
                                 <i className="fas fa-shopping-cart header__nav-cart-icon"></i>
                                 <div className="header__call-info">
@@ -56,10 +55,11 @@ const Header = () => {
                                         Giỏ hàng
                                     </div>
                                 </div>
-                            </a>
+                            </Link>
+
                         </div>
                     </section>
-                   
+
                 </div>
 
                 {/* <div className="header__nav">
@@ -97,7 +97,7 @@ const Header = () => {
                 </div> */}
             </header>
         </>
-     );
+    );
 }
- 
+
 export default Header;

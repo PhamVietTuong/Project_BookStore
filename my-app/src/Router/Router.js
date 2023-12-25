@@ -16,6 +16,7 @@ import InfoUser from "../User/Account/InfoUser";
 import Main from "../User/Main";
 import AccountAdd from "../Admin/Account/AccountAdd";
 import ProductDetail from "../User/Main/ProductDetail";
+import Cart from "../User/Main/Cart";
 
 const Router = () => { 
     return (    
@@ -55,6 +56,7 @@ const Router = () => {
                             <Route path="order" element={<InfoUser />} />
                             <Route path="info" element={<InfoUser />} />
                             <Route path="detail/:id" element={<ProductDetail />} />
+                            <Route path="cart" element={<Cart />} />
                         </Route>
                     </Route>
                 </Routes>

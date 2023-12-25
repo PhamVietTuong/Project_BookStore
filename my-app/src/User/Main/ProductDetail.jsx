@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
-import { Button, Col, FormControl, InputGroup, Row } from "react-bootstrap";
+import { Button, Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import './ProductDetail.css';
 import { Pagination, Navigation } from 'swiper/modules';
+import { toast, ToastContainer } from 'react-toastify';
+
 
 const ProductDetail = () => {
     const { id } = useParams();
@@ -17,18 +19,9 @@ const ProductDetail = () => {
     const [hoveredImage, setHoveredImage] = useState(null);
     const [count, setCount] = useState(1);
     const [totalAmount, settotalAmount] = useState(0);
-
-    useEffect(() => {
-        AxiosClient.get(`/Books/detail/${id}`)
-            .then(res => {
-                const book = res.data
-                setBooks([book]);
-                settotalAmount(book.price || 0);
-                setSelectedImage(`https://localhost:7106/images/${book.imageName}` || '')
-            }).catch(error => {
-                console.error("Error fetching data:", error);
-            });
-    }, [id]);
+    const [quantityInCart, setQuantityInCart] = useState(0);
+    const [quantityInBook, setQuantityInBook] = useState(0);
+    const [Carts, setCarts] = useState({ userId: "b68155b3-86f9-4c7f-82d9-5eff5ffe4fad", bookId: id, quantity: 1, selected: false});
 
     //Handle hover image
     const handleImageClick = (newImage) => {
@@ -46,43 +39,99 @@ const ProductDetail = () => {
 
     //Handle minus and flus
     const handleIncrement = () => {
-        setCount(count + 1);
+        const newCount = count + 1;
+        setCount(newCount);
         settotalAmount(totalAmount + (Books[0].price || 0));
+        setCarts((prev) => ({ ...prev, quantity: newCount }));
     };
 
     const handleDecrement = () => {
+        const newCount = count - 1;
         if (count > 1) {
-            setCount(count - 1);
+            setCount(newCount);
             settotalAmount(totalAmount - (Books[0].price || 0))
+            setCarts((prev) => ({ ...prev, quantity: newCount }));
         }
     };
 
     const handleInputChange = (event) => {
-        const newValue = parseInt(event.target.value, 10) || 1;
-
-        if (newValue > count) {
-            settotalAmount(totalAmount + (newValue - count) * (Books[0].price || 0))
+        const name = event.target.name;
+        const value = parseInt(event.target.value, 10) || 1;
+        if (name === "quantity") {
+            if (value > count) {
+                settotalAmount(totalAmount + (value - count) * (Books[0].price || 0));
+            }
+            else if (value < count) {
+                settotalAmount(totalAmount - (count - value) * (Books[0].price || 0));
+            }
+            setCount(value);
         }
-        else if (newValue < count) {
-            settotalAmount(totalAmount - (count - newValue) * (Books[0].price || 0))
-        }
+        setCarts((prev) => ({ ...prev, [name]: value }));
+    };  
 
-        setCount(newValue);
+    useEffect(() => {
+        AxiosClient.get(`/Carts/listCart`).then((res) => {
+            const initialBookIdCart = {};
+            res.data.forEach((item) => {
+                if (item.bookId == id) {
+                    setQuantityInCart(item.quantity);
+                    initialBookIdCart[item.bookId] = item.bookId;
+                }
+            });
+        })
+    }, []);
+
+    useEffect(() => {
+        AxiosClient.get(`/Books/detail/${id}`)
+            .then(res => {
+                const book = res.data
+                setBooks([book]);
+                settotalAmount(book.price || 0);
+                setSelectedImage(`https://localhost:7106/images/${book.images[0].fileName}` || '');
+                setQuantityInBook(book.quantity)
+            }).catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }, [id]);
+
+    const handleSubmitCart = (e) => {
+        e.preventDefault();
+        const totalQuantity = quantityInCart + Carts.quantity;
+        if (totalQuantity > quantityInBook) { 
+            toast.info(() => (
+                <div>Số lượng được mua tối đa của sản phẩm này là {quantityInBook}</div>
+            ), {
+                position: "bottom-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                closeButton: false,
+                className: "custom-toast",
+                toastId: 'custom-toast'
+            });
+            return;
+        }
+        AxiosClient.post(`/Carts/createCart`, Carts)
+    }
+
+    const handleChangeCart = (e) => {
+        setCarts((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
-
 
     return (
         <>
-            <div style={{ backgroundColor: "#f5f5fa" }}>;
+            <div style={{ backgroundColor: "#f5f5fa" }}>
                 <div className="product_body">
                     <div className="product_main">
-                        <Row className="mb-5">
+                        <Row className="mb-5 mt-4">
                             {
                                 Books.map(item => {
                                     return (
                                         <>
-                                            <Col sm={4} className="product_image_main">
-
+                                            <Col sm={3} className="product_image_main">
                                                 <div className="product_header_image">
                                                     <div className="product_image_body">
                                                         <div className="" style={{ width: "368px", height: "368px" }}>
@@ -105,131 +154,30 @@ const ProductDetail = () => {
                                                                 modules={[Pagination, Navigation]}
                                                                 className="mySwiper"
                                                                 initialSlide={0}
-
                                                             >
-                                                                <SwiperSlide>
-                                                                    <a
-                                                                        className={`image_active ${selectedImage === `https://localhost:7106/images/${item.imageName}` ? 'active' : ''}`}
-                                                                        onClick={() => handleImageClick(`https://localhost:7106/images/${item.imageName}`)}
-                                                                        onMouseOver={() => handleImageHover(`https://localhost:7106/images/${item.imageName}`)}
-                                                                        onMouseLeave={handleImageLeave}
-                                                                    >
-
-                                                                        <img
-                                                                            src={`https://localhost:7106/images/${item.imageName}`}
-                                                                            alt=""
-                                                                            className="product_image_list"
-                                                                        />
-                                                                    </a>
-                                                                </SwiperSlide>
-
-                                                                {/* <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide>
-
-                                                                <SwiperSlide><a
-                                                                    className={`image_active ${selectedImage === '/images1/product/twd2_biaao_demo.jpg' ? 'active' : ''}`}
-                                                                    onClick={() => handleImageClick('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseOver={() => handleImageHover('/images1/product/twd2_biaao_demo.jpg')}
-                                                                    onMouseLeave={handleImageLeave}
-                                                                >
-                                                                    <img
-                                                                        src="/images1/product/twd2_biaao_demo.jpg"
-                                                                        alt=""
-                                                                        className="product_image_list"
-                                                                    />
-                                                                </a></SwiperSlide> */}
+                                                                {item.images.map((img, index) => (
+                                                                    <SwiperSlide key={index}>
+                                                                        <a
+                                                                            className={`image_active ${selectedImage === `https://localhost:7106/images/${img.fileName}` ? 'active' : ''}`}
+                                                                            onClick={() => handleImageClick(`https://localhost:7106/images/${img.fileName}`)}
+                                                                            onMouseOver={() => handleImageHover(`https://localhost:7106/images/${img.fileName}`)}
+                                                                            onMouseLeave={handleImageLeave}
+                                                                        >
+                                                                            <img
+                                                                                src={`https://localhost:7106/images/${img.fileName}`}
+                                                                                alt={`Image ${index + 1}`}
+                                                                                className="product_image_list"
+                                                                            />
+                                                                        </a>
+                                                                    </SwiperSlide>
+                                                                ))}
                                                             </Swiper>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </Col>
 
-                                            <Col sm={4} className="product_info">
+                                            <Col sm={6} className="product_info">
                                                 <div className="product_info_heder_body" style={{ gap: "16px" }}>
                                                     <div className="product_info_body">
                                                         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -298,7 +246,7 @@ const ProductDetail = () => {
                                                 </div>
                                             </Col>
 
-                                            <Col sm={4} className="product_price">
+                                            <Col sm={3} className="product_price">
                                                 <div style={{ position: "sticky", top: "12px", display: "flex", flexDirection: "column", alignItems: "stretch", gap: "12px" }}>
                                                     <div className="iHMNqO" style={{ gap: "16px", overflow: "initial" }}>
                                                         <div className="kVRTMZ" style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -324,50 +272,48 @@ const ProductDetail = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <Form onSubmit={handleSubmitCart}>
+                                                            <div className="hVrOaA" style={{ borderTop: "none" }}>
+                                                                <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                                                                    <div className="hEzlHi">
+                                                                        <p className="lable">Số lượng</p>
 
-                                                        <div className="hVrOaA" style={{ borderTop: "none" }}>
-                                                            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                                                                <div className="hEzlHi">
-                                                                    <p className="lable">Số lượng</p>
-
-                                                                    <div className="group-input">
-                                                                        <div>
-                                                                            <InputGroup>
-                                                                                <Button variant="outline-secondary" onClick={handleDecrement} disabled={count <= 1}>
-                                                                                    <i class="fas fa-minus"></i>
-                                                                                </Button>
-
-                                                                                <FormControl
-                                                                                    aria-label="Count"
-                                                                                    aria-describedby="basic-addon2"
-                                                                                    value={count}
-                                                                                    onChange={handleInputChange}
-                                                                                />
-
-
-                                                                                <Button variant="outline-secondary" onClick={handleIncrement}>
-                                                                                    <i class="fas fa-plus"></i>
-                                                                                </Button>
-                                                                            </InputGroup>
+                                                                        <div className="group-input">
+                                                                            <div>
+                                                                                <InputGroup>
+                                                                                    <Button variant="outline-secondary" onClick={handleDecrement} disabled={count <= 1}>
+                                                                                        <i class="fas fa-minus"></i>
+                                                                                    </Button>
+                                                                                    <FormControl
+                                                                                        aria-label="Count"
+                                                                                        aria-describedby="basic-addon2"
+                                                                                        name="quantity"
+                                                                                        value={count}
+                                                                                        onChange={handleInputChange}
+                                                                                    />
+                                                                                    <Button variant="outline-secondary" onClick={handleIncrement}>
+                                                                                        <i class="fas fa-plus"></i>
+                                                                                    </Button>
+                                                                                </InputGroup>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="exLljd">
-                                                                <div className="DxBpi">
-                                                                    Tạm tính
+                                                                <div className="exLljd">
+                                                                    <div className="DxBpi">
+                                                                        Tạm tính
+                                                                    </div>
+                                                                    <div className="egMRnV">
+                                                                        {totalAmount.toLocaleString("en-US").replace(/,/g, '.')}
+                                                                        <sup style={{ fontSize: "24px" }}>₫</sup>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="egMRnV">
-                                                                    {totalAmount.toLocaleString("en-US").replace(/,/g, '.')}
-                                                                    <sup style={{ fontSize: "24px" }}>₫</sup>
+                                                                <div className="group-button">
+                                                                    {/* <button className="ijFBvx"> <span>Mua ngay</span></button> */}
+                                                                    <Button type="submit" className="btnAddCart">Thêm vào giỏ hàng</Button>
                                                                 </div>
                                                             </div>
-                                                            <div className="group-button">
-                                                                <button className="ijFBvx"> <span>Mua ngay</span></button>
-                                                                <button type="button" className="eZIWqC"> <span>Thêm vào giỏ hàng</span></button>
-                                                            </div>
-                                                        </div>
-
+                                                        </Form>
                                                     </div>
                                                 </div>
                                             </Col>
@@ -379,7 +325,17 @@ const ProductDetail = () => {
                     </div>
                 </div>
             </div>
-
+            <ToastContainer
+                position="bottom-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick
+                rtl={true}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 }

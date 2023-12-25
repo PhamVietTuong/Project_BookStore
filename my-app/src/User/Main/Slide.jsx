@@ -51,7 +51,7 @@ const Slide = () => {
                                                 Slideshows.map((item, index) => {
                                                     return (
                                                         <div key={index} className={`carousel-item ${index == 0 ? 'active' : ''}`}>
-                                                            <img src={`https://localhost:7106/images/${item.name}`} className="d-block w-100"
+                                                            <img src={`https://localhost:7106/images/${item.fileName}`} className="d-block w-100"
                                                                 alt="Slideshow" />
                                                         </div>
                                                     )

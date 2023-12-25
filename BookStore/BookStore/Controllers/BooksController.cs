@@ -143,7 +143,7 @@ namespace BookStore.Controllers
 					Favourite = book.Favourite,
 					Star = book.Star,
 					Status = book.Status,
-                    ImageName = image?.Name,
+					FileName = image?.FileName,
 					FilePDF = image?.FilePDF
 				});
 			}
@@ -155,14 +155,12 @@ namespace BookStore.Controllers
 		{
             var book = await _context.Books
                          .Include(a => a.Author)
-                .Include(a => a.Category)
+                         .Include(a => a.Category)
                          .Include(a => a.Publisher)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                         .FirstOrDefaultAsync(a => a.Id == id);
+			List<Models.Image> images = await _context.Images.Where(i => i.BookId == book.Id).ToListAsync();
 
-            Models.Image image = await _context.Images
-                                                        .FirstOrDefaultAsync(i => i.BookId == book.Id);
-
-            if (book == null)
+			if (book == null)
             {
                 return NotFound();
             }
@@ -180,8 +178,12 @@ namespace BookStore.Controllers
                 Favourite = book.Favourite,
                 Star = book.Star,
                 Status = book.Status,
-                ImageName = image?.Name,
-                FilePDF = image?.FilePDF,
+				Images = images.Select(img => new ImageViewModel
+				{
+					FileName = img.FileName,
+					FilePDF = img.FilePDF
+				}).ToList(),
+
 			};
 
             return Ok(detailBook);

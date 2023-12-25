@@ -93,7 +93,7 @@ export default function Product() {
                                                         <div className="product__panel-item-wrap">
                                                             <div className="product__panel-img-wrap">
                                                                 <div className="image-wrapper">
-                                                                    <img src={`https://localhost:7106/images/${item.imageName}`} alt=""
+                                                                    <img src={`https://localhost:7106/images/${item.fileName}`} alt=""
                                                                         className="product__panel-img" style={{ width: "100%", height: "100%", opacity: "1" }} />
                                                                 </div>
                                                             </div>
@@ -117,7 +117,7 @@ export default function Product() {
                                                                     <div>
                                                                         <div className="price-discount has-discount">
                                                                             <div className="price-discount_price">
-                                                                                {item.price}
+                                                                                {item.price.toLocaleString("en-US").replace(/,/g, '.')}
                                                                                 <sup>₫</sup>
                                                                             </div>
 

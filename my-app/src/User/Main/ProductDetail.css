@@ -1,3 +1,83 @@
+.product_body {
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-right: 2.8rem;
+    margin-left: 3.5rem;
+}
+
+.product_header_image {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0px 5px;
+}
+
+.jFWyKZ .product-price__current-price {
+    font-size: 24.95px;
+    font-weight: 600;
+    line-height: 145%;
+}
+
+.product_info_header_main h6 {
+    margin: 0px;
+    color: rgb(36, 36, 36);
+    font-size: 13.6px;
+    font-weight: 400;
+    line-height: 20px;
+
+}
+
+.product_info_bookName {
+    margin: 0px;
+    color: rgb(39, 39, 42);
+    font-size: 23px;
+    font-weight: 500;
+    line-height: 130%;
+    word-break: break-word;
+    white-space: break-spaces;
+}
+
+.btnAddCart {
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+    white-space: nowrap;
+    width: 100%;
+    height: 40px;
+    cursor: pointer !important;
+    background: rgb(255, 255, 255) !important;
+    font-size: 16px;
+    line-height: 150%;
+    color: rgb(10, 104, 255);
+    border: 1px solid rgb(10, 104, 255);
+    border-radius: 4px;
+}
+
+.group-button .btnAddCart:hover {
+    color: rgb(10, 104, 255);
+}
+
+.group-button .btnAddCart:not(:disabled):not(.disabled):active {
+    background: rgb(255, 255, 255) !important;
+    color: rgb(10, 104, 255);
+}
+
+.group-button .btnAddCart:focus {
+    box-shadow: none;
+}
+
+.hEzlHi .lable {
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    margin: 0px;
+}
+
 .swiper-slide {
     text-align: center;
     font-size: 18px;
@@ -31,7 +111,8 @@
 }
 
 .image_active.active {
-    border: 2px solid rgb(10, 104, 255);;
+    border: 2px solid rgb(10, 104, 255);
+    ;
 }
 
 .image_active {
@@ -51,11 +132,45 @@
     color: rgb(108, 117, 125) !important;
 }
 
-
 .btn-outline-secondary:not(:disabled):not(.disabled).active,
 .btn-outline-secondary:not(:disabled):not(.disabled):active,
 .show>.btn-outline-secondary.dropdown-toggle {
     color: rgb(108, 117, 125) !important;
     background-color: rgb(236, 236, 236) !important;
     border-color: rgb(166, 166, 176) !important;
+}
+
+.product_image_list {
+    object-fit: contain;
+    display: block;
+}
+
+.center-toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@media (min-width: 576px) {
+    .product_image_main {
+        flex: 0 0 auto;
+        width: 28.5%;
+    }
+}
+
+@media (min-width: 576px) {
+    .product_info {
+        flex: 0 0 auto;
+        width: 43%;
+        margin-left: 15px;
+    }
+}
+
+@media (min-width: 576px) {
+    .product_price {
+        flex: 0 0 auto;
+        width: 27%;
+        margin-left: 5px;
+    }
 }

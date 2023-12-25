@@ -7,8 +7,8 @@
 		public string UserId { get; set; }
 		public User User { get; set; }
 
-		public int PromotionId { get; set; }
-		public Promotion Promotion { get; set;}
+		//public int PromotionId { get; set; }
+		//public Promotion Promotion { get; set;}
 
 		public string Code { get; set; }
 
