@@ -152,6 +152,41 @@
     transform: translate(-50%, -50%);
 }
 
+.product-price .productDeail-favourite-color {
+    font-size: 2px;
+}
+
+.product-price .productDeail-favourite-color .btn-productdetail-favourite {
+    color: rgb(156, 163, 175);
+}
+
+.product-price .productDeail-favourite-color .btn-productdetail-favourite .svg-inline--fa{
+    font-size: 20px;
+}
+
+.product-price .productDeail-favourite-color .btn-productdetail-favourite:not(:disabled):not(.disabled):active {
+    color: rgb(156, 163, 175);
+    background-color: rgb(255, 255, 255);
+    box-shadow: none;
+}
+
+.product-price .productDeail-favourite-color .btn-productdetail-favourite:focus-visible {
+    box-shadow: none;
+}
+
+.product-price .productDeail-favourite-color .btn-productdetail-favourite:focus {
+    box-shadow: none;
+}
+
+.product-price .productDeail-favourite-color .productDeail-favourite {
+    font-size: 20px;
+}
+
+.productDeail-favourite-color .btn-productdetail-favourite {
+    background-color: rgb(255, 255, 255);
+    border: none;
+}
+
 @media (min-width: 576px) {
     .product_image_main {
         flex: 0 0 auto;

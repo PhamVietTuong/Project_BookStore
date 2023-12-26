@@ -9,6 +9,8 @@ import 'swiper/css/navigation';
 import './ProductDetail.css';
 import { Pagination, Navigation } from 'swiper/modules';
 import { toast, ToastContainer } from 'react-toastify';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 
 
 const ProductDetail = () => {
@@ -21,6 +23,9 @@ const ProductDetail = () => {
     const [totalAmount, settotalAmount] = useState(0);
     const [quantityInCart, setQuantityInCart] = useState(0);
     const [quantityInBook, setQuantityInBook] = useState(0);
+    const [favourite, setFavourite] = useState();
+    const currentlyAFavorite = <FontAwesomeIcon icon={faHeart} color="rgb(156, 163, 175)"/>
+    const notCurrentlyAFavorite = <FontAwesomeIcon icon={faHeart} color="rgb(255, 66, 79)" />
     const [Carts, setCarts] = useState({ userId: "b68155b3-86f9-4c7f-82d9-5eff5ffe4fad", bookId: id, quantity: 1, selected: false});
 
     //Handle hover image
@@ -57,7 +62,7 @@ const ProductDetail = () => {
     const handleInputChange = (event) => {
         const name = event.target.name;
         const value = parseInt(event.target.value, 10) || 1;
-        if (name === "quantity") {
+        if (name === "quantity" && value <= 1000) {
             if (value > count) {
                 settotalAmount(totalAmount + (value - count) * (Books[0].price || 0));
             }
@@ -88,11 +93,24 @@ const ProductDetail = () => {
                 setBooks([book]);
                 settotalAmount(book.price || 0);
                 setSelectedImage(`https://localhost:7106/images/${book.images[0].fileName}` || '');
-                setQuantityInBook(book.quantity)
+                setQuantityInBook(book.quantity);
+                setFavourite(book.favourite);
             }).catch(error => {
                 console.error("Error fetching data:", error);
             });
     }, [id]);
+
+    const updateFavourite = async (id, favourite) => {
+        try {
+            const response = await  AxiosClient.put(`/Books/updateFavourite/${id}`, {
+                Id: id,
+                Favourite: favourite
+            })
+
+        } catch (err) {
+            console.error("Error updating the book on the server:", err);
+        }
+    };
 
     const handleSubmitCart = (e) => {
         e.preventDefault();
@@ -120,6 +138,15 @@ const ProductDetail = () => {
     const handleChangeCart = (e) => {
         setCarts((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
+
+    const handleFavourete = (id) => {
+        setFavourite((prevFavourite) => !prevFavourite);
+        updateFavourite(id, !favourite)
+    };
+
+    useEffect(() => {
+        setFavourite(Books.find((item) => item.id == id)?.favourite || false);
+    }, [Books, id])
 
     return (
         <>
@@ -237,6 +264,12 @@ const ProductDetail = () => {
                                                                         </div>
                                                                         <div className="product-price__discount-rate">
                                                                             -32%
+                                                                        </div>
+                                                                        <div className="fctQDC"></div>
+                                                                        <div className="productDeail-favourite-color">
+                                                                            <Button className="btn-productdetail-favourite p-0" onClick={()=>handleFavourete(item.id)}>
+                                                                                {favourite ? notCurrentlyAFavorite : currentlyAFavorite}
+                                                                            </Button>
                                                                         </div>
                                                                     </div>
                                                                 </div>

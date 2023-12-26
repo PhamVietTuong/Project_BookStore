@@ -1,6 +1,16 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AxiosClient from "../Axios/AxiosClient";
 
 const Header = () => {
+    const [carts, setCarts] = useState([]);
+
+    useEffect(() => {
+        AxiosClient.get(`/Carts/listCart`).then((res) => {
+            setCarts(res.data);
+        })
+    }, []);
+
     return (
         <>
             <header id="header">
@@ -48,7 +58,7 @@ const Header = () => {
                                 </div>
                             </Link>
                             <Link to="cart" className="header__call-icon-wrap ml-3">
-                                <span className="header__notice">4</span>
+                                <span className="header__notice">{carts.length}</span>
                                 <i className="fas fa-shopping-cart header__nav-cart-icon"></i>
                                 <div className="header__call-info">
                                     <div className="header__call-text">
