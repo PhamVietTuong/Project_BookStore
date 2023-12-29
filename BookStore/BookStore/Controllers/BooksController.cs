@@ -253,5 +253,76 @@ namespace BookStore.Controllers
 			return Ok(rows);
 		}
 
+        [HttpGet]
+        [Route("getTheListByPrice")]
+        public async Task<ActionResult<IEnumerable<Book>>> getTheListByPrice(double FromPrice, double ToThePrice)
+		{
+			var listBook = await _context.Books.Include(a => a.Author)
+											.Include(a => a.Publisher)
+											.Include(a => a.Category)
+											.Where(a => a.Status)
+											.Where(a=> a.Price >= FromPrice && a.Price <= ToThePrice)
+											.ToListAsync();
+            var rows = new List<BookViewModel>();
+            foreach (Book book in listBook)
+            {
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+
+				rows.Add(new BookViewModel
+                {
+					Id = book.Id,
+					PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Favourite = book.Favourite,
+					Star = book.Star,
+					Status = book.Status,
+					FileName = image?.FileName,
+					FilePDF = image?.FilePDF
+				});
+            }
+			return Ok(rows);
+        }
+
+
+		[HttpGet]
+		[Route("getTheListByCategory")]
+		public async Task<ActionResult<IEnumerable<Book>>> getTheListByCategory(string CategoryName)
+		{
+			var listBook = await _context.Books.Include(a => a.Author)
+											.Include(a => a.Publisher)
+											.Include(a => a.Category)
+											.Where(a => a.Status)
+											.Where(a => a.Category.Name == CategoryName)
+											.ToListAsync();
+			var rows = new List<BookViewModel>();
+			foreach (Book book in listBook)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+
+				rows.Add(new BookViewModel
+				{
+					Id = book.Id,
+					PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Favourite = book.Favourite,
+					Star = book.Star,
+					Status = book.Status,
+					FileName = image?.FileName,
+					FilePDF = image?.FilePDF
+				});
+			}
+			return Ok(rows);
+		}
+
 	}
 }

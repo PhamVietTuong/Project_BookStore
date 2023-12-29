@@ -16,16 +16,13 @@ const Cart = () => {
     const [selectedCart, setselectedCart] = useState({});
     const [showDelete, setShowDelete] = useState(false);
     const [selectAllChecked, setSelectAllChecked] = useState(false);
-    const [selectedItem, setSelectedItem] = useState([]);
     const [promotionPercentage, setPromotionPercentage] = useState(0);
     const [totalDiscountedAmount, setTotalDiscountedAmount] = useState(0);
     const [provisionalAmount, setProvisionalAmount] = useState(0);
     const [countProducts, setCountProducts] = useState(0);
     const [maxQuantity, setMaxQuantity] = useState(0);
-    const [selected, setSelected] = useState([]);
     const [newQuantity, setNewQuantity] = useState(0);
     const handleCloseDelete = () => setShowDelete(false);
-
 
     useEffect(() => {
         AxiosClient.get(`/Carts/listCart`).then((res) => {

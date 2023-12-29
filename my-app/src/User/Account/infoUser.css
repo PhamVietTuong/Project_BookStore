@@ -192,12 +192,6 @@
     margin-left: 20px;
 }
 
-.cardBody .footer .discount::before {
-    content: "";
-    height: 10px;
-    width: 1px;
-    background-color: rgb(102, 102, 102);
-    position: absolute;
-    left: -11px;
-    top: 2px;
+.cardBody .list .item:nth-child(n+2) {
+    border-top: 1px solid rgb(102, 102, 102);
 }

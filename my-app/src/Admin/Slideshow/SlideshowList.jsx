@@ -19,8 +19,7 @@ const SlideshowList = () => {
         const formData = new FormData(); 
         formData.append('fileName', file.name);
         formData.append('file', file);
-        console.log(file);
-        formData.append('userId', "7a2094c3-078f-4418-a25a-3f2d90e7c5c3");
+        formData.append('userId', "b68155b3-86f9-4c7f-82d9-5eff5ffe4fad");
         AxiosClient.post(`/Slideshows`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
