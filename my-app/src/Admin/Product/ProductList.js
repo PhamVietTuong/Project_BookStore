@@ -15,57 +15,52 @@ import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Col, Modal, Row, Table } from "react-bootstrap";
 
 const ProductList = () => {
+  var id = 0;
   const [Products, setProducts] = useState([]);
   const [Images, setImages] = useState([]);
-
   const [show, setshow] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [selectedImage, setselectedImage] = useState({});
   const [selectedProduct, setselectedProduct] = useState({
     author: {},
     category: {},
     publisher: {},
   });
-
-  const [selectedImage, setselectedImage] = useState({ });
-
-
   const handleShow = (id) => {
     setselectedProduct(Products.find((a) => a.id === id));
     setselectedImage(Images.find((a) => a.bookId === id));
     setshow(true);
-  }
+  };
+
   const handleClose = () => setshow(false);
-
-  var id = 0;
-
-  const [showDelete, setShowDelete] = useState(false);
   const handleCloseDelete = () => setShowDelete(false);
+
   const handleShowDelete = (id) => {
     setselectedProduct(Products.find((a) => a.id === id));
     setShowDelete(true);
   };
-
   const handleDelete = () => {
     AxiosClient.delete(`/Books/${selectedProduct.id}`);
     let list = Products;
-    list.splice(Products.findIndex((a) => a.id === selectedProduct.id),1);
+    list.splice(
+      Products.findIndex((a) => a.id === selectedProduct.id),
+      1
+    );
     setProducts(list);
     setShowDelete(false);
   };
-
   useEffect(() => {
     AxiosClient.get(`/Books`).then((res) => {
       setProducts(res.data);
       console.log(res.data);
     });
   }, []);
-
   useEffect(() => {
     AxiosClient.get(`/Images`).then((res) => {
       setImages(res.data);
       console.log(res.data);
     });
   }, []);
-
   return (
     <>
       <div>
@@ -94,7 +89,7 @@ const ProductList = () => {
               <div className="card">
                 <div className="card-body">
                   <Link to={`add`} className="btn btn-secondary mb-2">
-                    <FontAwesomeIcon icon={faPlus} /> Tạo loại sản phẩm
+                    <FontAwesomeIcon icon={faPlus} /> Tạo sản phẩm
                   </Link>
                   <div className="table-responsive">
                     <table
@@ -175,29 +170,17 @@ const ProductList = () => {
                           <Col md={4}>
                             <dl className="row">
                               <dt>Tên </dt>
-                              <dd>
-                                {selectedProduct.name}
-                              </dd>
+                              <dd>{selectedProduct.name}</dd>
                               <dt>Tác giả </dt>
-                              <dd>
-                                {selectedProduct.author.name}
-                              </dd>
+                              <dd>{selectedProduct.author.name}</dd>
                               <dt>Thể loại </dt>
-                              <dd>
-                                {selectedProduct.category.name}
-                              </dd>
+                              <dd>{selectedProduct.category.name}</dd>
                               <dt>Nhà xuất bản </dt>
-                              <dd>
-                                {selectedProduct.publisher.name}
-                              </dd>
+                              <dd>{selectedProduct.publisher.name}</dd>
                               <dt>Giá </dt>
-                              <dd>
-                                {selectedProduct.price}
-                              </dd>
+                              <dd>{selectedProduct.price}</dd>
                               <dt>Mô tả </dt>
-                              <dd>
-                                {selectedProduct.description}
-                              </dd>
+                              <dd>{selectedProduct.description}</dd>
                             </dl>
                           </Col>
                         </Row>
@@ -221,8 +204,7 @@ const ProductList = () => {
                         Bạn có chắc muốn sản phẩm{" "}
                         <span style={{ fontWeight: "bold" }}>
                           {selectedProduct.name}
-                        </span>{" "}
-                        ?
+                        </span>
                       </Modal.Body>
                       <Modal.Footer>
                         <Button variant="danger" onClick={handleDelete}>

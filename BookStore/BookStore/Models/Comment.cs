@@ -21,5 +21,7 @@ namespace BookStore.Models
 		public string Content { get; set; }
 
 		public DateTime Date { get; set; }
+
+		public bool Status { get; set; }
 	}
 }

@@ -49,7 +49,7 @@ const CategoryList = () => {
             $('#myTable').DataTable({
                 dom: 'Bfrtip',
                 responsive: true,
-                autoWidth: true,
+                autoWidth: false,
                 buttons: [
                     {
                         extend: 'copy',

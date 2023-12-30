@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using Microsoft.Extensions.Hosting;
+using System.Net.Http.Headers;
 
 namespace BookStore.Controllers
 {
@@ -16,10 +18,10 @@ namespace BookStore.Controllers
     {
         private readonly BookStoreContext _context;
 
-        public SlideShowsController(BookStoreContext context)
+		public SlideShowsController(BookStoreContext context)
         {
             _context = context;
-        }
+		}
 
         // GET: api/SlideShows
         [HttpGet]
@@ -73,19 +75,29 @@ namespace BookStore.Controllers
             return NoContent();
         }
 
-        // POST: api/SlideShows
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<SlideShow>> PostSlideShow(SlideShow slideShow)
-        {
-            _context.SlideShows.Add(slideShow);
-            await _context.SaveChangesAsync();
+		// POST: api/SlideShows
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<SlideShow>> PostSlideShow([FromForm] SlideShow slideShow)
+		{
+			if (slideShow.File != null && slideShow.File.Length > 0)
+			{
+				var filePath = Path.Combine("wwwroot/images", slideShow.FileName);
 
-            return CreatedAtAction("GetSlideShow", new { id = slideShow.Id }, slideShow);
-        }
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await slideShow.File.CopyToAsync(stream);
+				}
+			}
 
-        // DELETE: api/SlideShows/5
-        [HttpDelete("{id}")]
+			_context.SlideShows.Add(slideShow);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetSlideShow", new { id = slideShow.Id }, slideShow);
+		}
+
+		// DELETE: api/SlideShows/5
+		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSlideShow(int id)
         {
             var slideShow = await _context.SlideShows.FindAsync(id);
@@ -104,5 +116,5 @@ namespace BookStore.Controllers
         {
             return _context.SlideShows.Any(e => e.Id == id);
         }
-    }
+	}
 }

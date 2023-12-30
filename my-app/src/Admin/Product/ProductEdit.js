@@ -82,7 +82,7 @@ const ProductEdit = () => {
             <div className="col-md-12">
               <div className="card card-primary">
                 <div className="card-header">
-                  <h3 className="card-title">Thêm Sản Phẩm</h3>
+                  <h3 className="card-title">Sửa Sản Phẩm</h3>
                 </div>
                 {/* /.card-header */}
                 {/* form start */}
@@ -132,7 +132,7 @@ const ProductEdit = () => {
                           name="authorId"
                           style={widthInput}
                         >
-                          <option value="">{Products.author.name}</option>
+                          <option value={Products.authorId}>{Products.author.name}</option>
                           {Authors.map((item) => {
                             return <option value={item.id}>{item.name}</option>;
                           })}
@@ -146,7 +146,7 @@ const ProductEdit = () => {
                           name="categoryId"
                           style={widthInput}
                         >
-                          <option value="">{Products.category.name}</option>
+                          <option value={Products.categoryId}>{Products.category.name}</option>
                           {Categories.map((item) => {
                             return <option value={item.id}>{item.name}</option>;
                           })}
@@ -160,7 +160,7 @@ const ProductEdit = () => {
                           name="publisherId"
                           style={widthInput}
                         >
-                          <option value="">{Products.publisher.name}</option>
+                          <option value={Products.publisherId}>{Products.publisher.name}</option>
                           {Publishers.map((item) => {
                             return <option value={item.id}>{item.name}</option>;
                           })}
@@ -200,80 +200,6 @@ const ProductEdit = () => {
           </div>
         </div>
       </section>
-      {/* <Form className="col-md-4" onSubmit={handleSubmit}>
-        <Form.Group>
-          <Form.Label>Name:</Form.Label>
-          <Form.Control
-            type="text"
-            name="name"
-            onChange={handleChange}
-            value={Products.name}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Price:</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            onChange={handleChange}
-            value={Products.price}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Quantity:</Form.Label>
-          <Form.Control
-            type="number"
-            name="quantity"
-            onChange={handleChange}
-            value={Products.quantity}
-          />
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Author:</Form.Label>
-          <Form.Select onChange={handleChange} name="authorId">
-            <option value="">{Products.author.name}</option>
-            {Authors.map((item) => {
-              return <option value={item.id}>{item.name}</option>;
-            })}
-          </Form.Select>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Category:</Form.Label>
-          <Form.Select onChange={handleChange} name="categoryId">
-            <option value="">{Products.category.name}</option>
-            {Categories.map((item) => {
-              return <option value={item.id}>{item.name}</option>;
-            })}
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Publisher:</Form.Label>
-          <Form.Select onChange={handleChange} name="publisherId">
-            <option value="">{Products.publisher.name}</option>
-            {Publishers.map((item) => {
-              return <option value={item.id}>{item.name}</option>;
-            })}
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Description:</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={4}
-            name="description"
-            onChange={handleChange}
-            value={Products.description}
-          />
-        </Form.Group>
-
-        <div className="mt-2">
-          <Button type="submit" variant="success">
-            Edit
-          </Button>
-        </div>
-      </Form> */}
     </>
   );
 };

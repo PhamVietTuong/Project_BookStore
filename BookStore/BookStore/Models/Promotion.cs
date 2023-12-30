@@ -8,8 +8,6 @@
 
 		public DateTime DateTo { get; set; }
 
-		public double PromotionLevel { get; set; }
-
-		public double Reduce { get;}
+		public double PromotionPercentage { get; set; }
 	}
 }
