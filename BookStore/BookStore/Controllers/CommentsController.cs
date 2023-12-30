@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Net;
 
 namespace BookStore.Controllers
 {
@@ -25,7 +28,7 @@ namespace BookStore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Comment>>> GetComment()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.Include(a => a.Book).Include(a=> a.User).ToListAsync();
         }
 
         // GET: api/Comments/5
@@ -78,6 +81,7 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Comment>> PostComment(Comment comment)
         {
+            comment.Date= DateTime.Now;
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
@@ -94,7 +98,8 @@ namespace BookStore.Controllers
                 return NotFound();
             }
 
-            _context.Comments.Remove(comment);
+            comment.Status = false;
+            _context.Comments.Update(comment);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -104,5 +109,50 @@ namespace BookStore.Controllers
         {
             return _context.Comments.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet]
+		[Route("CommentTheBook")]
+		public async Task<ActionResult<IEnumerable<Comment>>> Test()
+		{
+			var newComments = await _context.Comments
+				.OrderByDescending(c => c.Date)
+                .Include(c => c.Book)
+				.Include(c => c.User)
+				.ToListAsync();
+
+           var rows = new List<CommentViewModel>();
+            foreach (Comment comment in newComments)
+            {
+                Models.Image image = _context.Images.FirstOrDefault(x => x.BookId == comment.Book.Id);
+                rows.Add(new CommentViewModel
+                {
+                    Id = comment.Id,
+					ParentCommentId = comment.ParentCommentId,
+					BookName = comment.Book.Name,
+					UserName = comment.User.FullName,
+					Content = comment.Content,
+					Date = comment.Date,
+					ImageName = image?.FileName,
+                    Status = comment.Status
+				});
+            }
+			return Ok(rows);
+		}
+
+		[HttpDelete("CommentDeleted/{id}")]
+		public async Task<IActionResult> EditCommentDelete(int id)
+		{
+			var comment = await _context.Comments.FindAsync(id);
+			if (comment == null)
+			{
+				return NotFound();
+			}
+
+			comment.Status = true;
+			_context.Comments.Update(comment);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+	}
 }
