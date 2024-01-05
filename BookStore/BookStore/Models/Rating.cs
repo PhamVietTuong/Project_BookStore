@@ -10,6 +10,6 @@
 		public string UserId { get; set; }
 		public User User { get; set; }
 
-		public int RatingLevel { get; set; }
+		public double RatingLevel { get; set; }
 	}
 }

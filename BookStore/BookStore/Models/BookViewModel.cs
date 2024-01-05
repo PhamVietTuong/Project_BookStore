@@ -32,5 +32,13 @@
         public List<ImageViewModel> Images { get; set; }
 
         public bool Status { get; set; }
-	}
+
+        public double FiveStar { get; set; }
+        public double FourStar { get; set; }
+
+        public double ThreeStar { get; set; }
+        public double TwoStar { get; set; }
+        public double OneStar { get; set; }
+        public int TotalRating { get; set; }
+    }
 }

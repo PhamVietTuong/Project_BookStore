@@ -187,6 +187,34 @@
     border: none;
 }
 
+.jzQKwa .dXPbue .MuiSvgIcon-root {
+    font-size: 17px;
+        color: #FFC400;
+}
+
+.fvFoxk .review-rating__inner .review-rating__stars .MuiSvgIcon-root {
+    font-size: 25px;
+    color: #FFC400;
+}
+
+.fvFoxk .review-rating__inner .review-rating__detail .MuiSvgIcon-root {
+    font-size: 20px;
+    color: #FFC400;
+}
+
+.review-comment__rating-title .jUynBq .MuiSvgIcon-root {
+    font-size: 20px;
+    color: #FFC400;
+}
+
+.reply-comment__wrapper .form-control:focus {
+    box-shadow: none;
+}
+
+.reply-comment__wrapper .btn {
+    border: 1px solid rgb(238, 238, 238) !important;
+}
+
 @media (min-width: 576px) {
     .product_image_main {
         flex: 0 0 auto;

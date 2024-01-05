@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Drawing;
 using static System.Reflection.Metadata.BlobBuilder;
 using static System.Net.Mime.MediaTypeNames;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace BookStore.Controllers
 {
@@ -130,6 +131,13 @@ namespace BookStore.Controllers
 			foreach (Book book in books)
             {
                 Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel),
+				}).FirstOrDefault();
+
+
+
 				rows.Add(new BookViewModel
                 {
                     Id = book.Id,
@@ -141,7 +149,7 @@ namespace BookStore.Controllers
 					Description = book.Description,
 					Price = book.Price,
 					Favourite = book.Favourite,
-					Star = book.Star,
+					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
 					FilePDF = image?.FilePDF
@@ -158,7 +166,13 @@ namespace BookStore.Controllers
                          .Include(a => a.Category)
                          .Include(a => a.Publisher)
                          .FirstOrDefaultAsync(a => a.Id == id);
+
 			List<Models.Image> images = await _context.Images.Where(i => i.BookId == book.Id).ToListAsync();
+			var rating = _context.Ratings.Where(r => r.BookId == book.Id).AsEnumerable().GroupBy(r => r.BookId).Select(x => new
+			{
+				averageRating = x.Average(r => r.RatingLevel),
+				ratingCounts = x.GroupBy(r => r.RatingLevel).ToDictionary(group => group.Key, group => group.Count()),
+			}).FirstOrDefault();
 
 			if (book == null)
             {
@@ -176,8 +190,14 @@ namespace BookStore.Controllers
                 Description = book.Description,
                 Price = book.Price,
                 Favourite = book.Favourite,
-                Star = book.Star,
-                Status = book.Status,
+				Star = rating?.averageRating ?? 5,
+				FiveStar = rating?.ratingCounts.GetValueOrDefault(5) ?? 0,
+				FourStar = rating?.ratingCounts.GetValueOrDefault(4) ?? 0,
+				ThreeStar = rating?.ratingCounts.GetValueOrDefault(3) ?? 0,
+				TwoStar = rating?.ratingCounts.GetValueOrDefault(2) ?? 0,
+				OneStar = rating?.ratingCounts.GetValueOrDefault(1) ?? 0,
+				TotalRating = rating?.ratingCounts.Count() ?? 0,
+				Status = book.Status,
 				Images = images.Select(img => new ImageViewModel
 				{
 					FileName = img.FileName,
@@ -237,6 +257,11 @@ namespace BookStore.Controllers
 			foreach (Book book in books)
 			{
 				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel)
+				}).FirstOrDefault();
+
 				rows.Add(new ListFavouriteViewModel
 				{
 					Id = book.Id,
@@ -244,7 +269,7 @@ namespace BookStore.Controllers
 					Name = book.Name,
 					Price = book.Price,
 					Favourite = book.Favourite,
-					Star = book.Star,
+					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
 					PriceAfterPromotion = book.Price * ((100-book.Promotion.PromotionPercentage)/100)
@@ -267,6 +292,10 @@ namespace BookStore.Controllers
             foreach (Book book in listBook)
             {
 				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel)
+				}).FirstOrDefault();
 
 				rows.Add(new BookViewModel
                 {
@@ -279,7 +308,7 @@ namespace BookStore.Controllers
 					Description = book.Description,
 					Price = book.Price,
 					Favourite = book.Favourite,
-					Star = book.Star,
+					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
 					FilePDF = image?.FilePDF
@@ -303,6 +332,10 @@ namespace BookStore.Controllers
 			foreach (Book book in listBook)
 			{
 				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel)
+				}).FirstOrDefault();
 
 				rows.Add(new BookViewModel
 				{
@@ -315,7 +348,7 @@ namespace BookStore.Controllers
 					Description = book.Description,
 					Price = book.Price,
 					Favourite = book.Favourite,
-					Star = book.Star,
+					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
 					FilePDF = image?.FilePDF
