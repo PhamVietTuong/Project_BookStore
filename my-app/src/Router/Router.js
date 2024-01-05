@@ -17,6 +17,7 @@ import Main from "../User/Main";
 import AccountAdd from "../Admin/Account/AccountAdd";
 import ProductDetail from "../User/Main/ProductDetail";
 import Cart from "../User/Main/Cart";
+import CommentList from "../Admin/Comment/CommentList";
 
 const Router = () => { 
     return (    
@@ -40,6 +41,9 @@ const Router = () => {
                             <Route path="category/edit/:id" element={<CategoryEdit />} />
 
                             <Route path="slideshow" element={<SlideshowList />} />
+
+                            <Route path="comments" element={<CommentList />} />
+
                         </Route>
                     </Route> 
                     <Route path="register" >
