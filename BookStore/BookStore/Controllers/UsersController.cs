@@ -36,7 +36,9 @@ namespace BookStore.Controllers
 		public async Task<ActionResult<IEnumerable<User>>> GetUsers()
 		{
 			//return await _userManager.Users.ToListAsync();
-			var users = await _userManager.Users.ToListAsync();
+			var users = await _userManager.Users
+				.Where( u => u.Status)
+				.ToListAsync();
 			List<UserViewModel> list = new List<UserViewModel>();
 			foreach (var user in users)
 			{
@@ -45,9 +47,10 @@ namespace BookStore.Controllers
 					Id = user.Id, 
 					UserName = user.UserName,
 					FullName = user.FullName,
-					Birthday = user.Birthday,
+					Address= user.Address,
 					Email = user.Email,
 					Status= user.Status,
+					
 				});
 			}
 			return Ok(list);
@@ -57,6 +60,57 @@ namespace BookStore.Controllers
 		public async Task<ActionResult<User>> GetUser(string id)
 		{
 			return await _userManager.FindByIdAsync(id);
+			
+		}
+
+		//Put:api/users/5
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutUser(string id, UserViewModel User)
+		{
+			if (id != User.Id)
+			{
+				return BadRequest("Invalid ID or User doesn't exist");
+			}
+			var user = await _userManager.FindByIdAsync(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			// Update user properties
+			user.UserName = User.UserName;
+			user.FullName = User.FullName;
+			user.Address = User.Address;
+			user.Email = User.Email;
+			user.Status = User.Status;
+			var result = await _userManager.UpdateAsync(user);
+			if (result.Succeeded)
+			{
+				return Ok(); // Successful update
+			}
+			else
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to");
+			}
+		}
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteUser(string id)
+		{
+			var user = await _context.Users.FindAsync(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			user.Status = false;
+			_context.Users.Update(user);
+			var result = await _context.SaveChangesAsync();
+			if (result > 0)
+			{
+				return Ok();
+			}
+			else
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to");
+			}
 		}
 
 		[HttpPost]
@@ -104,7 +158,6 @@ namespace BookStore.Controllers
 
 			return BadRequest(ModelState);
 		}
-
 		[HttpPost]
 		[Route("register")]
 		public async Task<IActionResult> Register(RegisterViewModel re)
@@ -119,7 +172,7 @@ namespace BookStore.Controllers
 				SecurityStamp = Guid.NewGuid().ToString(),
 				UserName = re.UserName,
 				FullName = re.FullName,
-				Status= re.Status
+				Status= true
 			
 			};
 			var result = await _userManager.CreateAsync(user, re.PassWord);
