@@ -24,8 +24,6 @@
 
 		public double Price { get; set; }
 
-		public bool Favourite { get; set; }
-
 		public double Star { get; set; }
 
 		public bool Status{ get; set; }

@@ -41,5 +41,7 @@ namespace BookStore.Data
 
         public DbSet<BookStore.Models.SlideShow> SlideShows { get; set; }
 
+        public DbSet<BookStore.Models.Favourite> Favourites { get; set; }
+
     }
 }

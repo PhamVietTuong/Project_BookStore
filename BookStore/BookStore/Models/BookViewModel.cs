@@ -21,8 +21,6 @@
 
 		public double Price { get; set; }
 
-		public bool Favourite { get; set; }
-
 		public double Star { get; set; }
 
         public string FileName { get; set; }

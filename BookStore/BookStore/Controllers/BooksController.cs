@@ -148,7 +148,6 @@ namespace BookStore.Controllers
 					Quantity = book.Quantity,
 					Description = book.Description,
 					Price = book.Price,
-					Favourite = book.Favourite,
 					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
@@ -189,7 +188,6 @@ namespace BookStore.Controllers
                 Quantity = book.Quantity,
                 Description = book.Description,
                 Price = book.Price,
-                Favourite = book.Favourite,
 				Star = rating?.averageRating ?? 5,
 				FiveStar = rating?.ratingCounts.GetValueOrDefault(5) ?? 0,
 				FourStar = rating?.ratingCounts.GetValueOrDefault(4) ?? 0,
@@ -209,74 +207,74 @@ namespace BookStore.Controllers
             return Ok(detailBook);
         }
 
-		[HttpPut("updateFavourite/{id}")]
-		public async Task<IActionResult> UpdateFavourite(int id, Book book)
-		{
-			if (id != book.Id)
-			{
-				return BadRequest();
-			}
+		//[HttpPut("updateFavourite/{id}")]
+		//public async Task<IActionResult> UpdateFavourite(int id, Book book)
+		//{
+		//	if (id != book.Id)
+		//	{
+		//		return BadRequest();
+		//	}
 
-			var existingBook = await _context.Books.FindAsync(id);
+		//	var existingBook = await _context.Books.FindAsync(id);
 
-			if (existingBook == null)
-			{
-				return NotFound();
-			}
+		//	if (existingBook == null)
+		//	{
+		//		return NotFound();
+		//	}
 
-			existingBook.Favourite = book.Favourite;
+		//	existingBook.Favourite = book.Favourite;
 
-			try
-			{
-				await _context.SaveChangesAsync();
-			}
-			catch (DbUpdateConcurrencyException)
-			{
-				if (!BookExists(id))
-				{
-					return NotFound();
-				}
-				else
-				{
-					throw;
-				}
-			}
+		//	try
+		//	{
+		//		await _context.SaveChangesAsync();
+		//	}
+		//	catch (DbUpdateConcurrencyException)
+		//	{
+		//		if (!BookExists(id))
+		//		{
+		//			return NotFound();
+		//		}
+		//		else
+		//		{
+		//			throw;
+		//		}
+		//	}
 
-			return NoContent();
-		}
+		//	return NoContent();
+		//}
 
-		[HttpGet]
-		[Route("listFavourite")]
-		public async Task<ActionResult<IEnumerable<Book>>> ListFavourite()
-		{
-			var books = await _context.Books.Include(a => a.Promotion)
-											.Where(a => a.Status && a.Favourite)
-											.ToListAsync();
+		//[HttpGet]
+		//[Route("listFavourite")]
+		//public async Task<ActionResult<IEnumerable<Book>>> ListFavourite()
+		//{
+		//	var books = await _context.Books.Include(a => a.Promotion)
+		//									.Where(a => a.Status && a.Favourite)
+		//									.ToListAsync();
 
-			var rows = new List<ListFavouriteViewModel>();
-			foreach (Book book in books)
-			{
-				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
-				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
-				{
-					averageRating = x.Average(r => r.RatingLevel)
-				}).FirstOrDefault();
+		//	var rows = new List<ListFavouriteViewModel>();
+		//	foreach (Book book in books)
+		//	{
+		//		Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+		//		var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+		//		{
+		//			averageRating = x.Average(r => r.RatingLevel)
+		//		}).FirstOrDefault();
 
-				rows.Add(new ListFavouriteViewModel
-				{
-					Id = book.Id,
-					PromotionPercentage = book.Promotion.PromotionPercentage,
-					Name = book.Name,
-					Price = book.Price,
-					Favourite = book.Favourite,
-					Star = rating?.averageRating ?? 5,
-					Status = book.Status,
-					FileName = image?.FileName,
-					PriceAfterPromotion = book.Price * ((100-book.Promotion.PromotionPercentage)/100)
-				});
-			}
-			return Ok(rows);
-		}
+		//		rows.Add(new ListFavouriteViewModel
+		//		{
+		//			Id = book.Id,
+		//			PromotionPercentage = book.Promotion.PromotionPercentage,
+		//			Name = book.Name,
+		//			Price = book.Price,
+		//			Favourite = book.Favourite,
+		//			Star = rating?.averageRating ?? 5,
+		//			Status = book.Status,
+		//			FileName = image?.FileName,
+		//			PriceAfterPromotion = book.Price * ((100-book.Promotion.PromotionPercentage)/100)
+		//		});
+		//	}
+		//	return Ok(rows);
+		//}
 
         [HttpGet]
         [Route("getTheListByPrice")]
@@ -307,7 +305,6 @@ namespace BookStore.Controllers
 					Quantity = book.Quantity,
 					Description = book.Description,
 					Price = book.Price,
-					Favourite = book.Favourite,
 					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
@@ -347,7 +344,6 @@ namespace BookStore.Controllers
 					Quantity = book.Quantity,
 					Description = book.Description,
 					Price = book.Price,
-					Favourite = book.Favourite,
 					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
