@@ -104,5 +104,34 @@ namespace BookStore.Controllers
         {
             return _context.Reviews.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet]
+		[Route("listReview")]
+		public async Task<ActionResult<IEnumerable<Review>>> ListReview(int bookId)
+		{
+			var reviews = await _context.Reviews.Include(a => a.User)
+                                                .Include(a => a.Book)
+                                                .Where(a => a.BookId == bookId)
+											.ToListAsync();
+			TimeZoneInfo vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+			DateTime vietnamTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.Utc, vietnamTimeZone);
+
+			var rows = new List<ReviewViewModel>();
+			foreach (Review review in reviews)
+			{
+                Rating rating = await _context.Ratings.FirstOrDefaultAsync(r => r.UserId == review.UserId);
+
+				rows.Add(new ReviewViewModel
+                {
+                    Id = review.Id,
+                    FullName = review.User?.FullName,
+                    Content = review.Content,
+                    CreateTime = (int)(vietnamTime - review.CreateTime).TotalSeconds,
+                    Rating = rating.RatingLevel
+				});
+			}
+			return Ok(rows);
+		}
+
+	}
 }

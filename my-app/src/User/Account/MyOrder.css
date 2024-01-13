@@ -1,0 +1,84 @@
+*{
+    box-sizing: border-box;
+}
+.navbarMyorder {
+    cursor: pointer;
+    background: rgb(255, 255, 255);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: sticky;
+    top: 0px;
+    z-index: 10;
+}
+
+.itemnavbarMyorder {
+    width: 16.6667%;
+    white-space: nowrap;
+    text-align: center;
+    border-bottom: none;
+}
+/* .navbaritem0{
+    width: 16.6667%;
+    padding: 12px 0px;
+    text-align: center;
+    color: rgb(13, 92, 182);
+    border-bottom: 2px solid rgb(13, 92, 182);
+} */
+
+.itemnavbarMyorder a{
+   color: black;
+}
+.backgroundInfo {
+    padding-bottom: 1rem;  
+}
+
+
+/* invoicedetails */
+.hhOLsC {
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+.itemI{
+    width: 33.3333%;    
+}
+.item1{
+    background-color: #efefef;
+}
+.item2{
+    background-color: #efefef;
+}
+.parentInvoice{
+    background-color: #efefef;
+}
+.detailInvoiceNavbar{
+    margin-bottom: 3rem;
+}
+.detailInvoiceNavbarItem1{
+    width: 84%;
+}
+
+.fontSize20{
+    font-size: 20px;
+}
+.displayFLEX{
+    display: flex;
+}
+ .totalInvoice .floatRightInvoice{
+    float: right;
+    padding:  2rem 2rem;
+    padding-left: 0;
+}
+.totalInvoice .floatRightInvoice .totalResult{
+    display: flex;
+}
+.totalInvoice .floatRightInvoice .totalResult div:nth-child(2) p{
+    text-align: end;
+}
+.totalInvoice .floatRightInvoice button{
+    float: right;
+    padding: 0.5rem 1rem;
+}
+
+

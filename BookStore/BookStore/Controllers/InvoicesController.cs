@@ -104,5 +104,77 @@ namespace BookStore.Controllers
         {
             return _context.Invoices.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet("ListOfOrder/{str}")]
+		//[Route("ListOfOrder")]
+		public async Task<ActionResult<IEnumerable<Invoice>>> ListOfOrder(string str)
+		{
+            var invoice = await _context.Invoices.ToListAsync();
+            invoice = await _context.Invoices.Include(i => i.User)
+                .Where(i => str == "default" ? true
+                : str == "ordered" ? i.ApproveOrder == "Đã đặt"
+                : str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
+                : str == "transported" ? i.ApproveOrder == "Đang vận chuyển"
+                : str == "delivered" ? i.ApproveOrder == "Đã giao"
+                : str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).ToListAsync();
+
+            var detailInvoice =await _context.InvoiceDetails
+					.Include(i => i.Book)
+					.Include(i => i.Invoice).ToListAsync();
+
+			var listInvoice = new List<InvoicesViewModel>();
+            foreach(Invoice item in invoice)
+            {
+				var chuoi = "";
+                var ngay = "";
+                var thang = "";
+                var nam = "";
+                var time = "";
+				ngay = ngay + item.IssuedDate.Day;
+				thang = thang + item.IssuedDate.Month;
+				nam = nam + item.IssuedDate.Year;
+				List<string> tempList = new List<string>();
+				foreach (InvoiceDetail detail in detailInvoice)
+                {
+                    if(detail.Invoice.Id == item.Id)
+                    {                      
+						tempList.Add(detail.Book.Name);
+					}
+					
+				}
+                time = ngay +"/"+ thang +"/"+ nam;
+				chuoi = string.Join(", ", tempList);
+				listInvoice.Add(new InvoicesViewModel
+                {
+                    Id = item.Id,
+                    Code = item.Code,
+                    IssuedDate = time,
+                    ShippingAddress = item.ShippingAddress,
+                    ShippingPhone = item.ShippingPhone,
+                    Total = item.Total,
+                    ApproveOrder = item.ApproveOrder,
+                    BookName = chuoi,
+                    Status = item.Status
+                });       
+            }
+			return Ok(listInvoice);
+		}
+
+		[HttpDelete("Canceled/{id}")]
+		public async Task<IActionResult> Canceled(int id)
+		{
+			var invoice = await _context.Invoices.FindAsync(id);
+			
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			invoice.ApproveOrder = "Đã hủy";
+			_context.Invoices.Update(invoice);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+	}
 }

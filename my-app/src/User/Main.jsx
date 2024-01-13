@@ -289,11 +289,9 @@ const Main = () => {
                                                                                 </h3>
                                                                                 <div className="product_star_sold">
                                                                                     <div className="product__panel-rate-wrap">
-                                                                                        <i className="fas fa-star product__panel-rate"></i>
-                                                                                        <i className="fas fa-star product__panel-rate"></i>
-                                                                                        <i className="fas fa-star product__panel-rate"></i>
-                                                                                        <i className="fas fa-star product__panel-rate"></i>
-                                                                                        <i className="fas fa-star product__panel-rate"></i>
+                                                                                        <p className="hlnKeG" style={{ fontSize: "15px", display: "inline-block" }}>
+                                                                                            <Rating defaultValue={item.star} readOnly />
+                                                                                        </p>
                                                                                     </div>
                                                                                     <span className="quantity hasBorder">Đã bán 1000</span>
                                                                                 </div>

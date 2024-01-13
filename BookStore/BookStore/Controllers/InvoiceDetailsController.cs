@@ -32,7 +32,7 @@ namespace BookStore.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<InvoiceDetail>> GetInvoiceDetail(int id)
         {
-            var invoiceDetail = await _context.InvoiceDetails.FindAsync(id);
+            var invoiceDetail = await _context.InvoiceDetails.Include(i => i.Book).Include(i => i.Invoice).FirstOrDefaultAsync(a => a.Id == id); ;
 
             if (invoiceDetail == null)
             {
@@ -103,6 +103,76 @@ namespace BookStore.Controllers
         private bool InvoiceDetailExists(int id)
         {
             return _context.InvoiceDetails.Any(e => e.Id == id);
+        }
+
+        [HttpGet("detailsOfAnOrder/{id}")]
+        public async Task<ActionResult<InvoiceDetail>> detailsOfAnOrder(int id)
+        {
+			var invoiceDetail = await _context.InvoiceDetails
+                      .Include(i => i.Book.Promotion)
+                      .Include(i => i.Invoice.User)
+                      .Where(a => a.Invoice.Id == id).ToListAsync();
+
+			if (invoiceDetail == null)
+            {
+                return NotFound();
+            }
+
+            var listInvoiceDetails = new List<InvoiceDetailsViewModel>();
+            foreach(InvoiceDetail item in invoiceDetail)
+            {
+				Models.Image image = _context.Images.FirstOrDefault(x => x.BookId == item.Book.Id);
+      
+				double totalproduct = (item.Quantity * item.UnitPrice);
+
+                listInvoiceDetails.Add(new InvoiceDetailsViewModel
+                {
+					Id = item.Id,
+					UnitPrice = item.UnitPrice,
+					Quantity = item.Quantity,
+                    TotalProduct = totalproduct,
+					ApproveOrder = item.Invoice.ApproveOrder,
+					PromotionPercentage = (double)(item.Book.Promotion?.PromotionPercentage),
+					BookName = item.Book?.Name,
+					Images = image?.FileName
+				});
+			}
+
+            return Ok(listInvoiceDetails);
+        }
+
+
+        [HttpGet("orderer/{id}")]
+        public async Task<ActionResult<InvoiceDetail>> orderer(int id)
+        {
+			var ngay = "";
+			var thang = "";
+			var nam = "";
+			var time = "";
+			var orderer = await _context.InvoiceDetails
+                .Include(i => i.Book)
+                .Include(i => i.Invoice.User)
+                .FirstOrDefaultAsync(a => a.Invoice.Id == id);
+
+            ngay += orderer.Invoice.IssuedDate.Day;
+            thang += orderer.Invoice.IssuedDate.Month;
+            nam += orderer.Invoice.IssuedDate.Year;
+            time = ngay +"/"+ thang +"/"+ nam;
+			if (orderer == null)
+            {
+                return NotFound();
+            }
+
+            var detailOrderer = new OrdererViewModel
+            {
+               Code = orderer.Invoice.Code,
+               IssuedDate = time,
+			   OrderersName = orderer.Invoice.User.FullName,
+			   ShippingAddress = orderer.Invoice.ShippingAddress,
+			   ShippingPhone = orderer.Invoice.ShippingPhone
+			};
+
+            return Ok(detailOrderer);
         }
     }
 }
