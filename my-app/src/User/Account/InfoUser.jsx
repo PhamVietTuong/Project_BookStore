@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import './infoUser.css';
 import { useEffect, useState } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
+import MyOrder from "./MyOrder";
 
 const InfoUser = () => {
     const [listFavourite, setlistFavourite] = useState([]);
@@ -26,14 +27,14 @@ const InfoUser = () => {
                                 </div>
                                 <Nav variant="pills" className="flex-column managementInfo">
                                     <Nav.Item>
-                                        <Nav.Link eventKey="info">
+                                        <Nav.Link eventKey="info" as={Link} to="/info">
                                             <i className="far fa-user iconOrderManagement"></i>
                                             Thông tin tài khoản
                                         </Nav.Link>
                                     </Nav.Item>
 
                                     <Nav.Item>
-                                        <Nav.Link eventKey="order">
+                                        <Nav.Link eventKey="order" as={Link} to="/order">
                                             <i className="far fa-file-alt iconOrderManagement"></i>
                                                 Quản lí đơn hàng
                                         </Nav.Link>
@@ -54,7 +55,7 @@ const InfoUser = () => {
                                     <Tab.Pane eventKey="order">
                                         <div className="myOrder">Đơn hàng của tôi</div>
                                         <Card className="cardBody">
-                                            <Card.Body></Card.Body>
+                                            <Card.Body style={{padding:"0px"}}><MyOrder/></Card.Body>
                                         </Card>
                                     </Tab.Pane>
 

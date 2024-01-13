@@ -18,6 +18,7 @@ import AccountAdd from "../Admin/Account/AccountAdd";
 import ProductDetail from "../User/Main/ProductDetail";
 import Cart from "../User/Main/Cart";
 import CommentList from "../Admin/Comment/CommentList";
+import InvoiceDetails from "../User/Account/InvoiceDetails";
 
 const Router = () => { 
     return (    
@@ -61,6 +62,7 @@ const Router = () => {
                             <Route path="info" element={<InfoUser />} />
                             <Route path="detail/:id" element={<ProductDetail />} />
                             <Route path="cart" element={<Cart />} />
+                            <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
                         </Route>
                     </Route>
                 </Routes>
