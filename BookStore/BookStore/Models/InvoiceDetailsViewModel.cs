@@ -14,5 +14,7 @@
 		public double PromotionPercentage { get; set; }
 		public string BookName { get; set; }
 		public string Images { get; set; }
+
+		public string Publisher { get; set; }
 	}
 }

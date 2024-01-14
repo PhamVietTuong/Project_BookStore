@@ -105,9 +105,9 @@ namespace BookStore.Controllers
             return _context.Invoices.Any(e => e.Id == id);
         }
 
-		[HttpGet("ListOfOrder/{str}")]
+		[HttpGet("ListOfOrder/{useId}/{str}")]
 		//[Route("ListOfOrder")]
-		public async Task<ActionResult<IEnumerable<Invoice>>> ListOfOrder(string str)
+		public async Task<ActionResult<IEnumerable<Invoice>>> ListOfOrder(string useId, string str)
 		{
             var invoice = await _context.Invoices.ToListAsync();
             invoice = await _context.Invoices.Include(i => i.User)
@@ -116,7 +116,7 @@ namespace BookStore.Controllers
                 : str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
                 : str == "transported" ? i.ApproveOrder == "Đang vận chuyển"
                 : str == "delivered" ? i.ApproveOrder == "Đã giao"
-                : str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).ToListAsync();
+                : str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId==useId).ToListAsync();
 
             var detailInvoice =await _context.InvoiceDetails
 					.Include(i => i.Book)

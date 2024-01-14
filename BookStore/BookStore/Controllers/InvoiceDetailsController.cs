@@ -110,7 +110,8 @@ namespace BookStore.Controllers
         {
 			var invoiceDetail = await _context.InvoiceDetails
                       .Include(i => i.Book.Promotion)
-                      .Include(i => i.Invoice.User)
+					  .Include(i => i.Book.Publisher)
+					  .Include(i => i.Invoice.User)
                       .Where(a => a.Invoice.Id == id).ToListAsync();
 
 			if (invoiceDetail == null)
@@ -134,7 +135,8 @@ namespace BookStore.Controllers
 					ApproveOrder = item.Invoice.ApproveOrder,
 					PromotionPercentage = (double)(item.Book.Promotion?.PromotionPercentage),
 					BookName = item.Book?.Name,
-					Images = image?.FileName
+					Images = image?.FileName,
+                    Publisher = item.Book.Publisher.Name
 				});
 			}
 
