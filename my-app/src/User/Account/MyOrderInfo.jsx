@@ -9,7 +9,7 @@ const MyOrderInfo = ({ ListOfOrder }) => {
           <tr>
             <th>Mã đơn hàng</th>
             <th>Ngày mua</th>
-            <th>Sản phẩm</th>
+            <th style={{width:"50%"}}>Sản phẩm</th>
             <th>Tổng tiền</th>
             <th>Trạng thái</th>
           </tr>

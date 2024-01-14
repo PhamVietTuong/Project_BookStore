@@ -127,7 +127,7 @@ const InvoiceDetails = () => {
                             </div>
                             <div style={{ width: "100%" }}>
                               <div>{item.bookName}</div>
-                              <div>sku</div>
+                              <div>Cung cấp bởi: {item.publisher}</div>
                             </div>
                           </div>
                         </td>
