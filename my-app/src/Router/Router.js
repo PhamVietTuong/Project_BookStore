@@ -21,6 +21,7 @@ import CommentList from "../Admin/Comment/CommentList";
 import { useEffect, useState } from "react";
 import AxiosClient from "../Axios/AxiosClient";
 import ModalLogin from "../User/ModalLogin";
+import InvoiceDetails from "../User/Account/InvoiceDetails";
 
 const Router = () => {
     return (
@@ -55,6 +56,7 @@ const Router = () => {
                             <Route path="detail/:id" element={<ProductDetail />} />
                             <Route path="cart" element={<Cart />} />
                             <Route path="cart" element={<Cart />} />
+                            <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
                         </Route>
                     </Route>
                 </Routes>

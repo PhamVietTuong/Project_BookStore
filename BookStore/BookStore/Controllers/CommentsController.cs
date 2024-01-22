@@ -112,7 +112,7 @@ namespace BookStore.Controllers
 
 		[HttpGet]
 		[Route("CommentTheBook")]
-		public async Task<ActionResult<IEnumerable<Comment>>> Test()
+		public async Task<ActionResult<IEnumerable<Comment>>> CommentTheBook()
 		{
 			var newComments = await _context.Comments
 				.OrderByDescending(c => c.Date)
