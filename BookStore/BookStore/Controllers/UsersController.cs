@@ -12,21 +12,29 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BookStore.Helpers;
+using Newtonsoft.Json;
+using AutoMapper;
 
 namespace BookStore.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
-    {
-        private readonly BookStoreContext _context;
+	[Route("api/[controller]")]
+	[ApiController]
+	public class UsersController : ControllerBase
+	{
+		private readonly BookStoreContext _context;
 		private readonly UserManager<User> _userManager;
 		private readonly RoleManager<IdentityRole> _roleManager;
 		private readonly IConfiguration _configuration;
 
-		public UsersController(BookStoreContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
-        {
-            _context = context;
+		public UsersController(
+			BookStoreContext context,
+			UserManager<User> userManager,
+			RoleManager<IdentityRole> roleManager,
+			IConfiguration configuration
+			)
+		{
+			_context = context;
 			_userManager = userManager;
 			_roleManager = roleManager;
 			_configuration = configuration;
@@ -37,20 +45,20 @@ namespace BookStore.Controllers
 		{
 			//return await _userManager.Users.ToListAsync();
 			var users = await _userManager.Users
-				.Where( u => u.Status)
+				.Where(u => u.Status)
 				.ToListAsync();
 			List<UserViewModel> list = new List<UserViewModel>();
 			foreach (var user in users)
 			{
-				list.Add(new UserViewModel 
-				{ 
-					Id = user.Id, 
+				list.Add(new UserViewModel
+				{
+					Id = user.Id,
 					UserName = user.UserName,
 					FullName = user.FullName,
-					Address= user.Address,
+					Address = user.Address,
 					Email = user.Email,
-					Status= user.Status,
-					
+					Status = user.Status,
+
 				});
 			}
 			return Ok(list);
@@ -60,7 +68,7 @@ namespace BookStore.Controllers
 		public async Task<ActionResult<User>> GetUser(string id)
 		{
 			return await _userManager.FindByIdAsync(id);
-			
+
 		}
 
 		//Put:api/users/5
@@ -124,11 +132,12 @@ namespace BookStore.Controllers
 				if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
 				{
 					var userRoles = await _userManager.GetRolesAsync(user);
-
+					var UserId = user.Id.ToString();
 					var authClaims = new List<Claim>
 				{
 					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+					new Claim(ClaimTypes.NameIdentifier, UserId),
+					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 				};
 
 					foreach (var userRole in userRoles)
@@ -158,6 +167,7 @@ namespace BookStore.Controllers
 
 			return BadRequest(ModelState);
 		}
+
 		[HttpPost]
 		[Route("register")]
 		public async Task<IActionResult> Register(RegisterViewModel re)
@@ -171,9 +181,8 @@ namespace BookStore.Controllers
 				Email = re.Email,
 				SecurityStamp = Guid.NewGuid().ToString(),
 				UserName = re.UserName,
-				FullName = re.FullName,
-				Status= true
-			
+				Status = true
+
 			};
 			var result = await _userManager.CreateAsync(user, re.PassWord);
 			if (!result.Succeeded)
@@ -218,6 +227,5 @@ namespace BookStore.Controllers
 		{
 			return _context.Users.Any(e => e.Id == id);
 		}
-
 	}
 }

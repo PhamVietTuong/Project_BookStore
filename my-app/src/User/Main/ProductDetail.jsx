@@ -28,7 +28,7 @@ const ProductDetail = () => {
     const [favourite, setFavourite] = useState();
     const currentlyAFavorite = <FontAwesomeIcon icon={faHeart} color="rgb(156, 163, 175)" />
     const notCurrentlyAFavorite = <FontAwesomeIcon icon={faHeart} color="rgb(255, 66, 79)" />
-    const [Carts, setCarts] = useState({ userId: "b68155b3-86f9-4c7f-82d9-5eff5ffe4fad", bookId: id, quantity: 1, selected: false });
+    const [Carts, setCarts] = useState({bookId: id, quantity: 1, selected: false });
     const [review, setReview] = useState([]);
     const [contentComment, setContentComment] = useState('');
     const [timeComment, setTimeComment] = useState(0);

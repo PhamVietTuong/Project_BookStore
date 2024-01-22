@@ -18,24 +18,24 @@ import AccountAdd from "../Admin/Account/AccountAdd";
 import ProductDetail from "../User/Main/ProductDetail";
 import Cart from "../User/Main/Cart";
 import CommentList from "../Admin/Comment/CommentList";
+import { useEffect, useState } from "react";
+import AxiosClient from "../Axios/AxiosClient";
+import ModalLogin from "../User/ModalLogin";
 
-const Router = () => { 
-    return (    
+const Router = () => {
+    return (
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="login" >
-                        <Route index element={<Login />} />
-                    </Route>
                     <Route>
                         <Route path="admin" element={<Index />} exact>
-                            <Route path="products" element={<ProductList/>} />
-                            <Route path="products/add" element={<ProductAdd/>}/>
-                            <Route path="products/edit/:id" element={<ProductEdit/>}/>
+                            <Route path="products" element={<ProductList />} />
+                            <Route path="products/add" element={<ProductAdd />} />
+                            <Route path="products/edit/:id" element={<ProductEdit />} />
 
                             <Route path="accounts" element={<AccountList />} />
-                            <Route path="accounts/add" element={<AccountAdd/>}/>
-                            
+                            <Route path="accounts/add" element={<AccountAdd />} />
+
                             <Route path="category" element={<CategoryList />} />
                             <Route path="category/add" element={<CategoryCreate />} />
                             <Route path="category/edit/:id" element={<CategoryEdit />} />
@@ -45,21 +45,15 @@ const Router = () => {
                             <Route path="comments" element={<CommentList />} />
 
                         </Route>
-                    </Route> 
-                    <Route path="register" >
-                        <Route index element={<Register/>} />
-                    </Route>
-
-                    <Route path="dashboard" >
-                        <Route index element={<Dashboard />} />
                     </Route>
 
                     <Route>
                         <Route path="/" element={<IndexUser />} exact>
-                            <Route index path="" element={<Main/>} />
+                            <Route index path="" element={<Main />} />
                             <Route path="order" element={<InfoUser />} />
                             <Route path="info" element={<InfoUser />} />
                             <Route path="detail/:id" element={<ProductDetail />} />
+                            <Route path="cart" element={<Cart />} />
                             <Route path="cart" element={<Cart />} />
                         </Route>
                     </Route>
