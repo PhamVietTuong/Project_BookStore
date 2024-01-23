@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import AxiosClient from "../Axios/AxiosClient";
 import ModalLogin from "../User/ModalLogin";
 import InvoiceDetails from "../User/Account/InvoiceDetails";
+import Unauthorize from "../Unauthorized";
 
 const Router = () => {
     return (
@@ -44,10 +45,9 @@ const Router = () => {
                             <Route path="slideshow" element={<SlideshowList />} />
 
                             <Route path="comments" element={<CommentList />} />
-
                         </Route>
                     </Route>
-
+                    
                     <Route>
                         <Route path="/" element={<IndexUser />} exact>
                             <Route index path="" element={<Main />} />
@@ -58,6 +58,10 @@ const Router = () => {
                             <Route path="cart" element={<Cart />} />
                             <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
                         </Route>
+                    </Route>
+
+                    <Route path="unauthorized" >
+                        <Route index element={<Unauthorize />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

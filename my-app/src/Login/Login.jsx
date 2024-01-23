@@ -14,6 +14,9 @@ const Login = ({ onSuccess }) => {
   const [account, setAccount] = useState({});
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
+  const [userRoles, setUserRoles] = useState([]);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const validRoles = ['Admin', 'User']
   const navigate = useNavigate();
   const handleChange = (e) => {
     setAccount(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,8 +39,9 @@ const Login = ({ onSuccess }) => {
 
       if (token) {
         localStorage.setItem('jwt', token);
+        setUserRoles(response.data.userRoles)
+        setLoginSuccess(true);
         onSuccess();
-        navigate("/")
       } else {
         setErrors({
           general: 'Invalid username or password.',
@@ -57,6 +61,20 @@ const Login = ({ onSuccess }) => {
       }
     }
   };
+
+  if (loginSuccess) {
+    const areRolesValid = userRoles.every(role => validRoles.includes(role));
+    if (areRolesValid) {
+      if (userRoles.includes('Admin')) {
+        navigate('/admin')
+      }
+      if (userRoles.includes('User')) {
+        navigate('/')
+      }
+    } else {
+      navigate('/unauthorized')
+    }
+  }
 
   return (
     <>
@@ -105,7 +123,7 @@ const Login = ({ onSuccess }) => {
               Login
             </Button>
             <div className="text-center mt-3">
-              <p>Not a member? <Link onClick = {() => setShow(true)}>Register</Link></p>
+              <p>Not a member? <Link onClick={() => setShow(true)}>Register</Link></p>
               <p>Or sign up with: </p>
             </div>
             <Button className="mb-2 w-100" size="lg" style={{ backgroundColor: '#dd4b39' }}>

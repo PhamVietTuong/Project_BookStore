@@ -134,11 +134,11 @@ namespace BookStore.Controllers
 					var userRoles = await _userManager.GetRolesAsync(user);
 					var UserId = user.Id.ToString();
 					var authClaims = new List<Claim>
-				{
-					new Claim(ClaimTypes.Name, user.UserName),
-					new Claim(ClaimTypes.NameIdentifier, UserId),
-					new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-				};
+					{
+						new Claim(ClaimTypes.Name, user.UserName),
+						new Claim(ClaimTypes.NameIdentifier, UserId),
+						new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+					};
 
 					foreach (var userRole in userRoles)
 					{
@@ -155,9 +155,11 @@ namespace BookStore.Controllers
 						signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
 					);
 
+
 					return Ok(new
 					{
 						token = new JwtSecurityTokenHandler().WriteToken(token),
+						userRoles = userRoles,
 						expiration = token.ValidTo
 					});
 				}
@@ -185,8 +187,20 @@ namespace BookStore.Controllers
 
 			};
 			var result = await _userManager.CreateAsync(user, re.PassWord);
+
 			if (!result.Succeeded)
 				return StatusCode(StatusCodes.Status500InternalServerError);
+
+			if (!await _roleManager.RoleExistsAsync("Admin"))
+				await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+			if (!await _roleManager.RoleExistsAsync("User"))
+				await _roleManager.CreateAsync(new IdentityRole("User"));
+
+			if (await _roleManager.RoleExistsAsync("User"))
+			{
+				await _userManager.AddToRoleAsync(user, "User");
+			}
 
 			return Ok();
 		}
