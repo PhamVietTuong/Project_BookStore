@@ -5,17 +5,18 @@ import { useEffect, useState } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
 import MyOrder from "./MyOrder";
 
-const InfoUser = () => {
+const InfoUser = ({ activeTab }) => {
     const [listFavourite, setlistFavourite] = useState([]);
 
-    useEffect(() => {
-        AxiosClient.get(`/Books/listFavourite`).then(res => setlistFavourite(res.data))
-    }, []);
+    // useEffect(() => {
+    //     AxiosClient.get(`/Books/listFavourite`).then(res => setlistFavourite(res.data))
+    // }, []);
+
     return (
         <>
             <div className="backgroundInfo">
                 <div className="container" style={{marginRight: "10rem", paddingTop: "1rem"}}>
-                    <Tab.Container id="left-tabs-example" defaultActiveKey="info">
+                    <Tab.Container id="left-tabs-example" defaultActiveKey={activeTab}>
                         <Row>
                             <Col sm={3} className="mt-4 mb-3">
                                 <div className="userInfo">

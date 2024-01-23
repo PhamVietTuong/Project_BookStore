@@ -6,13 +6,18 @@ import Login from "../Login/Login";
 import '../User/Header.css'
 import ModalLogin from "./ModalLogin";
 import ModalRegister from "./ModalRegister";
+import InfoUser from "./Account/InfoUser";
 const Header = () => {
     const [carts, setCarts] = useState([]);
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
+    const [activeTab, setActiveTab] = useState('info');
+    const [infoUserVisible, setInfoUserVisible] = useState(false);
+
     var jwt = localStorage.getItem("jwt")
     var navigate = useNavigate();
-    let menu;
+    var menu;
+
     useEffect(() => {
         AxiosClient.get(`/Carts/listCart`).then((res) => {
             setCarts(res.data);
@@ -33,12 +38,20 @@ const Header = () => {
             console.log("Logout error", error);
         }
     }
+    const handleLinkClick = (tabId) => {
+        setActiveTab(tabId);
+        setInfoUserVisible(true);
+    };
 
+    const handleHomeClick = () => {
+        setInfoUserVisible(false);
+    }
+    
     if (jwt) {
         menu = (
             <div className="dropdown-menu">
-                <Link to="info" className="dropdown-item">Thông tin tài khoản</Link>
-                <Link to="order" className="dropdown-item">Đơn hàng của tôi</Link>
+                <Link to="info" className="dropdown-item" onClick={() => handleLinkClick('info')}>Thông tin tài khoản</Link>
+                <Link to="order" className="dropdown-item" onClick={() => handleLinkClick('order')}>Đơn hàng của tôi</Link>
                 <Link to="" className="dropdown-item" onClick={logout}>Đăng xuất</Link>
             </div>
         )
@@ -51,7 +64,7 @@ const Header = () => {
             </div>
         )
     }
-   
+    
     return (
         <>
                 <div className="container">
@@ -76,7 +89,7 @@ const Header = () => {
                         <div className="col-lg-3 header__call">
 
 
-                            <Link to="" className="header__call-icon-wrap">
+                        <Link to="" className="header__call-icon-wrap" onClick={handleHomeClick}>
                                 <i className="fas fa-home header__call-icon"></i>
                                 <div className="header__call-info">
                                     <div className="header__call-text" >
@@ -85,7 +98,7 @@ const Header = () => {
                                 </div>
                             </Link>
 
-                            <Link to="" className="header__call-icon-wrap ml-3 " >
+                        <Link to="" className="header__call-icon-wrap ml-3 ">
                             <div className="header__call-info navbar">
                                 <div className="nav-item dropdown">
                                     <i className="fas fa-user-circle header__user-icon"></i>
@@ -109,6 +122,7 @@ const Header = () => {
                 </div>
             <ModalLogin show={showLogin} handleClose={handleCloseLogin} />
             <ModalRegister show={showRegister} handleClose={handleCloseRegister} />
+            {infoUserVisible && activeTab && <InfoUser activeTab={activeTab} />}
         </>
     );
 }
