@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using BookStore.Helpers;
 
 namespace BookStore.Controllers
 {
@@ -148,6 +149,7 @@ namespace BookStore.Controllers
 			}
 			else
 			{
+                cart.UserId = User.GetUserId().ToString();
 				_context.Carts.Add(cart);
 			}
 			await _context.SaveChangesAsync();
