@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Text;
 using BookStore.Helpers;
 using Newtonsoft.Json;
-using AutoMapper;
+
 
 namespace BookStore.Controllers
 {
@@ -159,7 +159,7 @@ namespace BookStore.Controllers
 					return Ok(new
 					{
 						token = new JwtSecurityTokenHandler().WriteToken(token),
-						userRoles = userRoles,
+						userRoles = userRoles.ToList(),
 						expiration = token.ValidTo
 					});
 				}

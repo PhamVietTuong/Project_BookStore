@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AxiosClient from "../Axios/AxiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ const Login = ({ onSuccess }) => {
   const [account, setAccount] = useState({});
   const [errors, setErrors] = useState({});
   const [show, setShow] = useState(false);
-  const [userRoles, setUserRoles] = useState([]);
+  const [userRoles, setUserRoles] = useState(null);
   const [loginSuccess, setLoginSuccess] = useState(false);
   const validRoles = ['Admin', 'User']
   const navigate = useNavigate();
@@ -35,18 +35,26 @@ const Login = ({ onSuccess }) => {
 
     try {
       const response = await AxiosClient.post('/Users/login', account);
-      const token = response.data.token;
+      console.log('Response from server:', response.data);
+      const { token, userRoles } = response.data;
+      localStorage.setItem('jwt', token);
+      localStorage.setItem('userRoles', userRoles);
+      setUserRoles(userRoles);
+      setLoginSuccess(true);
+      onSuccess();
 
-      if (token) {
-        localStorage.setItem('jwt', token);
-        setUserRoles(response.data.userRoles)
-        setLoginSuccess(true);
-        onSuccess();
-      } else {
-        setErrors({
-          general: 'Invalid username or password.',
-        });
-      }
+      // if (token) {
+        // localStorage.setItem('jwt', token);
+        // setUserRoles(response.data.userRoles)
+        // setLoginSuccess(true);
+      // onSuccess();
+        //window.location.reload()
+      // } else {
+      //   setErrors({
+      //     general: 'Invalid username or password.',
+      //   });
+      // }
+      
     } catch (error) {
       console.error('Error during login:', error);
 
@@ -62,19 +70,32 @@ const Login = ({ onSuccess }) => {
     }
   };
 
+  // if (loginSuccess) {
+  //   const areRolesValid = userRoles.every(role => validRoles.includes(role));
+  //   if (areRolesValid) {
+  //     if (userRoles.includes('Admin')) {
+  //       navigate('/admin')
+  //     }
+  //     if (userRoles.includes('User')) {
+  //       navigate('/')
+  //     }
+  //   } else {
+  //     navigate('/unauthorized')
+  //   }
+  // }
+
   if (loginSuccess) {
     const areRolesValid = userRoles.every(role => validRoles.includes(role));
     if (areRolesValid) {
       if (userRoles.includes('Admin')) {
         navigate('/admin')
       }
-      if (userRoles.includes('User')) {
+      else{
         navigate('/')
+        window.location.reload()
       }
-    } else {
-      navigate('/unauthorized')
-    }
   }
+}
 
   return (
     <>
