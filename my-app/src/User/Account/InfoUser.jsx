@@ -1,5 +1,5 @@
 import { Card, Col, Nav, Row, Tab } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import './infoUser.css';
 import { useEffect, useState } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
@@ -7,16 +7,14 @@ import MyOrder from "./MyOrder";
 
 const InfoUser = ({ activeTab }) => {
     const [listFavourite, setlistFavourite] = useState([]);
-
-    // useEffect(() => {
-    //     AxiosClient.get(`/Books/listFavourite`).then(res => setlistFavourite(res.data))
-    // }, []);
+    const location = useLocation();
+    const cleanPathname = location.pathname.replace('/', ''); 
 
     return (
         <>
             <div className="backgroundInfo">
                 <div className="container" style={{marginRight: "10rem", paddingTop: "1rem"}}>
-                    <Tab.Container id="left-tabs-example" defaultActiveKey={activeTab}>
+                    <Tab.Container id="left-tabs-example" defaultActiveKey={cleanPathname} >
                         <Row>
                             <Col sm={3} className="mt-4 mb-3">
                                 <div className="userInfo">

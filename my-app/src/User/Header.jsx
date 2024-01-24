@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import AxiosClient from "../Axios/AxiosClient";
 import { Button, Modal } from "react-bootstrap";
 import Login from "../Login/Login";
@@ -11,8 +11,6 @@ const Header = () => {
     const [carts, setCarts] = useState([]);
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
-    const [activeTab, setActiveTab] = useState('info');
-    const [infoUserVisible, setInfoUserVisible] = useState(false);
 
     var jwt = localStorage.getItem("jwt")
     var navigate = useNavigate();
@@ -38,20 +36,12 @@ const Header = () => {
             console.log("Logout error", error);
         }
     }
-    const handleLinkClick = (tabId) => {
-        setActiveTab(tabId);
-        setInfoUserVisible(true);
-    };
-
-    const handleHomeClick = () => {
-        setInfoUserVisible(false);
-    }
     
     if (jwt) {
         menu = (
             <div className="dropdown-menu">
-                <Link to="info" className="dropdown-item" onClick={() => handleLinkClick('info')}>Thông tin tài khoản</Link>
-                <Link to="order" className="dropdown-item" onClick={() => handleLinkClick('order')}>Đơn hàng của tôi</Link>
+                <NavLink to="info" className="dropdown-item" activeClassName="active">Thông tin tài khoản</NavLink>
+                <NavLink to="order" className="dropdown-item" activeClassName="active">Đơn hàng của tôi</NavLink>
                 <Link to="" className="dropdown-item" onClick={logout}>Đăng xuất</Link>
             </div>
         )
@@ -88,8 +78,7 @@ const Header = () => {
 
                         <div className="col-lg-3 header__call">
 
-
-                        <Link to="" className="header__call-icon-wrap" onClick={handleHomeClick}>
+                        <Link to="" className="header__call-icon-wrap">
                                 <i className="fas fa-home header__call-icon"></i>
                                 <div className="header__call-info">
                                     <div className="header__call-text" >
@@ -122,7 +111,6 @@ const Header = () => {
                 </div>
             <ModalLogin show={showLogin} handleClose={handleCloseLogin} />
             <ModalRegister show={showRegister} handleClose={handleCloseRegister} />
-            {infoUserVisible && activeTab && <InfoUser activeTab={activeTab} />}
         </>
     );
 }
