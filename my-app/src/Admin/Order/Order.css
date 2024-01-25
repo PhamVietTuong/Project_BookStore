@@ -1,0 +1,49 @@
+*{
+    box-sizing: border-box;
+}
+
+.backgroundInfo{
+    padding: 1rem;
+}
+ 
+.ishnWO {
+    background: rgb(255, 255, 255);
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    padding: 0;
+}
+
+.dfCYMA {
+    width: 100%;
+}
+
+.dfCYMA .sort-list { 
+        cursor: pointer;
+        background: rgb(230 229 229);
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
+        position: sticky;
+        top: 0px;
+        z-index: 10;
+        
+}
+
+.dfCYMA .sort-list a:hover, .dfCYMA .sort-list a.active {
+    color: rgb(11, 116, 229);
+    font-weight: 500;
+    position: relative;
+}
+
+.itemavbarMyorder{
+    border-right: solid 2px rgb(242, 242, 242);
+
+}
+
+.contentbody{
+    margin-top: 0.5rem;
+    height: 100px;
+    background: rgb(255, 255, 255);
+}

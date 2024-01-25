@@ -52,7 +52,7 @@ const CommentList = () => {
 
   const handleCheckboxChange = (id) => {
     const updatedComments = CommentTheBookAll.map((comment) =>
-      comment.id === id ? { ...comment, status: false } : comment
+      comment.id === id ? { ...comment, status: !comment.status } : comment
     );
     //setCommentTheBook(updatedComments);
     setCommentTheBookAll(updatedComments)
@@ -119,64 +119,6 @@ const CommentList = () => {
                       style={{ width: "100%" }}
                     >
                       <tbody>
-                        {/* {ImagesAreCommented.map((itemIAC) => {
-                        return (
-                          <>
-                            <tr>
-                              <td>
-                                <div className="icheck-primary">
-                                  <input
-                                    type="checkbox"
-                                    defaultValue=""
-                                    id="check1"
-                                  />
-                                  <label htmlFor="check1" />
-                                </div>
-                              </td>
-                              <td className="mailbox-name">
-                                <a href="#">
-                                  <img
-                                    src={`https://localhost:7106/Images/${itemIAC.name}`}
-                                    style={{ width: "100px" }}
-                                  />
-                                </a>
-                              </td>
-
-                              <td>
-                                {CommentTheBook.map((itemCTB) => {
-                                  return (
-                                    <>
-                                      {itemIAC.bookId === itemCTB.bookId ? (
-                                        <div>
-                                          <p className="mailbox-subject">
-                                            <span>
-                                              <b>{itemCTB.user.fullName}</b>{" "}
-                                              {itemCTB.content}
-                                              <button
-                                                onClick={() =>
-                                                  handleShowDelete(itemCTB.id)
-                                                }
-                                              >
-                                                xóa
-                                              </button>
-                                            </span>
-                                            <span>{itemCTB.status === false ? "ko được hiển thị" : "hiển thị"}</span>
-                                            <span style={{ float: "right" }}>
-                                              {itemCTB.date}
-                                            </span>
-
-                                           
-                                          </p>
-                                        </div>
-                                      ) : null}
-                                    </>
-                                  );
-                                })}                              
-                              </td>
-                            </tr>
-                          </>
-                        );
-                      })} */}
                         {CommentTheBook.map((itemIAC) => {
                           return (
                             <>
@@ -220,7 +162,7 @@ const CommentList = () => {
                                 <td>                                
                                     <div >
                                         <p style={{marginBottom: "3rem"}}>
-                                          {itemIAC.date}
+                                          Ngày đăng {itemIAC.date}
                                         </p>  
                                         {itemIAC.status ?
                                          <button

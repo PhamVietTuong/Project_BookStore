@@ -20,7 +20,7 @@ namespace BookStore.Models
 
 		public string Content { get; set; }
 
-		public DateTime Date { get; set; }
+		public string Date { get; set; }
 
 		public string ImageName { get; set; }
 

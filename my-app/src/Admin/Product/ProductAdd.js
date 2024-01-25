@@ -5,7 +5,6 @@ import { Button, Form } from "react-bootstrap";
 
 const ProductAdd = () => {
   const [Products, setProducts] = useState({
-    favourite: true,
     star: 4,
     status: true,
   });

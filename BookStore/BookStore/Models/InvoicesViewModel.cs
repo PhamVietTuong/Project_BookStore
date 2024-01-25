@@ -14,6 +14,8 @@
 
 		public double Total { get; set; }
 
+		public int TotalQuantity { get; set; }
+
 		public string ApproveOrder { get; set; }
 
 		public string BookName { get; set; }

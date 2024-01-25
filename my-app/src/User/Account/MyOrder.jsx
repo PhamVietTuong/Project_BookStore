@@ -7,10 +7,10 @@ import MyOrderInfo from "./MyOrderInfo";
 
 const MyOrder = () => {
   const [ListOfOrders, setListOfOrders] = useState([]);
-  var userId = "ec1f2da0-bab0-4e5d-bb2b-6b252f0375a6"; // nếu muốn test hãy nhập ID của user vào biến userId, chưa phan quyen
-
+  //var userId = "ec1f2da0-bab0-4e5d-bb2b-6b252f0375a6"; // nếu muốn test hãy nhập ID của user vào biến userId, chưa phan quyen
+  //${userId}
   const handleNavSelect = (selectedKey) => {
-    AxiosClient.get(`Invoices/ListOfOrder/${userId}/${selectedKey}`).then((res) => {
+    AxiosClient.get(`Invoices/UserListOfOrder/${selectedKey}`).then((res) => {
       setListOfOrders(res.data);
     });
   };

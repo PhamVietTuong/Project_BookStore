@@ -8,8 +8,11 @@
 
 		public double TotalProduct { get; set; }
 		// invoice
+		public int IdInvoice { get; set; } 
 		public double TotalInvoice { get; set; }
 		public string ApproveOrder { get; set; }
+
+		public int ProductCode { get; set; }
 		//book	
 		public double PromotionPercentage { get; set; }
 		public string BookName { get; set; }

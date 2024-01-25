@@ -123,15 +123,20 @@ namespace BookStore.Controllers
            var rows = new List<CommentViewModel>();
             foreach (Comment comment in newComments)
             {
-                Models.Image image = _context.Images.FirstOrDefault(x => x.BookId == comment.Book.Id);
-                rows.Add(new CommentViewModel
+				var ngay = ""; var thang = "";var nam = ""; var time = "";
+				Models.Image image = _context.Images.FirstOrDefault(x => x.BookId == comment.Book.Id);
+				ngay += comment.Date.Day;
+				thang += comment.Date.Month;
+				nam += comment.Date.Year;
+				time = ngay + "/" + thang + "/" + nam;
+				rows.Add(new CommentViewModel
                 {
                     Id = comment.Id,
 					ParentCommentId = comment.ParentCommentId,
 					BookName = comment.Book.Name,
 					UserName = comment.User.FullName,
 					Content = comment.Content,
-					Date = comment.Date,
+					Date = time,
 					ImageName = image?.FileName,
                     Status = comment.Status
 				});

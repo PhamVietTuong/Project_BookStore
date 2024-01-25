@@ -23,6 +23,7 @@ import AxiosClient from "../Axios/AxiosClient";
 import ModalLogin from "../User/ModalLogin";
 import InvoiceDetails from "../User/Account/InvoiceDetails";
 import Unauthorize from "../Unauthorized";
+import OrderList from "../Admin/Order/OrderList";
 
 const Router = () => {
     return (
@@ -45,6 +46,7 @@ const Router = () => {
                             <Route path="slideshow" element={<SlideshowList />} />
 
                             <Route path="comments" element={<CommentList />} />
+                            <Route path="orders" element={<OrderList/>} />
                         </Route>
                     </Route>
                     

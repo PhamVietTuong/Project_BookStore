@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Col, Modal, Row, Table } from "react-bootstrap";
+import $ from 'jquery';
 
 const ProductList = () => {
   var id = 0;
@@ -25,13 +26,16 @@ const ProductList = () => {
     author: {},
     category: {},
     publisher: {},
+    price:{}
   });
+
+  const [dataLoaded, setDataLoaded] = useState(false);
+
   const handleShow = (id) => {
     setselectedProduct(Products.find((a) => a.id === id));
     setselectedImage(Images.find((a) => a.bookId === id));
     setshow(true);
-  };
-
+  }
   const handleClose = () => setshow(false);
   const handleCloseDelete = () => setShowDelete(false);
 
@@ -52,15 +56,51 @@ const ProductList = () => {
   useEffect(() => {
     AxiosClient.get(`/Books`).then((res) => {
       setProducts(res.data);
-      console.log(res.data);
+      setDataLoaded(true);
     });
   }, []);
+
   useEffect(() => {
     AxiosClient.get(`/Images`).then((res) => {
       setImages(res.data);
-      console.log(res.data);
     });
   }, []);
+
+  useEffect(() => {
+    if (dataLoaded) {
+        $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            autoWidth: false,
+            buttons: [
+                {
+                    extend: 'copy',
+                    className: 'btn bg-primary',
+                },
+                {
+                    extend: 'csv',
+                    className: 'btn bg-secondary',
+                },
+                {
+                    extend: 'excel',
+                    className: 'btn bg-success',
+                    filename: function () {
+                        return 'data_' + Date.now();
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn bg-danger',
+                    filename: function () {
+                        return 'data_' + Date.now();
+                    }
+                }
+            ],
+            "bDestroy": true
+        });
+    }
+}, [dataLoaded]);
+
   return (
     <>
       <div>
@@ -117,7 +157,7 @@ const ProductList = () => {
                               <td>{item.author.name}</td>
                               <td>{item.category.name}</td>
                               <td>{item.publisher.name}</td>
-                              <td>{item.price}</td>
+                              <td>{item.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</td>
                               <td>
                                 <Button
                                   variant="primary"
@@ -163,11 +203,11 @@ const ProductList = () => {
                         <Row>
                           <Col md={6}>
                             <img
-                              src={`https://localhost:7106/Images/${selectedImage.name}`}
+                              src={`https://localhost:7106/Images/${selectedImage.fileName}`}
                               style={{ width: "400px" }}
                             />
                           </Col>
-                          <Col md={4}>
+                          <Col md={4} style={{width:"47.333333%"}}>
                             <dl className="row">
                               <dt>Tên </dt>
                               <dd>{selectedProduct.name}</dd>
@@ -178,10 +218,16 @@ const ProductList = () => {
                               <dt>Nhà xuất bản </dt>
                               <dd>{selectedProduct.publisher.name}</dd>
                               <dt>Giá </dt>
-                              <dd>{selectedProduct.price}</dd>
-                              <dt>Mô tả </dt>
-                              <dd>{selectedProduct.description}</dd>
+                              <dd>{selectedProduct.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</dd>
                             </dl>
+                          </Col>                        
+                        </Row>
+                        <Row>
+                          <Col md={12}>
+                              <dl className="row">                       
+                                <dt>Mô tả </dt>
+                                <dd className="text-justify">{selectedProduct.description}</dd>
+                              </dl>
                           </Col>
                         </Row>
                       </Modal.Body>

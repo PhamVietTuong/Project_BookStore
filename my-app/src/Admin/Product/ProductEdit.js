@@ -5,10 +5,9 @@ import { Button, Form, FormControl } from "react-bootstrap";
 
 const ProductEdit = () => {
   const { id } = useParams();
-
+  
   const [Products, setProducts] = useState({
-    favourite: true,
-    star: 4,
+    star: 5,
     status: true,
     author: {},
     category: {},
@@ -31,12 +30,6 @@ const ProductEdit = () => {
     let name = e.target.name;
     let value = e.target.value;
     setProducts((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleCheck = (e) => {
-    let name = e.target.name;
-    let checked = e.target.checked;
-    setProducts((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleSubmit = (e) => {
@@ -106,7 +99,6 @@ const ProductEdit = () => {
                         <Form.Control
                           type="number"
                           name="price"
-                          onChange={handleChange}
                           style={widthInput}
                           placeholder="Nhập giá"
                           value={Products.price}
@@ -118,7 +110,6 @@ const ProductEdit = () => {
                         <Form.Control
                           type="number"
                           name="quantity"
-                          onChange={handleChange}
                           style={widthInput}
                           placeholder="Nhập số lượng"
                           value={Products.quantity}

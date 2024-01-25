@@ -77,7 +77,7 @@ const InvoiceDetails = () => {
               <b>{Orderer.orderersName}</b>
             </div>
             <div>Địa chỉ:</div>
-            <div>{Orderer.shippingAddress} an giang...</div>
+            <div>{Orderer.shippingAddress}</div>
             <div>Điện thoại: {Orderer.shippingPhone}</div>
           </Card>
           <Card className="card-body itemI">

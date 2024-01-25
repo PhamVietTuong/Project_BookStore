@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using BookStore.Helpers;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace BookStore.Controllers
 {
@@ -105,18 +108,25 @@ namespace BookStore.Controllers
             return _context.Invoices.Any(e => e.Id == id);
         }
 
-		[HttpGet("ListOfOrder/{useId}/{str}")]
+		[HttpGet("UserListOfOrder/{str}")]
 		//[Route("ListOfOrder")]
-		public async Task<ActionResult<IEnumerable<Invoice>>> ListOfOrder(string useId, string str)
+		public async Task<ActionResult<IEnumerable<Invoice>>> ListOfOrder(string str) //string useId,
 		{
-            var invoice = await _context.Invoices.ToListAsync();
-            invoice = await _context.Invoices.Include(i => i.User)
-                .Where(i => str == "default" ? true
-                : str == "ordered" ? i.ApproveOrder == "Đã đặt"
-                : str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
-                : str == "transported" ? i.ApproveOrder == "Đang vận chuyển"
-                : str == "delivered" ? i.ApproveOrder == "Đã giao"
-                : str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId==useId).ToListAsync();
+			//var claimsIdentity = User.Identity as ClaimsIdentity;
+			//var userIdClaim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+			
+			var invoice = await _context.Invoices.ToListAsync();
+			var userId = User.GetUserId().ToString();
+			if (userId != null)
+			{
+				invoice = await _context.Invoices.Include(i => i.User)
+				.Where(i => str == "default" ? true
+				: str == "ordered" ? i.ApproveOrder == "Đã đặt"
+				: str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
+				: str == "transported" ? i.ApproveOrder == "Đang vận chuyển"
+				: str == "delivered" ? i.ApproveOrder == "Đã giao"
+				: str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId == userId).ToListAsync();
+			}
 
             var detailInvoice =await _context.InvoiceDetails
 					.Include(i => i.Book)
@@ -160,17 +170,144 @@ namespace BookStore.Controllers
 			return Ok(listInvoice);
 		}
 
-		[HttpDelete("Canceled/{id}")]
+		[HttpDelete("UpdateQuantityOrder/{id}")]
 		public async Task<IActionResult> Canceled(int id)
 		{
 			var invoice = await _context.Invoices.FindAsync(id);
-			
+			var book = await _context.Books.ToListAsync();
+			var invoice_Detail = await _context.InvoiceDetails
+					  .Include(i => i.Book)
+					  .Include(i => i.Invoice)
+					  .Where(a => a.InvoiceId == id).ToListAsync();
+
+
 			if (invoice == null)
 			{
 				return NotFound();
 			}
 
-			invoice.ApproveOrder = "Đã hủy";
+			foreach (InvoiceDetail details in invoice_Detail)
+			{
+				book.Where(b => b.Id == details.BookId);
+				foreach (Book itembook in book)
+				{
+					if (itembook.Id == details.BookId)
+					{
+						itembook.Quantity += details.Quantity;
+					}
+					_context.Books.Update(itembook);
+					await _context.SaveChangesAsync();
+				}
+			}
+			invoice.Status = false;
+			_context.Invoices.Update(invoice);
+			await _context.SaveChangesAsync();
+			return NoContent();
+		}
+
+		[HttpGet("ListOfOrder/{str}")]
+		//[Route("ListOfOrder")]
+		public async Task<ActionResult<IEnumerable<Invoice>>> ListOfOrderAdmin(string str)
+		{
+			var invoice = await _context.Invoices.ToListAsync();
+			invoice = await _context.Invoices.Include(i => i.User)
+				.Where(i => str == "default" ? true
+				: str == "approveOrder" ? i.ApproveOrder == "Đã đặt"
+                : str == "confirmed" ? i.ApproveOrder =="Đã xác nhận"
+				: str == "transported" ? i.ApproveOrder == "Đang vận chuyển"
+				: str == "delivered" ? i.ApproveOrder == "Đã giao"
+				: str == "canceled" ? i.ApproveOrder == "Đã hủy" : i.ApproveOrder == "Đã đặt").ToListAsync();
+
+			var detailInvoice = await _context.InvoiceDetails
+					.Include(i => i.Book)
+					.Include(i => i.Invoice).ToListAsync();
+
+			var listInvoice = new List<InvoicesViewModel>();
+			foreach (Invoice item in invoice)
+			{
+                var soluong = 0;
+				var chuoi = "";
+				var ngay = "";
+				var thang = "";
+				var nam = "";
+				var time = "";
+				ngay = ngay + item.IssuedDate.Day;
+				thang = thang + item.IssuedDate.Month;
+				nam = nam + item.IssuedDate.Year;
+				List<string> tempList = new List<string>();
+				foreach (InvoiceDetail detail in detailInvoice)
+				{              
+					if (detail.Invoice.Id == item.Id)
+					{
+						soluong += detail.Quantity;
+						tempList.Add(detail.Book.Name);
+					}
+
+				}
+				time = ngay + "/" + thang + "/" + nam;
+				chuoi = string.Join(", ", tempList);
+				listInvoice.Add(new InvoicesViewModel
+				{
+					Id = item.Id,
+					Code = item.Code,
+					IssuedDate = time,
+					ShippingAddress = item.ShippingAddress,
+					ShippingPhone = item.ShippingPhone,
+					Total = item.Total,
+                    TotalQuantity = soluong,
+					ApproveOrder = item.ApproveOrder,
+					BookName = chuoi,
+					Status = item.Status
+				});
+			}
+			return Ok(listInvoice);
+		}
+
+		[HttpDelete("AdminConfirm/{id}")]
+		public async Task<IActionResult> AdminConfirm(int id)
+		{
+			var invoice = await _context.Invoices.FindAsync(id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			invoice.ApproveOrder = "Đã xác nhận";
+			_context.Invoices.Update(invoice);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		[HttpDelete("AdminTransport/{id}")]
+		public async Task<IActionResult> AdminTransport(int id)
+		{
+			var invoice = await _context.Invoices.FindAsync(id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			invoice.ApproveOrder = "Đang vận chuyển";
+			_context.Invoices.Update(invoice);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
+		[HttpDelete("AdminDeliver/{id}")]
+		public async Task<IActionResult> AdminDeliver(int id)
+		{
+			var invoice = await _context.Invoices.FindAsync(id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			invoice.ApproveOrder = "Đã giao";
 			_context.Invoices.Update(invoice);
 			await _context.SaveChangesAsync();
 
