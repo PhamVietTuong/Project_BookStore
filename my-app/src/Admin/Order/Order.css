@@ -14,11 +14,11 @@
     padding: 0;
 }
 
-.dfCYMA {
+.dfCYMAa {
     width: 100%;
 }
 
-.dfCYMA .sort-list { 
+.dfCYMAa .sort-list { 
         cursor: pointer;
         background: rgb(230 229 229);
         width: 100%;
@@ -31,7 +31,7 @@
         
 }
 
-.dfCYMA .sort-list a:hover, .dfCYMA .sort-list a.active {
+.dfCYMAa .sort-list a:hover, .dfCYMAa .sort-list a.active {
     color: rgb(11, 116, 229);
     font-weight: 500;
     position: relative;

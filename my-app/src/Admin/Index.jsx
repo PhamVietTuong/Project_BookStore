@@ -195,6 +195,15 @@ const Index = () => {
                                             </a>
                                         </li>
                                     </Link>
+
+                                    <Link to="images" className="nav-link">
+                                        <li className="sidebar-item">
+                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
+                                                <i className="mdi mdi-library-books"></i>
+                                                <span className="hide-menu">Hình ảnh</span>
+                                            </a>
+                                        </li>
+                                    </Link>
                                 </ul>
                             </nav>
                         </div>
