@@ -160,6 +160,7 @@ namespace BookStore.Controllers
 					{
 						token = new JwtSecurityTokenHandler().WriteToken(token),
 						userRoles = userRoles.ToList(),
+						userId = UserId,
 						expiration = token.ValidTo
 					});
 				}

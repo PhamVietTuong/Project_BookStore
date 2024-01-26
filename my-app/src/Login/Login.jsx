@@ -36,9 +36,11 @@ const Login = ({ onSuccess }) => {
     try {
       const response = await AxiosClient.post('/Users/login', account);
       console.log('Response from server:', response.data);
-      const { token, userRoles } = response.data;
+      const { token, userRoles, userId } = response.data;
       localStorage.setItem('jwt', token);
       localStorage.setItem('userRoles', userRoles);
+      localStorage.setItem('userId', userId);
+
       setUserRoles(userRoles);
       setLoginSuccess(true);
       onSuccess();
