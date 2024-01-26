@@ -1,19 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Form } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const ProductAdd = () => {
   const [Products, setProducts] = useState({
-    star: 4,
+    star: 5,
+    quantitySold: 0,
     status: true,
   });
 
   const [Categories, setCategories] = useState([]);
   const [Authors, setAuthors] = useState([]);
   const [Publishers, setPublishers] = useState([]);
-
+  const [Promotion, setPromotion] = useState([]);
   const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  // const accessToken = localStorage.getItem('userId');
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("fileName", file.name);
+    formData.append("fileImage", file);
+    formData.append("filePDF", null);
+    formData.append("booId", "");
+    AxiosClient.post(`/Images`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then(() => {
+      window.location.reload();
+    });
+  };
 
   const handleChange = (e) => {
     let name = e.target.name;
@@ -36,31 +57,34 @@ const ProductAdd = () => {
   useEffect(() => {
     AxiosClient.get(`/Categories`).then((res) => {
       setCategories(res.data);
-      console.log(res.data);
     });
   }, []);
 
   useEffect(() => {
     AxiosClient.get(`/Authors`).then((res) => {
       setAuthors(res.data);
-      console.log(res.data);
     });
   }, []);
 
   useEffect(() => {
     AxiosClient.get(`/Publishers`).then((res) => {
       setPublishers(res.data);
-      console.log(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    AxiosClient.get(`/Promotions`).then((res) => {
+      setPromotion(res.data);
     });
   }, []);
 
   var widthInput = {
-    width: "70%"
-  }
+    width: "100%",
+  };
 
   var content = {
-    display: "flex"
-  }
+    display: "flex",
+  };
 
   return (
     <>
@@ -75,8 +99,8 @@ const ProductAdd = () => {
                 {/* /.card-header */}
                 {/* form start */}
                 <Form onSubmit={handleSubmit}>
-                <div className="card-body" style={content}>
-                    <div style={{width:"50%"}}>
+                  <div className="card-body" style={content}>
+                    <div style={{ width: "30%" }}>
                       <Form.Group>
                         <Form.Label>Tên sách:</Form.Label>
                         <Form.Control
@@ -84,10 +108,10 @@ const ProductAdd = () => {
                           name="name"
                           onChange={handleChange}
                           style={widthInput}
-                          placeholder="Nhập tên"                       
+                          placeholder="Nhập tên"
                         />
                       </Form.Group>
-                      
+
                       <Form.Group>
                         <Form.Label>Giá:</Form.Label>
                         <Form.Control
@@ -153,6 +177,24 @@ const ProductAdd = () => {
                       </Form.Group>
 
                       <Form.Group>
+                        <Form.Label>Khuyến mãi:</Form.Label>
+                        <Form.Select
+                          onChange={handleChange}
+                          name="promotionId"
+                          style={widthInput}
+                        >
+                          <option value="">-- Chọn --</option>
+                          {Promotion.map((item) => {
+                            return (
+                              <option value={item.id}>
+                                {item.promotionPercentage}
+                              </option>
+                            );
+                          })}
+                        </Form.Select>
+                      </Form.Group>
+
+                      <Form.Group>
                         <Form.Label>Description:</Form.Label>
                         <Form.Control
                           as="textarea"
@@ -164,12 +206,12 @@ const ProductAdd = () => {
                         />
                       </Form.Group>
                     </div>
-                    <div style={{width:"50%"}}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Chọn tệp tin:</Form.Label>
-                        <Form.Control type="file" style={widthInput}/>
-                      </Form.Group>
-                      <img src="https://localhost:7106/Images/TrenDuongBang.png" style={{width: "70%"}}/>
+                    <div style={{ width: "70%" }}>          
+                      <div style={{ width: "60%", margin:"0 auto", paddingTop:"7rem" }}>
+                        <img style={{width:"60%"}}
+                        src="https://localhost:7106/Images/TrenDuongBang.png"
+                        
+                      /></div>
                     </div>
                   </div>
                   {/* /.card-body */}
@@ -184,6 +226,29 @@ const ProductAdd = () => {
           </div>
         </div>
       </section>
+
+      {/* <div style={{ marginTop: "3rem", width: "50%" }}>
+                    <form encType="multipart/form-data">
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: "none" }}
+                        onChange={handleFileSelect}
+                      />
+                      <div className="card card-hover" style={{ width: "40%" }}>
+                        <div className="box text-center">
+                          <h1 className="font-light text-black">
+                            <label style={{ marginRight: "0.5rem" }}>
+                              Thêm ảnh
+                            </label>
+                            <FontAwesomeIcon icon={faPlus} />
+                          </h1>
+                        </div>
+                      </div>
+
+                     
+                    </form>
+                  </div> */}
     </>
   );
 };

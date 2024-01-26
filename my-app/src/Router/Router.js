@@ -24,6 +24,9 @@ import ModalLogin from "../User/ModalLogin";
 import InvoiceDetails from "../User/Account/InvoiceDetails";
 import Unauthorize from "../Unauthorized";
 import OrderList from "../Admin/Order/OrderList";
+import ImagesAdd from "../Admin/Images/ImagesAdd";
+import Pay from "../User/Main/Pay";
+import Shipping from "../User/Main/Shipping";
 
 const Router = () => {
     return (
@@ -47,6 +50,8 @@ const Router = () => {
 
                             <Route path="comments" element={<CommentList />} />
                             <Route path="orders" element={<OrderList/>} />
+                            <Route path="images" element={<ImagesAdd/>} />
+
                         </Route>
                     </Route>
                     
@@ -57,8 +62,10 @@ const Router = () => {
                             <Route path="info" element={<InfoUser />} />
                             <Route path="detail/:id" element={<ProductDetail />} />
                             <Route path="cart" element={<Cart />} />
-                            <Route path="cart" element={<Cart />} />
                             <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
+                            <Route path="pay" element={<Pay />} />
+                            <Route path="shipping" element={<Shipping />} />
+
                         </Route>
                     </Route>
 
