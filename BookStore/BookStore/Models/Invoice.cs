@@ -22,6 +22,8 @@
 
         public string ApproveOrder { get; set; }
 
-        public bool Status { get; set; }
+		public DateTime CreateTime { get; set; }
+
+		public bool Status { get; set; }
 	}
 }

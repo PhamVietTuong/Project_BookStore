@@ -43,7 +43,7 @@ namespace BookStore.Controllers
         public async Task<ActionResult<Book>> GetBook(int id)
         {
 			var book = await _context.Books.Include(a => a.Author)
-				.Include(a => a.Category).Include(a => a.Publisher)
+				.Include(a => a.Category).Include(a => a.Publisher).Include(a => a.Promotion)
 				.FirstOrDefaultAsync(a => a.Id == id);
 
 			if (book == null)
@@ -90,6 +90,7 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
+			book.CreateTime = DateTime.Now;
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
 

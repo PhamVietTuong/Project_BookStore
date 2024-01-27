@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -32,7 +32,7 @@ const ProductDetail = () => {
     const [review, setReview] = useState([]);
     const [contentComment, setContentComment] = useState('');
     const [timeComment, setTimeComment] = useState(0);
-
+    const navigate  = useNavigate()
     //Handle hover image
     const handleImageClick = (newImage) => {
         setSelectedImage(newImage);
@@ -191,7 +191,10 @@ const ProductDetail = () => {
         setContentComment(e.target.value)
     }
 
-
+    const handleButtonClick = () => {
+        //window.location.href = '/pay';
+        navigate("/shipping")      
+      };
 
     return (
         <>
@@ -330,7 +333,7 @@ const ProductDetail = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <Form onSubmit={handleSubmitCart}>
+                                                        
                                                             <div className="hVrOaA" style={{ borderTop: "none" }}>
                                                                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                                                                     <div className="hEzlHi">
@@ -367,11 +370,18 @@ const ProductDetail = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="group-button">
-                                                                    {/* <button className="ijFBvx"> <span>Mua ngay</span></button> */}
-                                                                    <Button type="submit" className="btnAddCart">Thêm vào giỏ hàng</Button>
+                                                                    {/* <Link
+                                                                        onClick={handleButtonClick}
+                                                                        className="ijFBvx"          
+                                                                    >  
+                                                                             <span>Mua ngay</span>                                                                                                                                     
+                                                                    </Link> */}
+                                                                    <button  className="ijFBvx"  onClick={handleButtonClick}><span>Mua ngay</span>  </button>
+                                                                    {/* <button className="ijFBvx" > <span>Mua ngay</span></button> */}
+                                                                    <Button type="submit" className="btnAddCart" onClick={handleSubmitCart}>Thêm vào giỏ hàng</Button>
                                                                 </div>
                                                             </div>
-                                                        </Form>
+                                                       
                                                     </div>
                                                 </div>
                                             </Col>
