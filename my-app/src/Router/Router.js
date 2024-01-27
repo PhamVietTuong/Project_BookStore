@@ -24,6 +24,7 @@ import ModalLogin from "../User/ModalLogin";
 import InvoiceDetails from "../User/Account/InvoiceDetails";
 import Unauthorize from "../Unauthorized";
 import OrderList from "../Admin/Order/OrderList";
+import BarChart from "../Admin/Chart/BarChart";
 
 const Router = () => {
     return (
@@ -46,7 +47,8 @@ const Router = () => {
                             <Route path="slideshow" element={<SlideshowList />} />
 
                             <Route path="comments" element={<CommentList />} />
-                            <Route path="orders" element={<OrderList/>} />
+                            <Route path="orders" element={<OrderList />} />
+                            <Route path="statistical" element={<BarChart />} />
                         </Route>
                     </Route>
                     
