@@ -50,14 +50,10 @@ const Router = () => {
                             <Route path="slideshow" element={<SlideshowList />} />
 
                             <Route path="comments" element={<CommentList />} />
-<<<<<<< HEAD
                             <Route path="orders" element={<OrderList />} />
                             <Route path="statistical" element={<BarChart />} />
-=======
                             <Route path="orders" element={<OrderList/>} />
                             <Route path="images" element={<ImagesAdd/>} />
-
->>>>>>> 74f8c9e775623210ab03b2b4462a01b53f24f295
                         </Route>
                     </Route>
                     
