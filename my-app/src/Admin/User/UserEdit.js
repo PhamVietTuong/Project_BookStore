@@ -1,45 +1,80 @@
 import { useEffect, useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 
 const UserEdit = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [user, setUser] = useState({});
-
+    const [loading, setLoading] = useState(true);
+    const [errors, setError] = useState("");
+    const [emailError, setEmailError] = useState('');
+    const accessToken = localStorage.getItem('userId');
     const handleChange = (e) => {
-        let name = e.target.name;
-        let value = e.target.value;
-        setUser((prev) => ({ ...prev, [name]: value }));
-    }
+        const { name, value } = e.target;
 
-    const handleSubmit = (e) => {
+        if (name === "fullName" && /\d/.test(value)) {
+            setEmailError('');
+            setError('Vui lòng không nhập ký tự số.');
+        } else if (name === "email") {
+            const atIndex = value.indexOf('@');
+            const domain = atIndex !== -1 ? value.slice(atIndex + 1) : '';
+
+            if (!value.includes('@') || /\d/.test(domain)) {
+                setEmailError('Vui lòng nhập địa chỉ email hợp lệ.');
+                setError('');
+            } else {
+                setEmailError('');
+                setError('');
+                setUser((prev) => ({ ...prev, [name]: value }));
+            }
+        } else {
+            setEmailError('');
+            setError('');
+            setUser((prev) => ({ ...prev, [name]: value }));
+        }
+    }
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        AxiosClient.put(`/Users/${id}`, user) // Fix the AxiosClient.put request
-            .then(() => {
-                navigate("/admin/users");
-            })
-            .catch(error => {
-                console.error("Error updating user:", error);
-            });
+        try {
+            await AxiosClient.put(`/Users/${accessToken}`, user);
+            window.location.reload();
+
+        } catch (error) {
+            console.error("Error updating user:", error);
+            setError("Error updating user. Please try again.");
+        }
     }
 
     useEffect(() => {
-        AxiosClient.get(`/Users/${id}`)
-            .then((res) => {
-                setUser(res.data);
-                console.log(res.data);
-            })
-            .catch(error => {
+        const fetchUserData = async () => {
+            try {
+                const response = await AxiosClient.get(`/Users/${accessToken}`);
+                setUser(response.data);
+            } catch (error) {
                 console.error("Error fetching user data:", error);
-            });
-    }, [id]); // Add id to the dependency array
+                setError("Error fetching user data. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [id]);
+
     var widthInput = {
         width: "70%",
     };
+
+    if (loading) {
+        return <p>Loading...</p>; // or show a loading spinner
+    }
+
+    // if (error) {
+    //     return <p>{error}</p>;
+    // }
 
     return (
         <>
@@ -193,6 +228,8 @@ const UserEdit = () => {
                                         style={widthInput}
                                     />
                                 </div>
+                                {errors && <div style={{ color: 'red', marginLeft: '8rem', marginTop: '3px' }}>{errors}</div>}
+
                             </div>
                             <hr />
                             <div className="row">
@@ -209,6 +246,7 @@ const UserEdit = () => {
                                         style={widthInput}
                                     />
                                 </div>
+                                {emailError && <p style={{ color: 'red', marginLeft: '8rem', marginTop: '3px' }}>{emailError}</p>}
                             </div>
                             <hr />
                             <div className="row">
@@ -227,9 +265,9 @@ const UserEdit = () => {
                                     />
                                 </div>
                             </div>
-                            <div className=" card-footer mt-2 pl-3">
+                            <div className=" card-footer mt-2 pl-0">
                                 <Button type="submit" variant="warning" onClick={handleSubmit}>
-                                    <FontAwesomeIcon icon={faCheck}/>Cập nhật thông tin khách hàng
+                                    <FontAwesomeIcon icon={faCheck} />Cập nhật thông tin khách hàng
                                 </Button>
                             </div>
                         </div>
