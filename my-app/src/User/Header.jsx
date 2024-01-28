@@ -7,12 +7,14 @@ import '../User/Header.css'
 import ModalLogin from "./ModalLogin";
 import ModalRegister from "./ModalRegister";
 import InfoUser from "./Account/InfoUser";
+import ModalResetpassword from "./ModalResetpassword";
 //import { useDebounce } from "@uidotdev/usehooks";
 
 const Header = () => {
     const [carts, setCarts] = useState([]);
     const [showLogin, setShowLogin] = useState(false);
     const [showRegister, setShowRegister] = useState(false);
+    const [showResetpassword, setshowResetpassword] = useState(false);
     const [resultSearch, setResultSearch] = useState([]);
     const [listBooks, setListBooks] = useState([]);
     var jwt = localStorage.getItem("jwt")
@@ -30,9 +32,11 @@ const Header = () => {
 
     const handleCloseLogin = () => setShowLogin(false);
     const handleShowLogin = () => setShowLogin(true);
+    const handleShowResetpassword = () => setshowResetpassword(true);
 
     const handleCloseRegister = () => setShowRegister(false);
     const handleShowRegister = () => setShowRegister(true);
+    const handleCloseResetpassword = () => setshowResetpassword(false);
 
     const logout = async () => {
         try {
@@ -57,6 +61,7 @@ const Header = () => {
             <div className="dropdown-menu">
                 <Link to="" className="dropdown-item" onClick={handleShowLogin}>Đăng nhập</Link>
                 <Link to="" className="dropdown-item" onClick={handleShowRegister}>Đăng ký</Link>
+                <Link to="" className="dropdown-item" onClick={handleShowResetpassword}>Quên mật khẩu</Link>
             </div>
         )
     }
@@ -165,6 +170,7 @@ const Header = () => {
             </div>
             <ModalLogin show={showLogin} handleClose={handleCloseLogin} />
             <ModalRegister show={showRegister} handleClose={handleCloseRegister} />
+            <ModalResetpassword show={showResetpassword} handleClose={handleCloseResetpassword} />
         </>
     );
 }
