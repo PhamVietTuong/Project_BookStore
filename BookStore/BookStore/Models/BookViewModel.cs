@@ -38,5 +38,10 @@
         public double TwoStar { get; set; }
         public double OneStar { get; set; }
         public int TotalRating { get; set; }
-    }
+
+        public int QuantitySold { get; set; }
+        public double PromotionPercentage { get; set; }
+		public Promotion Promotion { get; set; }
+
+	}
 }

@@ -278,7 +278,7 @@ const ProductDetail = () => {
                                                                             <a className="number">(2003111)</a>
                                                                             <div className="fctQDC"></div>
                                                                         </div>
-                                                                        <div className="bExXAB"> Đã bán 5000+ </div>
+                                                                        <div className="bExXAB"> Đã bán {item.quantitySold || 0} </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -291,7 +291,8 @@ const ProductDetail = () => {
                                                                             <sup>₫</sup>
                                                                         </div>
                                                                         <div className="product-price__discount-rate">
-                                                                            -32%
+                                                                            -{item.promotionPercentage || 0}%
+
                                                                         </div>
                                                                         <div className="fctQDC"></div>
                                                                         <div className="productDeail-favourite-color">

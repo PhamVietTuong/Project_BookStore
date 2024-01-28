@@ -127,7 +127,7 @@ const Main = () => {
 
     const handleTakeTheListDefault = async () => {
         try {
-            AxiosClient.get(`/Books/listBook`).then((res) => { setProducts(res.data); });
+            AxiosClient.get(`/Books/listBook`).then((res) => { setProducts(res.data);});
 
         } catch (error) {
             console.log(error);
@@ -136,7 +136,7 @@ const Main = () => {
 
     const handleProductNewt = async () => {
         try {
-            AxiosClient.get(`/Books/productNew`).then((res) => { setProducts(res.data); });
+            AxiosClient.get(`/Books/productNew`).then((res) => { setProducts(res.data); console.log(res.data); });
 
         } catch (error) {
             console.log(error);
@@ -330,7 +330,7 @@ const Main = () => {
                                                                                             <Rating defaultValue={item.star} readOnly />
                                                                                         </p>
                                                                                     </div>
-                                                                                    <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                                    <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div>
@@ -341,7 +341,8 @@ const Main = () => {
                                                                                     </div>
 
                                                                                     <div className="product__panel-price-sale-off">
-                                                                                        -11%
+                                                                                        -{item.promotionPercentage || 0}%
+
                                                                                     </div>
                                                                                 </div>
                                                                             </div >
@@ -385,7 +386,7 @@ const Main = () => {
                                                                                              <Rating defaultValue={item.star} readOnly />
                                                                                          </p>
                                                                                      </div>
-                                                                                     <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
                                                                                  </div>
                                                                              </div>
                                                                              <div>
@@ -396,7 +397,7 @@ const Main = () => {
                                                                                      </div>
 
                                                                                      <div className="product__panel-price-sale-off">
-                                                                                         -11%
+                                                                                         -{item.promotionPercentage || 0}%
                                                                                      </div>
                                                                                  </div>
                                                                              </div >
@@ -440,7 +441,7 @@ const Main = () => {
                                                                                              <Rating defaultValue={item.star} readOnly />
                                                                                          </p>
                                                                                      </div>
-                                                                                     <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
                                                                                  </div>
                                                                              </div>
                                                                              <div>
@@ -451,7 +452,8 @@ const Main = () => {
                                                                                      </div>
 
                                                                                      <div className="product__panel-price-sale-off">
-                                                                                         -11%
+                                                                                         -{item.promotionPercentage || 0}%
+
                                                                                      </div>
                                                                                  </div>
                                                                              </div >
@@ -495,7 +497,7 @@ const Main = () => {
                                                                                              <Rating defaultValue={item.star} readOnly />
                                                                                          </p>
                                                                                      </div>
-                                                                                     <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
                                                                                  </div>
                                                                              </div>
                                                                              <div>
@@ -506,7 +508,8 @@ const Main = () => {
                                                                                      </div>
 
                                                                                      <div className="product__panel-price-sale-off">
-                                                                                         -11%
+                                                                                         -{item.promotionPercentage || 0}%
+
                                                                                      </div>
                                                                                  </div>
                                                                              </div >
@@ -550,7 +553,7 @@ const Main = () => {
                                                                                              <Rating defaultValue={item.star} readOnly />
                                                                                          </p>
                                                                                      </div>
-                                                                                     <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
                                                                                  </div>
                                                                              </div>
                                                                              <div>
@@ -561,7 +564,8 @@ const Main = () => {
                                                                                      </div>
 
                                                                                      <div className="product__panel-price-sale-off">
-                                                                                         -11%
+                                                                                         -{item.promotionPercentage || 0}%
+
                                                                                      </div>
                                                                                  </div>
                                                                              </div >
