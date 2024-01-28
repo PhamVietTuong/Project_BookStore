@@ -125,6 +125,7 @@ namespace BookStore.Controllers
             var books = await _context.Books.Include(a => a.Author)
                                             .Include(a => a.Publisher)
                                             .Include(a => a.Category)
+											.Include(a => a.Promotion)
 											.Where(a => a.Status)
 											.ToListAsync();  
 
@@ -152,6 +153,8 @@ namespace BookStore.Controllers
 					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
 					FileName = image?.FileName,
+					QuantitySold = book.QuantitySold,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
 					FilePDF = image?.FilePDF
 				});
 			}
@@ -165,6 +168,7 @@ namespace BookStore.Controllers
                          .Include(a => a.Author)
                          .Include(a => a.Category)
                          .Include(a => a.Publisher)
+											.Include(a => a.Promotion)
                          .FirstOrDefaultAsync(a => a.Id == id);
 
 			List<Models.Image> images = await _context.Images.Where(i => i.BookId == book.Id).ToListAsync();
@@ -195,6 +199,8 @@ namespace BookStore.Controllers
 				ThreeStar = rating?.ratingCounts.GetValueOrDefault(3) ?? 0,
 				TwoStar = rating?.ratingCounts.GetValueOrDefault(2) ?? 0,
 				OneStar = rating?.ratingCounts.GetValueOrDefault(1) ?? 0,
+				QuantitySold = book.QuantitySold,
+				PromotionPercentage = book.Promotion.PromotionPercentage,
 				TotalRating = rating?.ratingCounts.Count() ?? 0,
 				Status = book.Status,
 				Images = images.Select(img => new ImageViewModel
@@ -284,6 +290,7 @@ namespace BookStore.Controllers
 			var listBook = await _context.Books.Include(a => a.Author)
 											.Include(a => a.Publisher)
 											.Include(a => a.Category)
+											.Include(a => a.Promotion)
 											.Where(a => a.Status)
 											.Where(a=> a.Price >= FromPrice && a.Price <= ToThePrice)
 											.ToListAsync();
@@ -308,7 +315,9 @@ namespace BookStore.Controllers
 					Price = book.Price,
 					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
 					FileName = image?.FileName,
+					QuantitySold = book.QuantitySold,
 					FilePDF = image?.FilePDF
 				});
             }
@@ -323,6 +332,7 @@ namespace BookStore.Controllers
 			var listBook = await _context.Books.Include(a => a.Author)
 											.Include(a => a.Publisher)
 											.Include(a => a.Category)
+											.Include(a => a.Promotion)
 											.Where(a => a.Status)
 											.Where(a => a.Category.Name == CategoryName)
 											.ToListAsync();
@@ -347,8 +357,186 @@ namespace BookStore.Controllers
 					Price = book.Price,
 					Star = rating?.averageRating ?? 5,
 					Status = book.Status,
+					QuantitySold = book.QuantitySold,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
 					FileName = image?.FileName,
 					FilePDF = image?.FilePDF
+				});
+			}
+			return Ok(rows);
+		}
+
+		[HttpGet]
+		[Route("descendingPrice")]
+		public async Task<ActionResult<IEnumerable<Book>>> DescendingPrice()
+		{
+			var books = await _context.Books.Include(a => a.Author)
+											.Include(a => a.Publisher)
+											.Include(a => a.Category)
+											.Include(a => a.Promotion)
+											.Where(a => a.Status)
+											.OrderByDescending(a => a.Price)
+											.ToListAsync();
+
+			var rows = new List<BookViewModel>();
+			foreach (Book book in books)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel),
+				}).FirstOrDefault();
+
+
+
+				rows.Add(new BookViewModel
+				{
+					Id = book.Id,
+					PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Star = rating?.averageRating ?? 5,
+					Status = book.Status,
+					FileName = image?.FileName,
+					QuantitySold = book.QuantitySold,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
+					FilePDF = image?.FilePDF
+				});
+			}
+			return Ok(rows);
+		}
+
+		[HttpGet]
+		[Route("ascendingPrice")]
+		public async Task<ActionResult<IEnumerable<Book>>> AscendingPrice()
+		{
+			var books = await _context.Books.Include(a => a.Author)
+											.Include(a => a.Publisher)
+											.Include(a => a.Category)
+											.Include(a => a.Promotion)
+											.Where(a => a.Status)
+											.OrderBy(a => a.Price)
+											.ToListAsync();
+
+			var rows = new List<BookViewModel>();
+			foreach (Book book in books)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel),
+				}).FirstOrDefault();
+
+
+
+				rows.Add(new BookViewModel
+				{
+					Id = book.Id,
+					PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Star = rating?.averageRating ?? 5,
+					Status = book.Status,
+					FileName = image?.FileName,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
+					QuantitySold = book.QuantitySold,
+					FilePDF = image?.FilePDF,
+				});
+			}
+			return Ok(rows);
+		}
+
+		[HttpGet]
+		[Route("productNew")]
+		public async Task<ActionResult<IEnumerable<Book>>> ProductNew()
+		{
+			var books = await _context.Books.Include(a => a.Author)
+											.Include(a => a.Publisher)
+											.Include(a => a.Category)
+											.Include(a => a.Promotion)
+											.Where(a => a.Status)
+											.OrderByDescending(a => a.CreateTime)
+											.ToListAsync();
+
+			var rows = new List<BookViewModel>();
+			foreach (Book book in books)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel),
+				}).FirstOrDefault();
+
+
+
+				rows.Add(new BookViewModel
+				{
+					Id = book.Id,
+					PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Star = rating?.averageRating ?? 5,
+					Status = book.Status,
+					FileName = image?.FileName,
+					FilePDF = image?.FilePDF,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
+					QuantitySold = book.QuantitySold,
+				});
+			}
+			return Ok(rows);
+		}
+
+		[HttpGet]
+		[Route("highestQuantitySold")]
+		public async Task<ActionResult<IEnumerable<Book>>> HighestQuantitySold()
+		{
+			var books = await _context.Books.Include(a => a.Author)
+											.Include(a => a.Publisher)
+											.Include(a => a.Category)
+											.Include(a => a.Promotion)
+											.Where(a => a.Status)
+											.OrderByDescending(a => a.QuantitySold)
+											.ToListAsync();
+
+			var rows = new List<BookViewModel>();
+			foreach (Book book in books)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == book.Id);
+				var rating = _context.Ratings.Where(r => r.BookId == book.Id).GroupBy(r => r.BookId).Select(x => new
+				{
+					averageRating = x.Average(r => r.RatingLevel),
+				}).FirstOrDefault();
+
+
+
+				rows.Add(new BookViewModel
+				{
+					Id = book.Id,
+					PublisherName = book.Publisher.Name,
+					AuthorName = book.Author.Name,
+					CategoryName = book.Category.Name,
+					Name = book.Name,
+					Quantity = book.Quantity,
+					Description = book.Description,
+					Price = book.Price,
+					Star = rating?.averageRating ?? 5,
+					Status = book.Status,
+					FileName = image?.FileName,
+					FilePDF = image?.FilePDF,
+					PromotionPercentage = book.Promotion.PromotionPercentage,
+					QuantitySold = book.QuantitySold,
 				});
 			}
 			return Ok(rows);

@@ -107,14 +107,51 @@ const Main = () => {
         }
     } 
 
-    const handleTakeTheListDefault = async () => {
+    const handleDescendingPrice = async () => {
         try {
-            AxiosClient.get(`/Books/listBook`).then((res) => { setProducts(res.data); });
+            AxiosClient.get(`/Books/descendingPrice`).then((res) => { setProducts(res.data); });
 
         } catch (error) {
             console.log(error);
         }
     }
+
+    const handleAscendingPrice = async () => {
+        try {
+            AxiosClient.get(`/Books/ascendingPrice`).then((res) => { setProducts(res.data); });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleTakeTheListDefault = async () => {
+        try {
+            AxiosClient.get(`/Books/listBook`).then((res) => { setProducts(res.data);});
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleProductNewt = async () => {
+        try {
+            AxiosClient.get(`/Books/productNew`).then((res) => { setProducts(res.data); console.log(res.data); });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const handleHighestQuantitySold = async () => {
+        try {
+            AxiosClient.get(`/Books/highestQuantitySold`).then((res) => { setProducts(res.data); });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
      return (
         <>
              {isVisible && (<button id="myBtn-scroll" onClick={scrollToTop} title="Go to top"><i class="fas fa-chevron-up" /></button>)}
@@ -250,17 +287,17 @@ const Main = () => {
                                                                  <Nav.Link eventKey="default" onClick={handleTakeTheListDefault}>Phổ Biến</Nav.Link>
                                                             </Nav.Item>
                                                             <Nav.Item>
-                                                                <Nav.Link eventKey="topSeller">Bán Chạy</Nav.Link>
+                                                                <Nav.Link eventKey="topSeller" onClick={handleHighestQuantitySold}>Bán Chạy</Nav.Link>
                                                             </Nav.Item>
                                                             <Nav.Item>
-                                                                <Nav.Link eventKey="newest">Hàng mới</Nav.Link>
+                                                                 <Nav.Link eventKey="newest" onClick={handleProductNewt}>Hàng mới</Nav.Link>
                                                             </Nav.Item>
                                                             <Nav.Item>
-                                                                <Nav.Link eventKey="priceAsc">Giá Thấp Đến Cao</Nav.Link>
+                                                                 <Nav.Link eventKey="priceAsc" onClick={handleAscendingPrice}>Giá Thấp Đến Cao</Nav.Link>
                                                             </Nav.Item>
                                                             <Nav.Item>
-                                                                <Nav.Link eventKey="priceDesc">Giá Cao Đến Thấp</Nav.Link>
-                                                            </Nav.Item>
+                                                                 <Nav.Link eventKey="priceDesc" onClick={handleDescendingPrice}>Giá Cao Đến Thấp</Nav.Link>
+                                                             </Nav.Item>
                                                         </Nav>
 
                                                     </div>
@@ -293,7 +330,7 @@ const Main = () => {
                                                                                             <Rating defaultValue={item.star} readOnly />
                                                                                         </p>
                                                                                     </div>
-                                                                                    <span className="quantity hasBorder">Đã bán 1000</span>
+                                                                                    <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
                                                                                 </div>
                                                                             </div>
                                                                             <div>
@@ -304,7 +341,8 @@ const Main = () => {
                                                                                     </div>
 
                                                                                     <div className="product__panel-price-sale-off">
-                                                                                        -11%
+                                                                                        -{item.promotionPercentage || 0}%
+
                                                                                     </div>
                                                                                 </div>
                                                                             </div >
@@ -326,16 +364,227 @@ const Main = () => {
                                             }</div>
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="topSeller">
-                                            <div>Bán Chạy</div>
+                                             <div className="row mt-2">{
+                                                 Products.map(item => {
+                                                     return (
+                                                         <>
+                                                             <div className="col-lg-3 listProduct">
+                                                                 <Link to={`detail/${item.id}`} className="card card-hover">
+                                                                     <div className="image-wrapper">
+                                                                         <img src={`https://localhost:7106/images/${item.fileName}`} alt=""
+                                                                             className="product__panel-img" style={{ width: "100%", height: "100%", opacity: "1" }} />
+                                                                     </div>
+                                                                     <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
+                                                                         <div className="product-info">
+                                                                             <div className="product-name-star-sold">
+                                                                                 <h3 className="product__panel-link">
+                                                                                     {item.name}
+                                                                                 </h3>
+                                                                                 <div className="product_star_sold">
+                                                                                     <div className="product__panel-rate-wrap">
+                                                                                         <p className="hlnKeG" style={{ fontSize: "15px", display: "inline-block" }}>
+                                                                                             <Rating defaultValue={item.star} readOnly />
+                                                                                         </p>
+                                                                                     </div>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
+                                                                                 </div>
+                                                                             </div>
+                                                                             <div>
+                                                                                 <div className="price-discount has-discount">
+                                                                                     <div className="price-discount_price">
+                                                                                         {item.price.toLocaleString("en-US").replace(/,/g, '.')}
+                                                                                         <sup>₫</sup>
+                                                                                     </div>
+
+                                                                                     <div className="product__panel-price-sale-off">
+                                                                                         -{item.promotionPercentage || 0}%
+                                                                                     </div>
+                                                                                 </div>
+                                                                             </div >
+
+                                                                         </div>
+
+                                                                         <div style={{ marginInline: "8px" }}>
+                                                                             <div className="product-now">
+                                                                                 <img width="32" height="16" src="images1/now.png" alt="" />
+                                                                                 <span>Giao siêu tốc 2h</span>
+                                                                             </div>
+                                                                         </div>
+                                                                     </div>
+                                                                 </Link>
+                                                             </div>
+                                                         </>
+                                                     )
+                                                 })
+                                             }</div>
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="newest">
-                                            <div>Hàng Mới</div>
+                                             <div className="row mt-2">{
+                                                 Products.map(item => {
+                                                     return (
+                                                         <>
+                                                             <div className="col-lg-3 listProduct">
+                                                                 <Link to={`detail/${item.id}`} className="card card-hover">
+                                                                     <div className="image-wrapper">
+                                                                         <img src={`https://localhost:7106/images/${item.fileName}`} alt=""
+                                                                             className="product__panel-img" style={{ width: "100%", height: "100%", opacity: "1" }} />
+                                                                     </div>
+                                                                     <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
+                                                                         <div className="product-info">
+                                                                             <div className="product-name-star-sold">
+                                                                                 <h3 className="product__panel-link">
+                                                                                     {item.name}
+                                                                                 </h3>
+                                                                                 <div className="product_star_sold">
+                                                                                     <div className="product__panel-rate-wrap">
+                                                                                         <p className="hlnKeG" style={{ fontSize: "15px", display: "inline-block" }}>
+                                                                                             <Rating defaultValue={item.star} readOnly />
+                                                                                         </p>
+                                                                                     </div>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
+                                                                                 </div>
+                                                                             </div>
+                                                                             <div>
+                                                                                 <div className="price-discount has-discount">
+                                                                                     <div className="price-discount_price">
+                                                                                         {item.price.toLocaleString("en-US").replace(/,/g, '.')}
+                                                                                         <sup>₫</sup>
+                                                                                     </div>
+
+                                                                                     <div className="product__panel-price-sale-off">
+                                                                                         -{item.promotionPercentage || 0}%
+
+                                                                                     </div>
+                                                                                 </div>
+                                                                             </div >
+
+                                                                         </div>
+
+                                                                         <div style={{ marginInline: "8px" }}>
+                                                                             <div className="product-now">
+                                                                                 <img width="32" height="16" src="images1/now.png" alt="" />
+                                                                                 <span>Giao siêu tốc 2h</span>
+                                                                             </div>
+                                                                         </div>
+                                                                     </div>
+                                                                 </Link>
+                                                             </div>
+                                                         </>
+                                                     )
+                                                 })
+                                             }</div>
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="priceAsc">
-                                            <div>Giá Thấp Đến Cao</div>
+                                             <div className="row mt-2">{
+                                                 Products.map(item => {
+                                                     return (
+                                                         <>
+                                                             <div className="col-lg-3 listProduct">
+                                                                 <Link to={`detail/${item.id}`} className="card card-hover">
+                                                                     <div className="image-wrapper">
+                                                                         <img src={`https://localhost:7106/images/${item.fileName}`} alt=""
+                                                                             className="product__panel-img" style={{ width: "100%", height: "100%", opacity: "1" }} />
+                                                                     </div>
+                                                                     <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
+                                                                         <div className="product-info">
+                                                                             <div className="product-name-star-sold">
+                                                                                 <h3 className="product__panel-link">
+                                                                                     {item.name}
+                                                                                 </h3>
+                                                                                 <div className="product_star_sold">
+                                                                                     <div className="product__panel-rate-wrap">
+                                                                                         <p className="hlnKeG" style={{ fontSize: "15px", display: "inline-block" }}>
+                                                                                             <Rating defaultValue={item.star} readOnly />
+                                                                                         </p>
+                                                                                     </div>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
+                                                                                 </div>
+                                                                             </div>
+                                                                             <div>
+                                                                                 <div className="price-discount has-discount">
+                                                                                     <div className="price-discount_price">
+                                                                                         {item.price.toLocaleString("en-US").replace(/,/g, '.')}
+                                                                                         <sup>₫</sup>
+                                                                                     </div>
+
+                                                                                     <div className="product__panel-price-sale-off">
+                                                                                         -{item.promotionPercentage || 0}%
+
+                                                                                     </div>
+                                                                                 </div>
+                                                                             </div >
+
+                                                                         </div>
+
+                                                                         <div style={{ marginInline: "8px" }}>
+                                                                             <div className="product-now">
+                                                                                 <img width="32" height="16" src="images1/now.png" alt="" />
+                                                                                 <span>Giao siêu tốc 2h</span>
+                                                                             </div>
+                                                                         </div>
+                                                                     </div>
+                                                                 </Link>
+                                                             </div>
+                                                         </>
+                                                     )
+                                                 })
+                                             }</div>
                                         </Tab.Pane>
                                         <Tab.Pane eventKey="priceDesc">
-                                            <div>Giá Cao Đến Thấp</div>
+                                             <div className="row mt-2">{
+                                                 Products.map(item => {
+                                                     return (
+                                                         <>
+                                                             <div className="col-lg-3 listProduct">
+                                                                 <Link to={`detail/${item.id}`} className="card card-hover">
+                                                                     <div className="image-wrapper">
+                                                                         <img src={`https://localhost:7106/images/${item.fileName}`} alt=""
+                                                                             className="product__panel-img" style={{ width: "100%", height: "100%", opacity: "1" }} />
+                                                                     </div>
+                                                                     <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
+                                                                         <div className="product-info">
+                                                                             <div className="product-name-star-sold">
+                                                                                 <h3 className="product__panel-link">
+                                                                                     {item.name}
+                                                                                 </h3>
+                                                                                 <div className="product_star_sold">
+                                                                                     <div className="product__panel-rate-wrap">
+                                                                                         <p className="hlnKeG" style={{ fontSize: "15px", display: "inline-block" }}>
+                                                                                             <Rating defaultValue={item.star} readOnly />
+                                                                                         </p>
+                                                                                     </div>
+                                                                                     <span className="quantity hasBorder">Đã bán {item.quantitySold || 0}</span>
+                                                                                 </div>
+                                                                             </div>
+                                                                             <div>
+                                                                                 <div className="price-discount has-discount">
+                                                                                     <div className="price-discount_price">
+                                                                                         {item.price.toLocaleString("en-US").replace(/,/g, '.')}
+                                                                                         <sup>₫</sup>
+                                                                                     </div>
+
+                                                                                     <div className="product__panel-price-sale-off">
+                                                                                         -{item.promotionPercentage || 0}%
+
+                                                                                     </div>
+                                                                                 </div>
+                                                                             </div >
+
+                                                                         </div>
+
+                                                                         <div style={{ marginInline: "8px" }}>
+                                                                             <div className="product-now">
+                                                                                 <img width="32" height="16" src="images1/now.png" alt="" />
+                                                                                 <span>Giao siêu tốc 2h</span>
+                                                                             </div>
+                                                                         </div>
+                                                                     </div>
+                                                                 </Link>
+                                                             </div>
+                                                         </>
+                                                     )
+                                                 })
+                                             }</div>
                                         </Tab.Pane>
                                     </Tab.Content>
                                 </Tab.Container>

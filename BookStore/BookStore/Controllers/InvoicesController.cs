@@ -313,5 +313,69 @@ namespace BookStore.Controllers
 
 			return NoContent();
 		}
+
+		[HttpGet]
+		[Route("statistical")]
+		public async Task<ActionResult<IEnumerable<Invoice>>> Statistical(string value)
+		{
+			var invoices = await _context.Invoices.ToListAsync();
+
+			var invoiceDetails = await _context.InvoiceDetails.ToListAsync();
+
+			DateTime currentDate = DateTime.Now;
+
+			List<StatisticalViewModel> result = new List<StatisticalViewModel>();
+
+			if (value == "day")
+			{
+				result = invoices
+								.Where(i => i.CreateTime.Day == currentDate.Day)
+								.GroupBy(i => i.CreateTime.Day)
+								.Select(group => new StatisticalViewModel
+								{
+									Month = "Hôm nay",
+									TotalToThis = group.Sum(i => i.Total),
+									BooksSoldCount = invoiceDetails
+									.Join(group, id => id.InvoiceId, inv => inv.Id, (id, inv) => id)
+									.Select(id => id.Quantity)
+									.Sum()
+								})
+								.ToList();
+
+			} else if ( value == "month")
+			{
+				result = invoices
+								.Where(i=> i.CreateTime.Year == currentDate.Year)
+								.GroupBy(i => i.CreateTime.Day)
+								.Select(group => new StatisticalViewModel
+								{
+									Month = "Ngày " + group.Key.ToString(),
+									TotalToThis = group.Sum(i => i.Total),
+									BooksSoldCount = invoiceDetails
+									.Join(group, id => id.InvoiceId, inv => inv.Id, (id, inv) => id)
+									.Select(id => id.Quantity)
+									.Sum()
+								})
+								.ToList();
+			}
+			else if ( value == "year" )
+			{
+				result = invoices
+								.Where(i => i.CreateTime.Year == currentDate.Year)
+								.GroupBy(i => i.CreateTime.Month)
+								.Select(group => new StatisticalViewModel
+								{
+									Month = "Tháng " + group.Key.ToString(),
+									TotalToThis = group.Sum(i => i.Total),
+									BooksSoldCount = invoiceDetails
+									.Join(group, id => id.InvoiceId, inv => inv.Id, (id, inv) => id)
+									.Select(id => id.Quantity)
+									.Sum()
+								})
+								.ToList();
+			}
+
+			return Ok(result);
+		}
 	}
 }

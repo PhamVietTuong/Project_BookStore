@@ -14,7 +14,10 @@ using System.Security.Claims;
 using System.Text;
 using BookStore.Helpers;
 using Newtonsoft.Json;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Build.Framework;
+using System.ComponentModel.DataAnnotations;
+using System.Data.OleDb;
 
 namespace BookStore.Controllers
 {
@@ -70,26 +73,24 @@ namespace BookStore.Controllers
 			return await _userManager.FindByIdAsync(id);
 
 		}
-
-		//Put:api/users/5
+		
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutUser(string id, UserViewModel User)
+		public async Task<IActionResult> PutUser(string id ,UserViewModel userViewModel)
 		{
-			if (id != User.Id)
-			{
-				return BadRequest("Invalid ID or User doesn't exist");
-			}
+			// Lấy ID của người dùng đang đăng nhập từ ClaimsPrincipal
+			
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{
 				return NotFound();
 			}
 			// Update user properties
-			user.UserName = User.UserName;
-			user.FullName = User.FullName;
-			user.Address = User.Address;
-			user.Email = User.Email;
-			user.Status = User.Status;
+			user.UserName = userViewModel.UserName;
+			user.FullName = userViewModel.FullName;
+			user.Address = userViewModel.Address;
+			user.Email = userViewModel.Email;
+			user.Status = userViewModel.Status;
+
 			var result = await _userManager.UpdateAsync(user);
 			if (result.Succeeded)
 			{
@@ -97,7 +98,7 @@ namespace BookStore.Controllers
 			}
 			else
 			{
-				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to");
+				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to update user.");
 			}
 		}
 		[HttpDelete("{id}")]
@@ -238,6 +239,47 @@ namespace BookStore.Controllers
 			return Ok();
 		}
 
+		[HttpGet]
+		[Route("reset-password-token")]
+		public async Task<IActionResult> ResetPasswordToken(string Username)
+		{
+			var user = await _userManager.FindByNameAsync(Username);
+			if(user==null)
+			{
+				return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = "User does not exists" });
+			}
+			var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+			return Ok(new { token = token });
+		}
+		[HttpPost]
+		[Route("reset-password-user")]
+		public async Task<IActionResult> ResetPasswordUser(ResetPasswordModel model)
+		{
+			var user = await _userManager.FindByNameAsync(model.Username);
+			if (user == null)
+			{
+				return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = "User does not exists" });
+			}
+			if(string.Compare(model.NewPassword, model.ConfirmPassword)!=0)
+			{
+				return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = "The new password and cofirm new password does not match" });
+			}
+			if (string.IsNullOrEmpty(model.Token))
+			{
+				return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = "Invail Token" });
+			}
+			var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+			if(!result.Succeeded )
+			{
+				var errors = new List<string>();
+				foreach(var error in result.Errors)
+				{
+					errors.Add(error.Description);
+				}
+				return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = string.Join(",",errors) });
+			}
+			return Ok(new Response { Status = "Success", Message = "Password Reseted Successfully" });
+		}
 		private bool UserExists(string id)
 		{
 			return _context.Users.Any(e => e.Id == id);

@@ -1,0 +1,44 @@
+.barChart_statistical {
+    width: 1250px !important;
+    height: 600px !important;
+}
+
+.barChart_Content h4 {
+    margin-top: 2px;
+}
+
+.barChart_App {
+    margin: 5px 5px 5px 5px;
+}
+
+.barChart_filter {
+    text-align: center;
+    justify-content: center;
+}
+
+.barChart_filter .form-label {
+    width: 10%;
+    margin-top: 10px;
+}
+
+.barChart_filter .form-select {
+    width: 10%;
+}
+
+.barChart_result {
+    margin-top: 5px;
+    margin-left: 12px;
+}
+
+.barChart_result .barChart_text {
+    font-size: 20px;
+}
+
+.barChart_hr {
+    margin-left: 10px;
+    width: 20rem;
+}
+
+.barChart_result_total {
+    text-align-last: right;
+}
