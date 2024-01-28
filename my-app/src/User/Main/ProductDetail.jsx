@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Col, Form, FormControl, InputGroup, Row } from "react-bootstrap";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -32,7 +32,7 @@ const ProductDetail = () => {
     const [review, setReview] = useState([]);
     const [contentComment, setContentComment] = useState('');
     const [timeComment, setTimeComment] = useState(0);
-
+    const navigate  = useNavigate()
     //Handle hover image
     const handleImageClick = (newImage) => {
         setSelectedImage(newImage);
@@ -191,7 +191,10 @@ const ProductDetail = () => {
         setContentComment(e.target.value)
     }
 
-
+    const handleButtonClick = () => {
+        //window.location.href = '/pay';
+        navigate("/shipping")      
+      };
 
     return (
         <>
@@ -275,7 +278,7 @@ const ProductDetail = () => {
                                                                             <a className="number">(2003111)</a>
                                                                             <div className="fctQDC"></div>
                                                                         </div>
-                                                                        <div className="bExXAB"> Đã bán 5000+ </div>
+                                                                        <div className="bExXAB"> Đã bán {item.quantitySold || 0} </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -288,7 +291,8 @@ const ProductDetail = () => {
                                                                             <sup>₫</sup>
                                                                         </div>
                                                                         <div className="product-price__discount-rate">
-                                                                            -32%
+                                                                            -{item.promotionPercentage || 0}%
+
                                                                         </div>
                                                                         <div className="fctQDC"></div>
                                                                         <div className="productDeail-favourite-color">
@@ -330,7 +334,7 @@ const ProductDetail = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <Form onSubmit={handleSubmitCart}>
+                                                        
                                                             <div className="hVrOaA" style={{ borderTop: "none" }}>
                                                                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                                                                     <div className="hEzlHi">
@@ -367,11 +371,18 @@ const ProductDetail = () => {
                                                                     </div>
                                                                 </div>
                                                                 <div className="group-button">
-                                                                    {/* <button className="ijFBvx"> <span>Mua ngay</span></button> */}
-                                                                    <Button type="submit" className="btnAddCart">Thêm vào giỏ hàng</Button>
+                                                                    {/* <Link
+                                                                        onClick={handleButtonClick}
+                                                                        className="ijFBvx"          
+                                                                    >  
+                                                                             <span>Mua ngay</span>                                                                                                                                     
+                                                                    </Link> */}
+                                                                    <button  className="ijFBvx"  onClick={handleButtonClick}><span>Mua ngay</span>  </button>
+                                                                    {/* <button className="ijFBvx" > <span>Mua ngay</span></button> */}
+                                                                    <Button type="submit" className="btnAddCart" onClick={handleSubmitCart}>Thêm vào giỏ hàng</Button>
                                                                 </div>
                                                             </div>
-                                                        </Form>
+                                                       
                                                     </div>
                                                 </div>
                                             </Col>

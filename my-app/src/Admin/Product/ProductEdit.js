@@ -12,6 +12,8 @@ const ProductEdit = () => {
     author: {},
     category: {},
     publisher: {},
+    promotion: {},
+
   });
 
   useEffect(() => {
@@ -23,6 +25,7 @@ const ProductEdit = () => {
   const [Categories, setCategories] = useState([]);
   const [Authors, setAuthors] = useState([]);
   const [Publishers, setPublishers] = useState([]);
+  const [Promotion, setPromotion] = useState([]);
 
   const navigate = useNavigate();
 
@@ -57,6 +60,12 @@ const ProductEdit = () => {
     AxiosClient.get(`/Publishers`).then((res) => {
       setPublishers(res.data);
       console.log(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    AxiosClient.get(`/Promotions`).then((res) => {
+      setPromotion(res.data);
     });
   }, []);
 
@@ -159,6 +168,24 @@ const ProductEdit = () => {
                       </Form.Group>
 
                       <Form.Group>
+                        <Form.Label>Khuyến mãi:</Form.Label>
+                        <Form.Select
+                          onChange={handleChange}
+                          name="promotionId"
+                          style={widthInput}
+                        >
+                          <option value={Products.promotionId}>{Products.promotion.promotionPercentage}</option>
+                          {Promotion.map((item) => {
+                            return (
+                              <option value={item.id}>
+                                {item.promotionPercentage}
+                              </option>
+                            );
+                          })}
+                        </Form.Select>
+                      </Form.Group>
+
+                      <Form.Group>
                         <Form.Label>Description:</Form.Label>
                         <Form.Control
                           as="textarea"
@@ -170,13 +197,6 @@ const ProductEdit = () => {
                           value={Products.description}
                         />
                       </Form.Group>
-                    </div>
-                    <div style={{ width: "50%" }}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Chọn tệp tin:</Form.Label>
-                        <Form.Control type="file" style={widthInput} />
-                      </Form.Group>
-                      <img src="#" style={{ width: "200px" }} />
                     </div>
                   </div>
                   {/* /.card-body */}

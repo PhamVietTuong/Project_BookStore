@@ -14,14 +14,24 @@ import { Link } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Col, Modal, Row, Table } from "react-bootstrap";
 import $ from 'jquery';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import './ProductList.css';
+import { Pagination, Navigation } from 'swiper/modules';
 
 const ProductList = () => {
   var id = 0;
+  const [Books, setBooks] = useState([]);
+  const [selectedImage, setSelectedImage] = useState('');
+  const [hoveredImage, setHoveredImage] = useState(null);
+
   const [Products, setProducts] = useState([]);
   const [Images, setImages] = useState([]);
   const [show, setshow] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [selectedImage, setselectedImage] = useState({});
+  // const [selectedImage, setselectedImage] = useState({});
   const [selectedProduct, setselectedProduct] = useState({
     author: {},
     category: {},
@@ -32,10 +42,31 @@ const ProductList = () => {
   const [dataLoaded, setDataLoaded] = useState(false);
 
   const handleShow = (id) => {
+    
+      AxiosClient.get(`/Books/detail/${id}`)
+          .then(res => {
+              const book = res.data
+              setBooks([book]);
+              setSelectedImage(`https://localhost:7106/images/${book.images[0].fileName}` || '');
+          }).catch(error => {
+              console.error("Error fetching data:", error);
+          });
+
     setselectedProduct(Products.find((a) => a.id === id));
-    setselectedImage(Images.find((a) => a.bookId === id));
+    // setselectedImage(Images.find((a) => a.bookId === id));
     setshow(true);
   }
+ console.log(Books)
+
+  const handleImageClick = (newImage) => {
+    setSelectedImage(newImage);
+};
+
+const handleImageHover = (hoverImage) => { setHoveredImage(hoverImage); };
+
+const handleImageLeave = () => { setHoveredImage(null); };
+//
+
   const handleClose = () => setshow(false);
   const handleCloseDelete = () => setShowDelete(false);
 
@@ -201,13 +232,78 @@ const ProductList = () => {
                       </Modal.Header>
                       <Modal.Body>
                         <Row>
-                          <Col md={6}>
-                            <img
+                          <Col md={7}>
+                            {/* <img
                               src={`https://localhost:7106/Images/${selectedImage.fileName}`}
                               style={{ width: "400px" }}
-                            />
+                            /> */}
+
+                          {Books.map(item => {
+                        return (
+                            <>
+                                <div className="product_body" style={{marginLeft:"0", marginRight:"0"}}>
+                                    <div className="product_main">
+                                        <Row className="">
+
+                                            <Col className="product_image_main" style={{width:"96%"}}>
+                                                <div className="product_header_image">
+                                                    <div className="product_image_body">
+                                                        <div className="" style={{ width: "368px", height: "368px" }}>
+                                                            <div style={{ position: "relative", cursor: "pointer" }}>
+                                                                <img
+                                                                    src={hoveredImage || selectedImage}
+                                                                    alt=""
+                                                                    className="product_image"
+                                                                    style={{ width: "368px", height: "368px", zIndex: "2", opacity: "1" }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="image_badges"></div>
+                                                    <div className="product_image_list_body">
+                                                        <div className="product_image_list_main">
+                                                            <Swiper
+                                                                slidesPerView={7}
+                                                                navigation={true}
+                                                                modules={[Pagination, Navigation]}
+                                                                className="mySwiper"
+                                                                initialSlide={0}
+                                                            >
+                                                                {item.images.map((img, index) => (
+                                                                    <SwiperSlide key={index}>
+                                                                        <a
+                                                                            className={`image_active ${selectedImage === `https://localhost:7106/images/${img.fileName}` ? 'active' : ''}`}
+                                                                            onClick={() => handleImageClick(`https://localhost:7106/images/${img.fileName}`)}
+                                                                            onMouseOver={() => handleImageHover(`https://localhost:7106/images/${img.fileName}`)}
+                                                                            onMouseLeave={handleImageLeave}
+                                                                        >
+                                                                            <img
+                                                                                src={`https://localhost:7106/images/${img.fileName}`}
+                                                                                alt={`Image ${index + 1}`}
+                                                                                className="product_image_list"
+                                                                            />
+                                                                        </a>
+                                                                    </SwiperSlide>
+                                                                ))}
+                                                            </Swiper>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                    </div>
+                                </div>
+                                <div>
+
+                                </div>
+                            </>
+                        )
+                    })  
+                  }                                                                          
+                                            
                           </Col>
-                          <Col md={4} style={{width:"47.333333%"}}>
+                          <Col style={{paddingTop:"5rem"}}>
                             <dl className="row">
                               <dt>Tên </dt>
                               <dd>{selectedProduct.name}</dd>

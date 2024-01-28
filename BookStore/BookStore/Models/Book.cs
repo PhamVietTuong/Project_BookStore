@@ -26,6 +26,10 @@
 
 		public double Star { get; set; }
 
+		public DateTime CreateTime { get; set; }
+
+		public int QuantitySold { get; set; }
+
 		public bool Status{ get; set; }
 
 	}

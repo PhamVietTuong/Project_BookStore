@@ -76,12 +76,21 @@ namespace BookStore.Controllers
         // POST: api/Images
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Image>> PostImage(Image image)
+        public async Task<ActionResult<Image>> PostImage([FromForm] Image image)
         {
-            _context.Images.Add(image);
-            await _context.SaveChangesAsync();
+			if (image.FileImage != null && image.FileImage.Length > 0)
+			{
+				var filePath = Path.Combine("wwwroot/images", image.FileName);
 
-            return CreatedAtAction("GetImage", new { id = image.Id }, image);
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await image.FileImage.CopyToAsync(stream);
+				}
+			}
+			_context.Images.Add(image);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetImage", new { id = image.Id }, image);
         }
 
         // DELETE: api/Images/5
