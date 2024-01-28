@@ -193,7 +193,17 @@ const ProductDetail = () => {
 
     const handleButtonClick = () => {
         //window.location.href = '/pay';
-        navigate("/shipping")      
+        const address = localStorage.getItem('Address')
+        const phone = localStorage.getItem('Phone')
+
+        if(address==null && phone==null)
+        {
+            navigate("/shipping")      
+
+        }
+        else{
+            navigate("/pay")      
+        }
       };
 
     return (
@@ -377,7 +387,8 @@ const ProductDetail = () => {
                                                                     >  
                                                                              <span>Mua ngay</span>                                                                                                                                     
                                                                     </Link> */}
-                                                                    <button  className="ijFBvx"  onClick={handleButtonClick}><span>Mua ngay</span>  </button>
+                                                                    <button  className="ijFBvx"  onClick={(e)=> {handleButtonClick(); handleSubmitCart(e)}}><span>Mua ngay</span>  </button>
+
                                                                     {/* <button className="ijFBvx" > <span>Mua ngay</span></button> */}
                                                                     <Button type="submit" className="btnAddCart" onClick={handleSubmitCart}>Thêm vào giỏ hàng</Button>
                                                                 </div>

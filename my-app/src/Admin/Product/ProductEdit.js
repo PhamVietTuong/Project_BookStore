@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Form, FormControl } from "react-bootstrap";
 
@@ -192,7 +192,7 @@ const ProductEdit = () => {
                           rows={4}
                           name="description"
                           onChange={handleChange}
-                          style={widthInput}
+                          style={{width:"100%"}}
                           placeholder="Mô tả"
                           value={Products.description}
                         />
@@ -201,9 +201,10 @@ const ProductEdit = () => {
                   </div>
                   {/* /.card-body */}
                   <div className="card-footer">
-                    <Button type="submit" variant="btn btn-primary">
+                    <Button type="submit" variant="btn  btn-success">
                       Sửa thông tin sản phẩm
                     </Button>
+                    <Link to='/admin/products' className="btn btn-primary" style={{marginLeft:"28rem"}}>Quay lại</Link>
                   </div>
                 </Form>
               </div>

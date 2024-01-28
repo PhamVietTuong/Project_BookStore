@@ -1,11 +1,20 @@
 import React from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import 'datatables.net-buttons-bs5';
 import 'datatables.net-buttons/js/buttons.colVis.mjs';
 import 'datatables.net-buttons/js/buttons.html5.mjs';
 import 'datatables.net-buttons/js/buttons.print.mjs';
 import 'datatables.net-responsive-bs5';
 const Index = () => {
+    const navigate = useNavigate();
+    const logout = async () => {
+        try {
+            localStorage.clear();
+            navigate("/");
+        } catch (error) {
+            console.log("Logout error", error);
+        }
+    }
     return (
         <>
             <div>
@@ -46,7 +55,7 @@ const Index = () => {
                                     </li>
                                 </ul>
                                 <ul className="navbar-nav float-right">
-                                    <li className="nav-item dropdown">
+                                    {/* <li className="nav-item dropdown">
                                         <a className="nav-link dropdown-toggle waves-effect waves-dark" href data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i className="mdi mdi-bell font-24" />
                                         </a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -103,19 +112,19 @@ const Index = () => {
                                                 </li>
                                             </ul>
                                         </div>
-                                    </li>
+                                    </li> */}
                                     <li className="nav-item dropdown">
                                         <a className="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="/assets/images/users/1.jpg" alt="user" className="rounded-circle" width={31} /></a>
                                         <div className="dropdown-menu dropdown-menu-right user-dd animated">
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="ti-user m-r-5 m-l-5" /> My Profile</a>
+                                            {/* <a className="dropdown-item" href="javascript:void(0)"><i className="ti-user m-r-5 m-l-5" /> My Profile</a>
                                             <a className="dropdown-item" href="javascript:void(0)"><i className="ti-wallet m-r-5 m-l-5" /> My Balance</a>
                                             <a className="dropdown-item" href="javascript:void(0)"><i className="ti-email m-r-5 m-l-5" /> Inbox</a>
                                             <div className="dropdown-divider" />
                                             <a className="dropdown-item" href="javascript:void(0)"><i className="ti-settings m-r-5 m-l-5" /> Account Setting</a>
+                                            <div className="dropdown-divider" /> */}
+                                            <a className="dropdown-item" href="javascript:void(0)"><i className="fa fa-power-off m-r-5 m-l-5" onClick={logout}/> Logout</a>
                                             <div className="dropdown-divider" />
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="fa fa-power-off m-r-5 m-l-5" /> Logout</a>
-                                            <div className="dropdown-divider" />
-                                            <div className="p-l-30 p-10"><a href="javascript:void(0)" className="btn btn-sm btn-success btn-rounded">View Profile</a></div>
+                                            <div className="p-l-30 p-10"><Link href="javascript:void(0)" className="btn btn-sm btn-success btn-rounded" to='/'>Quay về trang chủ</Link></div>
                                         </div>
                                     </li>
                                 </ul>

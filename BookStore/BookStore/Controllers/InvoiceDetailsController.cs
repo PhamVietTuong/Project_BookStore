@@ -135,7 +135,7 @@ namespace BookStore.Controllers
                     IdInvoice= item.Invoice.Id,
 					ApproveOrder = item.Invoice.ApproveOrder,
                     ProductCode= item.Book.Id,
-					PromotionPercentage = (double)(item.Book.Promotion?.PromotionPercentage),
+					PromotionPercentage = (item.Quantity*item.UnitPrice) * ((double)(item.Book.Promotion?.PromotionPercentage)/100),
 					BookName = item.Book?.Name,
 					Images = image?.FileName,
                     Publisher = item.Book.Publisher.Name

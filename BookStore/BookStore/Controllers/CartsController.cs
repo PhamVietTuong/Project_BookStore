@@ -228,5 +228,73 @@ namespace BookStore.Controllers
 
 			return NoContent();
 		}
+
+		[HttpPost]
+		[Route("Pay")]
+		public async Task<ActionResult<Cart>> Pay([FromBody] Invoice InvoiceRequest)
+		{
+			var userId = User.GetUserId().ToString();
+			if (userId != null)
+			{
+				var carts = await _context.Carts.Include(c => c.User).Include(c => c.Book)
+										  .Where(c => c.UserId == userId).ToListAsync();
+				Invoice invoice = new Invoice()
+				{
+					Code = DateTime.Now.ToString("yyMMddhhmmss"),
+					UserId = userId,
+					IssuedDate = DateTime.Now,
+					Total = InvoiceRequest.Total,
+					ShippingAddress= InvoiceRequest.ShippingAddress,
+					ShippingPhone= InvoiceRequest.ShippingPhone,
+					ApproveOrder = "Đã đặt",
+					CreateTime = DateTime.Now,
+					Status = true
+				};
+				_context.Invoices.Add(invoice);
+				await _context.SaveChangesAsync();
+
+				foreach (Cart item in carts)
+				{
+					InvoiceDetail detail = new InvoiceDetail()
+					{
+						InvoiceId = invoice.Id,
+						BookId = item.BookId,
+						Quantity = item.Quantity,
+						UnitPrice = item.Book.Price
+					};
+					item.Book.Quantity -= item.Quantity;
+					item.Book.QuantitySold += item.Quantity;
+					_context.InvoiceDetails.Add(detail);
+					_context.Books.Update(item.Book);
+					_context.Carts.Remove(item);
+				}
+			}
+			await _context.SaveChangesAsync();
+			return Ok();
+		}
+
+		[HttpGet("PaymentList/{userId}")]
+		public async Task<ActionResult<Cart>> PaymentList(string userId)
+		{
+			var carts= await _context.Carts.Include(a => a.User).Include(a => a.Book).Where(a => a.UserId == userId).ToArrayAsync();
+
+			var rows = new List<PaymentViewModel>();
+			foreach (Cart cart in carts)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(i => i.BookId == cart.Book.Id);
+				Promotion promotion = await _context.Promotions.FirstOrDefaultAsync(i => i.Id == cart.Book.PromotionId);
+				rows.Add(new PaymentViewModel
+				{
+					Id = cart.Id,
+					BookName = cart.Book.Name,
+					Quantity = cart.Quantity,
+					Images = image.FileName,
+					Price = cart.Book.Price,
+					PromotionPercentage = (cart.Quantity *cart.Book.Price) * (promotion.PromotionPercentage/100),
+					Selected = cart.Selected,
+				});
+			}
+			return Ok(rows);
+		}
 	}
 }
