@@ -109,7 +109,7 @@ const InvoiceDetails = () => {
               </thead>
               <tbody>
                 {InvoiceDetails.map((item) => {
-                  Subtotal = Subtotal + item.totalProduct;
+                  Subtotal = Subtotal + (item.quantity*item.unitPrice);
                   Discount = Discount + item.promotionPercentage;
                   totalInvoice = Subtotal - Discount;
                   approve = item.approveOrder;

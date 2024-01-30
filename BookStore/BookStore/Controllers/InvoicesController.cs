@@ -377,5 +377,20 @@ namespace BookStore.Controllers
 
 			return Ok(result);
 		}
+
+		[HttpDelete("Canceled/{id}")]
+		public async Task<IActionResult> UserCanceled(int id)
+		{
+			var invoice = await _context.Invoices.FindAsync(id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+			invoice.ApproveOrder = "Đã hủy";
+			_context.Invoices.Update(invoice);
+			await _context.SaveChangesAsync();
+			return NoContent();
+		}
 	}
 }

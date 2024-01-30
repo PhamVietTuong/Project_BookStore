@@ -1,7 +1,7 @@
 import { Button, Col, Form, FormControl, Image, InputGroup, Modal, Row } from 'react-bootstrap';
 import './Cart.css';
 import { toast, ToastContainer } from 'react-toastify';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AxiosClient from '../../Axios/AxiosClient';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,7 +23,7 @@ const Cart = () => {
     const [maxQuantity, setMaxQuantity] = useState(0);
     const [newQuantity, setNewQuantity] = useState(0);
     const handleCloseDelete = () => setShowDelete(false);
-
+    const navigate = useNavigate();
     useEffect(() => {
         AxiosClient.get(`/Carts/listCart`).then((res) => {
             const initialQuantityState = {};
@@ -247,6 +247,21 @@ const Cart = () => {
         setSelectAllChecked(selectedItems.length === carts.length && carts.length > 0);
     }, [carts]);
 
+    const handleButtonClick = () => {
+        //window.location.href = '/pay';
+        const address = localStorage.getItem('Address')
+        const phone = localStorage.getItem('Phone')
+
+        if(address==null && phone==null)
+        {
+            navigate("/shipping")      
+
+        }
+        else{
+            navigate("/pay")      
+        }
+      };
+
     return (
         <>
             <div style={{ backgroundColor: "#f5f5fa" }}>
@@ -402,7 +417,7 @@ const Cart = () => {
                                 </div>
                             </div>
 
-                            <Button className="dGoOLh">
+                            <Button className="dGoOLh" onClick={handleButtonClick}>
                                 Mua Hàng ({countProducts})
                             </Button>
                         </Col>
