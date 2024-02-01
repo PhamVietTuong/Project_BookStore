@@ -77,8 +77,6 @@ namespace BookStore.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> PutUser(string id ,UserViewModel userViewModel)
 		{
-			// Lấy ID của người dùng đang đăng nhập từ ClaimsPrincipal
-			
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{
@@ -89,6 +87,8 @@ namespace BookStore.Controllers
 			user.FullName = userViewModel.FullName;
 			user.Address = userViewModel.Address;
 			user.Email = userViewModel.Email;
+			user.Birthday = userViewModel.Birthday;
+			user.PhoneNumber = userViewModel.PhoneNumber;
 			user.Status = userViewModel.Status;
 
 			var result = await _userManager.UpdateAsync(user);
@@ -283,6 +283,33 @@ namespace BookStore.Controllers
 		private bool UserExists(string id)
 		{
 			return _context.Users.Any(e => e.Id == id);
+		}
+
+		[HttpPost("changepassword")]
+		public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel model)
+		{
+			var user = await _userManager.FindByIdAsync(model.Id.ToString());
+
+			if (user == null)
+			{
+				return NotFound("User not found");
+			}
+
+			var isOldPasswordCorrect = await _userManager.CheckPasswordAsync(user, model.Password);
+
+			if (!isOldPasswordCorrect)
+			{
+				return BadRequest(new { error = "Mật khẩu không đúng"});
+			}
+
+			var result = await _userManager.ChangePasswordAsync(user, model.Password, model.NewPassword);
+
+			if (!result.Succeeded)
+			{
+				return BadRequest(result.Errors);
+			}
+
+			return Ok("Password changed successfully");
 		}
 	}
 }

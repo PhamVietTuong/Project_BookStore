@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { Button, Nav } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import {  NavLink, Outlet, useParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import ChangePassword from "./ChangePassword";
+import "./UserEdit.css"
+
 const UserEdit = () => {
     const { id } = useParams();
     const [user, setUser] = useState({});
     const [loading, setLoading] = useState(true);
     const [errors, setError] = useState("");
     const [emailError, setEmailError] = useState('');
+    const [phoneError, setPhoneError] = useState('');
     const accessToken = localStorage.getItem('userId');
     const [dateString, setDateString] = useState();
     const splitDate = (dateString) => {
@@ -22,10 +25,10 @@ const UserEdit = () => {
         return { year: "", month: "", day: "" };
     };
     const { year, month, day } = splitDate(dateString);
-  
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
+
         if (name === "fullName" && /\d/.test(value)) {
             setEmailError('');
             setError('Vui lòng không nhập ký tự số.');
@@ -43,7 +46,17 @@ const UserEdit = () => {
             }
         } else if (name === "birthday") {
             setUser((prev) => ({ ...prev, [name]: value }));
-        } else {
+        }else if (name === "phoneNumber") {
+            if (value && !/^\d+$/.test(value)) {
+                setPhoneError('Vui lòng chỉ nhập số.');
+                setError('');
+            } else {
+                setPhoneError('');
+                setError('');
+                setUser((prev) => ({ ...prev, [name]: value }));
+            }
+        }        
+         else {
             setEmailError('');
             setError('');
             setUser((prev) => ({ ...prev, [name]: value }));
@@ -55,7 +68,6 @@ const UserEdit = () => {
         try {
             await AxiosClient.put(`/Users/${accessToken}`, user);
             window.location.reload();
-            console.log(user);
         } catch (error) {
             console.error("Error updating user:", error);
             setError("Error updating user. Please try again.");
@@ -76,7 +88,6 @@ const UserEdit = () => {
                 setLoading(false);
             }
         };
-
         fetchUserData();
     }, [id]);
 
@@ -85,10 +96,13 @@ const UserEdit = () => {
     };
 
     if (loading) {
-        return <p>Loading...</p>; 
+        return <p>Loading...</p>;
     }
     return (
         <>
+            <div className="geNdhL1">
+                Thông tin của tôi
+            </div>
             <div className="row gutters-sm">
                 <div className="col-md-4 mb-3">
                     <div className="card">
@@ -100,12 +114,6 @@ const UserEdit = () => {
                                     className="rounded-circle"
                                     width={150}
                                 />
-                                <div className="mt-3">
-                                    <h4 style={{marginTop:'1rem'}}>{user.fullName}</h4>
-                                    <NavLink to="/info/change" className="btn btn-outline-primary"style={{marginTop:'3rem'}}>
-                                        Đổi mật khẩu 
-                                    </NavLink>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -147,6 +155,25 @@ const UserEdit = () => {
                                 </div>
                                 {emailError && <p style={{ color: 'red', marginLeft: '8rem', marginTop: '3px' }}>{emailError}</p>}
                             </div>
+
+                            <hr />
+                            <div className="row">
+                                <div className="col-sm-2 d-flex align-items-center">
+                                    <h6 className="mb-0">Số điện thoại</h6>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div className="row" style={{ marginTop: '10px', marginLeft: '2px', width: '68%' }}>
+                                        <input
+                                            type="text"
+                                            name="phoneNumber"
+                                            value={user?.phoneNumber || ""}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                    {phoneError && <div style={{ color: 'red', marginLeft: '0rem', marginTop: '3px' }}>{phoneError}</div>}
+                                </div>
+                            </div>
                             <hr />
                             <div className="row">
                                 <div className="col-sm-2 d-flex align-items-center">
@@ -160,7 +187,6 @@ const UserEdit = () => {
                                             value={`${year || ""}-${month || ""}-${day || ""}`}
                                             onChange={handleChange}
                                             className="form-control"
-
                                         />
                                     </div>
                                 </div>
@@ -187,14 +213,24 @@ const UserEdit = () => {
                                 <Button type="submit" variant="warning" onClick={handleSubmit}>
                                     <FontAwesomeIcon icon={faCheck} />Cập nhật thông tin khách hàng
                                 </Button>
+                                
+                                    <Link to="changePassword" style={{marginLeft: "15px"}}>
+                                        <Button variant="primary">
+                                            Đổi mật khẩu
+                                        </Button>
+                                    </Link>
+                               
+                                {/* <NavLink to="/info/change" className="btn btn-outline-primary" style={{ marginTop: '3rem' }}>
+                                    Đổi mật khẩu
+                                </NavLink> */}
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
-           <Outlet/>
-        
+            <Outlet />
+
         </>
     );
 }
