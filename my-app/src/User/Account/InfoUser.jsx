@@ -1,10 +1,11 @@
 import { Card, Col, Nav, Row, Tab } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import './infoUser.css';
 import { useEffect, useState } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
 import MyOrder from "./MyOrder";
 import UserEdit from "../../Admin/User/UserEdit";
+import EditUser from "./EditUser";
 // import ProductDetailList from "../../Admin/User/ProductDetailList";
 
 const InfoUser = ({ activeTab }) => {
@@ -51,7 +52,9 @@ const InfoUser = ({ activeTab }) => {
                             </Col>
                             <Col sm={9} className="mt-4">
                                 <Tab.Content>
-                                    <Tab.Pane eventKey="info">Thông tin của tôi<UserEdit /></Tab.Pane>
+                                    <Tab.Pane eventKey="info">
+                                        <EditUser></EditUser>
+                                    </Tab.Pane>
 
                                     <Tab.Pane eventKey="order">
                                         <div className="myOrder">Đơn hàng của tôi</div>
