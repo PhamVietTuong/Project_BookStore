@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import ChangePassword from "./ChangePassword";
+import "./UserEdit.css"
+
 const UserEdit = () => {
     const { id } = useParams();
     const [user, setUser] = useState({});
@@ -98,6 +100,9 @@ const UserEdit = () => {
     }
     return (
         <>
+            <div className="geNdhL1">
+                Thông tin của tôi
+            </div>
             <div className="row gutters-sm">
                 <div className="col-md-4 mb-3">
                     <div className="card">
@@ -109,12 +114,6 @@ const UserEdit = () => {
                                     className="rounded-circle"
                                     width={150}
                                 />
-                                <div className="mt-3">
-                                    <h4 style={{ marginTop: '1rem' }}>{user.fullName}</h4>
-                                    <NavLink to="/info/change" className="btn btn-outline-primary" style={{ marginTop: '3rem' }}>
-                                        Đổi mật khẩu
-                                    </NavLink>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -214,6 +213,16 @@ const UserEdit = () => {
                                 <Button type="submit" variant="warning" onClick={handleSubmit}>
                                     <FontAwesomeIcon icon={faCheck} />Cập nhật thông tin khách hàng
                                 </Button>
+                                
+                                    <Link to="changePassword" style={{marginLeft: "15px"}}>
+                                        <Button variant="primary">
+                                            Đổi mật khẩu
+                                        </Button>
+                                    </Link>
+                               
+                                {/* <NavLink to="/info/change" className="btn btn-outline-primary" style={{ marginTop: '3rem' }}>
+                                    Đổi mật khẩu
+                                </NavLink> */}
                             </div>
                         </div>
                     </div>

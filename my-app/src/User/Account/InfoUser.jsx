@@ -6,7 +6,7 @@ import AxiosClient from "../../Axios/AxiosClient";
 import MyOrder from "./MyOrder";
 import UserEdit from "../../Admin/User/UserEdit";
 import ProductDetailList from "../../Admin/User/ProductDetailList";
-
+import EditUser from "./EditUser";
 const InfoUser = ({ activeTab }) => {
     const { id } = useParams();
     const [listFavourite, setlistFavourite] = useState([]);
@@ -73,7 +73,9 @@ const InfoUser = ({ activeTab }) => {
                             </Col>
                             <Col sm={9} className="mt-4">
                                 <Tab.Content>
-                                    <Tab.Pane eventKey="info">Thông tin của tôi<UserEdit /></Tab.Pane>
+                                    <Tab.Pane eventKey="info">
+                                        <EditUser></EditUser>
+                                    </Tab.Pane>
 
                                     <Tab.Pane eventKey="order">
                                         <div className="myOrder">Đơn hàng của tôi</div>
