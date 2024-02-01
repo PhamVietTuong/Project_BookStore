@@ -77,8 +77,6 @@ namespace BookStore.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> PutUser(string id ,UserViewModel userViewModel)
 		{
-			// Lấy ID của người dùng đang đăng nhập từ ClaimsPrincipal
-			
 			var user = await _userManager.FindByIdAsync(id);
 			if (user == null)
 			{
@@ -89,6 +87,8 @@ namespace BookStore.Controllers
 			user.FullName = userViewModel.FullName;
 			user.Address = userViewModel.Address;
 			user.Email = userViewModel.Email;
+			user.Birthday = userViewModel.Birthday;
+			user.PhoneNumber = userViewModel.PhoneNumber;
 			user.Status = userViewModel.Status;
 
 			var result = await _userManager.UpdateAsync(user);

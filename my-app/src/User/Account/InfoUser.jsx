@@ -1,17 +1,39 @@
 import { Card, Col, Nav, Row, Tab } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import './infoUser.css';
 import { useEffect, useState } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
 import MyOrder from "./MyOrder";
 import UserEdit from "../../Admin/User/UserEdit";
-// import ProductDetailList from "../../Admin/User/ProductDetailList";
+import ProductDetailList from "../../Admin/User/ProductDetailList";
 
 const InfoUser = ({ activeTab }) => {
+    const { id } = useParams();
     const [listFavourite, setlistFavourite] = useState([]);
     const location = useLocation();
     const cleanPathname = location.pathname.replace('/', '');
+    const [user, setUser] = useState({});
+    const accessToken = localStorage.getItem('userId');
+    const [errors, setError] = useState("");
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await AxiosClient.get(`/Users/${accessToken}`);
+                setUser(response.data);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+                setError("Error fetching user data. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUserData();
+    }, [id]);
 
+    if (loading) {
+        return <p>Loading...</p>;
+    }
     return (
         <>
             <div className="backgroundInfo">
@@ -23,7 +45,7 @@ const InfoUser = ({ activeTab }) => {
                                     <i className="fas fa-user-circle iconInfo"></i>
                                     <div className="info">
                                         Tài khoản của
-                                        <span>Phạm Viết Tường</span>
+                                        <span>{user.fullName}</span>
                                     </div>
                                 </div>
                                 <Nav variant="pills" className="flex-column managementInfo">
@@ -42,7 +64,7 @@ const InfoUser = ({ activeTab }) => {
                                     </Nav.Item>
 
                                     <Nav.Item>
-                                        <Nav.Link>
+                                        <Nav.Link eventKey="favourite" as={Link} to="/favourite">
                                             <i className="far fa-heart iconOrderManagement"></i>
                                             Sản phẩm yêu thích
                                         </Nav.Link>
