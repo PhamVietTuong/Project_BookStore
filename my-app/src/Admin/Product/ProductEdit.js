@@ -83,8 +83,9 @@ const ProductEdit = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="card card-primary">
-                <div className="card-header">
+                <div className="card-header" style={{display:"flex",  justifyContent : "space-between"}}>
                   <h3 className="card-title">Sửa Sản Phẩm</h3>
+                  <Link to='/admin/products' className="btn btn-primary" style={{width:"10rem"}}>Quay lại</Link>
                 </div>
                 {/* /.card-header */}
                 {/* form start */}
@@ -204,7 +205,7 @@ const ProductEdit = () => {
                     <Button type="submit" variant="btn  btn-success">
                       Sửa thông tin sản phẩm
                     </Button>
-                    <Link to='/admin/products' className="btn btn-primary" style={{marginLeft:"28rem"}}>Quay lại</Link>
+                    <Link to='/admin/products' className="btn btn-primary" style={{width:"10rem", marginLeft:"1rem"}}>Quay lại</Link>
                   </div>
                 </Form>
               </div>

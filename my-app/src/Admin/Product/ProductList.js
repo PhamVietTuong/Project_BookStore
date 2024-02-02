@@ -165,7 +165,7 @@ const handleImageLeave = () => { setHoveredImage(null); };
                   <div className="table-responsive">
                     <table
                       id="myTable"
-                      className="table table-striped table-bordered display nowrap"
+                      className="table table-striped table-bordered "
                       style={{ width: "100%" }}
                     >
                       <thead>
@@ -190,9 +190,11 @@ const handleImageLeave = () => { setHoveredImage(null); };
                               <td>{item.publisher.name}</td>
                               <td>{item.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</td>
                               <td>
+                                <div style={{display:"flex", float:"right"}}>
                                 <Button
                                   variant="primary"
                                   onClick={() => handleShow(item.id)}
+                                  className="m-2"
                                 >
                                   <FontAwesomeIcon icon={faInfoCircle} />
                                 </Button>
@@ -205,9 +207,11 @@ const handleImageLeave = () => { setHoveredImage(null); };
                                 <Button
                                   variant="danger"
                                   onClick={() => handleShowDelete(item.id)}
+                                  className="m-2"
                                 >
                                   <FontAwesomeIcon icon={faTrash} />
                                 </Button>
+                                </div>
                               </td>
                             </tr>
                           );

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -93,8 +93,9 @@ const ProductAdd = () => {
           <div className="row">
             <div className="col-md-12">
               <div className="card card-primary">
-                <div className="card-header">
+                <div className="card-header" style={{display:"flex", justifyContent:"space-between"}}>
                   <h3 className="card-title">Thêm Sản Phẩm</h3>
+                  <Link to='/admin/products' className="btn btn-primary" style={{width:"10rem"}}>Quay lại</Link>               
                 </div>
                 {/* /.card-header */}
                 {/* form start */}
@@ -216,7 +217,7 @@ const ProductAdd = () => {
                   </div>
                   {/* /.card-body */}
                   <div className="card-footer">
-                    <Button type="submit" variant="btn btn-primary">
+                    <Button type="submit" variant="btn btn-success" style={{width:"10rem"}}>
                       Thêm
                     </Button>
                   </div>

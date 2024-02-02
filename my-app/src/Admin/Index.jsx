@@ -122,7 +122,7 @@ const Index = () => {
                                             <div className="dropdown-divider" />
                                             <a className="dropdown-item" href="javascript:void(0)"><i className="ti-settings m-r-5 m-l-5" /> Account Setting</a>
                                             <div className="dropdown-divider" /> */}
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="fa fa-power-off m-r-5 m-l-5" onClick={logout}/> Logout</a>
+                                            <a className="dropdown-item" href="javascript:void(0)"><i className="fa fa-power-off m-r-5 m-l-5" onClick={logout}/> Đăng Xuất</a>
                                             <div className="dropdown-divider" />
                                             <div className="p-l-30 p-10"><Link href="javascript:void(0)" className="btn btn-sm btn-success btn-rounded" to='/'>Quay về trang chủ</Link></div>
                                         </div>

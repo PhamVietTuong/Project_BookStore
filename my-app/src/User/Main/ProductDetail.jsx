@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Rating } from "@mui/material";
 import { create } from "@mui/material/styles/createTransitions";
+import FavouritesProducts from "./FavouriteProduct";
 
 
 const ProductDetail = () => {
@@ -263,7 +264,7 @@ const ProductDetail = () => {
                                                 </div>
                                             </Col>
 
-                                            <Col sm={6} className="product_info">
+                                            {/* <Col sm={6} className="product_info">
                                                 <div className="product_info_heder_body" style={{ gap: "16px" }}>
                                                     <div className="product_info_body">
                                                         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
@@ -316,7 +317,8 @@ const ProductDetail = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </Col>
+                                            </Col> */}
+                                            <FavouritesProducts bookId={id} item={item}/>
 
                                             <Col sm={3} className="product_price">
                                                 <div style={{ position: "sticky", top: "12px", display: "flex", flexDirection: "column", alignItems: "stretch", gap: "12px" }}>
