@@ -21,6 +21,7 @@ const Header = () => {
     var navigate = useNavigate();
     var menu;
     const [searchItem, setSearchItem] = useState('');
+    const userRoles = localStorage.getItem('userRoles');
     useEffect(() => {
         AxiosClient.get(`/Carts/listCart`).then((res) => {
             setCarts(res.data);
@@ -52,6 +53,7 @@ const Header = () => {
             <div className="dropdown-menu">
                 <NavLink to="info" className="dropdown-item" activeClassName="active">Thông tin tài khoản</NavLink>
                 <NavLink to="order" className="dropdown-item" activeClassName="active">Đơn hàng của tôi</NavLink>
+                {userRoles=="Admin" && <Link to="/admin" className="dropdown-item">Trang quản trị</Link>}
                 <Link to="" className="dropdown-item" onClick={logout}>Đăng xuất</Link>
             </div>
         )

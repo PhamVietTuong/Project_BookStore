@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
+using System.Net;
 
 namespace BookStore.Controllers
 {
@@ -78,11 +79,24 @@ namespace BookStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Favourite>> PostFavourite(Favourite favourite)
         {
-            _context.Favourites.Add(favourite);
-            await _context.SaveChangesAsync();
+			var existingFavourite = await _context.Favourites
+						.FirstOrDefaultAsync(f => f.UserId == favourite.UserId && f.BookId == favourite.BookId);
 
-            return CreatedAtAction("GetFavourite", new { id = favourite.Id }, favourite);
-        }
+			if (existingFavourite == null)
+			{
+				_context.Favourites.Add(favourite);
+				await _context.SaveChangesAsync();
+
+				return CreatedAtAction("GetFavourite", new { id = favourite.Id }, favourite);
+			}
+			else
+			{
+				_context.Favourites.Remove(existingFavourite);
+				await _context.SaveChangesAsync();
+
+				return Ok("Đã xóa yêu thích");
+			}
+		}
 
         // DELETE: api/Favourites/5
         [HttpDelete("{id}")]
@@ -104,5 +118,18 @@ namespace BookStore.Controllers
         {
             return _context.Favourites.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet("{userId}/{bookId}")]
+		public async Task<ActionResult<Favourite>> GetFavouriteUserBook(string userId, int bookId)
+		{
+			var favourite = await _context.Favourites.FirstOrDefaultAsync(a => a.UserId == userId && a.BookId == bookId);
+
+			if (favourite == null)
+			{
+				return NotFound();
+			}
+
+			return favourite;
+		}
+	}
 }
