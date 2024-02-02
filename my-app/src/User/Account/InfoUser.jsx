@@ -86,7 +86,7 @@ const InfoUser = ({ activeTab }) => {
 
                                     <Tab.Pane eventKey="favourite">
                                         <div className="myOrder">Danh sách yêu thích ({listFavourite.length})</div>
-                                        {/* <ProductDetailList /> */}
+                                        <ProductDetailList />
                                     </Tab.Pane>
                                 </Tab.Content>
                             </Col>

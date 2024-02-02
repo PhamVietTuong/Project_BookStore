@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BookStore.Data;
 using BookStore.Models;
 using System.Net;
+using Microsoft.AspNetCore.Identity;
+using BookStore.Helpers;
 
 namespace BookStore.Controllers
 {
@@ -130,6 +132,33 @@ namespace BookStore.Controllers
 			}
 
 			return favourite;
+		}
+
+		[HttpGet("listFavorite")]
+		public async Task<ActionResult<List<FavouriteViewModel>>> FavouriteList()
+		{
+			var userId = User.GetUserId().ToString();
+			var favourites = await _context.Favourites
+                .Include(i => i.Book.Promotion)
+                .Where(f => f.UserId == userId).ToListAsync();
+			var listFavourite = new List<FavouriteViewModel>();
+			 
+			foreach (var favourite in favourites)
+			{
+				Models.Image image = await _context.Images.FirstOrDefaultAsync(x => x.BookId == favourite.Book.Id);
+
+				listFavourite.Add(new FavouriteViewModel
+				{
+					Id = favourite.Id,
+					BookId = favourite.Book.Id,
+					Title = favourite.Book?.Name,
+					Price = favourite.Book.Price,
+					Promotion = favourite.Book.PromotionId,
+					Start = favourite.Book.Star,
+					ImageName = image?.FileName
+				});
+			}
+            return Ok(listFavourite);
 		}
 	}
 }
