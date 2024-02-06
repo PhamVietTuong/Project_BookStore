@@ -59,14 +59,52 @@ const FavouritesProducts = ({ item, bookId }) => {
         console.error("Error fetching data:", error);
       });
   }, []);
-  console.log(selectedFavorite);
-  console.log(favoriteChange);
+
+  const [ShowDescription, setShowDescription] = useState(false);
+  const handleShowDescription = () => {
+    setShowDescription((prevState) => !prevState);
+  };
+
+  var divStyle = {};
+  var divGradient = {};
+  if (ShowDescription == false) {
+    divStyle = {
+      marginTop: "5px",
+      lineHeight: "21px",
+      wordBreak: "break-word",
+      maxHeight: "100px",
+    };
+
+    divGradient = {
+      position:"absolute",
+      bottom:0,
+      left:0,
+      width:"100%",
+      height:"200px",
+      backgroundImage: "linear-gradient(rgba(255, 255, 255, 0), rgb(255, 255, 255))"
+
+
+    };
+  } else {
+    divStyle = {
+      marginTop: "5px",
+      lineHeight: "21px",
+      wordBreak: "break-word",
+      maxHeight: "700px",
+    };
+  }
 
   return (
     <>
       <Col sm={6} className="product_info">
-        <div className="product_info_heder_body" style={{ gap: "16px" }}>
-          <div className="product_info_body">
+        <div
+          className="product_info_heder_body"
+          style={{ gap: "16px", padding: 0, background: "rgb(245, 245, 250)" }}
+        >
+          <div
+            className="product_info_body"
+            style={{ padding: "16px", background: "white", borderRadius:"0.5rem" }}
+          >
             <div
               style={{ display: "flex", flexDirection: "column", gap: "6px" }}
             >
@@ -129,6 +167,61 @@ const FavouritesProducts = ({ item, bookId }) => {
                       </Button>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="product_info_body"
+            style={{ padding: "16px", background: "white", borderRadius:"0.5rem" }}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
+              <div className="eaKcuo">Thông tin chi tiết</div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="jMQTPW">
+                  <div className="eDbeCp">
+                    <span
+                      style={{ maxWidth: "300px", color: "rgb(128, 128, 137)" }}
+                    >
+                      Nhà xuất bản
+                    </span>
+                    <span>{item.publisherName}</span>
+                  </div>
+                </div>
+                <div className="jMQTPW">
+                  <div className="eDbeCp">
+                    <span
+                      style={{ maxWidth: "300px", color: "rgb(128, 128, 137)" }}
+                    >
+                      Thể loại
+                    </span>
+                    <span>{item.categoryName}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="product_info_body"
+            style={{ padding: "16px", background: "white", borderRadius:"0.5rem" }}
+          >
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
+              <div className="eaKcuo">Mô tả sản phẩm</div>
+              <div className="dGqjau">
+                <div className="xbBes">
+                  <div className="imwRtb" style={{ overflow: "hidden" }}>
+                    <p style={divStyle}>{item.description}</p>
+                    <div style={divGradient}></div>
+                  </div>
+                  <a className="btn-more" onClick={handleShowDescription}>
+                    Xem thêm
+                  </a>
                 </div>
               </div>
             </div>

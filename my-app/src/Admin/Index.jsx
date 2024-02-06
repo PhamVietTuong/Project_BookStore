@@ -37,10 +37,10 @@ const Index = () => {
                                 <ul className="navbar-nav float-left mr-auto">
                                     <li className="nav-item d-none d-md-block"><a className="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i className="mdi mdi-menu font-24" /></a></li>
                                     <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {/* <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span className="d-none d-md-block">Create New <i className="fa fa-angle-down" /></span>
                                             <span className="d-block d-md-none"><i className="fa fa-plus" /></span>
-                                        </a>
+                                        </a> */}
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a className="dropdown-item" href="#">Action</a>
                                             <a className="dropdown-item" href="#">Another action</a>
