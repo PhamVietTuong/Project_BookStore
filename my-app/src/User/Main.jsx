@@ -321,7 +321,7 @@ const Main = () => {
                                                                     <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
                                                                         <div className="product-info">
                                                                             <div className="product-name-star-sold">
-                                                                                <h3 className="product__panel-link">
+                                                                                <h3 className="product__panel-link contentName">
                                                                                     {item.name}
                                                                                 </h3>
                                                                                 <div className="product_star_sold">
@@ -377,7 +377,7 @@ const Main = () => {
                                                                      <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
                                                                          <div className="product-info">
                                                                              <div className="product-name-star-sold">
-                                                                                 <h3 className="product__panel-link">
+                                                                                 <h3 className="product__panel-link contentName">
                                                                                      {item.name}
                                                                                  </h3>
                                                                                  <div className="product_star_sold">
@@ -432,7 +432,7 @@ const Main = () => {
                                                                      <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
                                                                          <div className="product-info">
                                                                              <div className="product-name-star-sold">
-                                                                                 <h3 className="product__panel-link">
+                                                                                 <h3 className="product__panel-link contentName">
                                                                                      {item.name}
                                                                                  </h3>
                                                                                  <div className="product_star_sold">
@@ -488,7 +488,7 @@ const Main = () => {
                                                                      <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
                                                                          <div className="product-info">
                                                                              <div className="product-name-star-sold">
-                                                                                 <h3 className="product__panel-link">
+                                                                                 <h3 className="product__panel-link contentName">
                                                                                      {item.name}
                                                                                  </h3>
                                                                                  <div className="product_star_sold">
@@ -544,7 +544,7 @@ const Main = () => {
                                                                      <div style={{ height: "188px", minHeight: "158px", display: "flex", flexDirection: "column" }}>
                                                                          <div className="product-info">
                                                                              <div className="product-name-star-sold">
-                                                                                 <h3 className="product__panel-link">
+                                                                                 <h3 className="product__panel-link contentName">
                                                                                      {item.name}
                                                                                  </h3>
                                                                                  <div className="product_star_sold">

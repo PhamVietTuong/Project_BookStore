@@ -526,6 +526,13 @@ content: "";
     margin-right: 12px;
 }
 
+.contentName{
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 @media (max-width:992px) {
 
     .product__sidebar {

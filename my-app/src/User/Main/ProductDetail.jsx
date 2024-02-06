@@ -14,6 +14,7 @@ import { faHeart, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Rating } from "@mui/material";
 import { create } from "@mui/material/styles/createTransitions";
 import FavouritesProducts from "./FavouriteProduct";
+import InfoDetail from "./InfoDetail";
 
 
 const ProductDetail = () => {
@@ -218,7 +219,7 @@ const ProductDetail = () => {
                                     <div className="product_main">
                                         <Row className="mb-5 mt-4">
 
-                                            <Col sm={3} className="product_image_main">
+                                            <Col sm={3} className="product_image_main" style={{height:"460px"}}>
                                                 <div className="product_header_image">
                                                     <div className="product_image_body">
                                                         <div className="" style={{ width: "368px", height: "368px" }}>
