@@ -23,7 +23,7 @@ const Index = () => {
                         <nav className="navbar top-navbar navbar-expand-md navbar-dark">
                             <div className="navbar-header" data-logobg="skin5">
                                 <a className="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i className="ti-menu ti-close" /></a>
-                                <a className="navbar-brand" href="index.html">
+                                <a className="navbar-brand">
                                     <b className="logo-icon p-l-10">
                                         <img src="/assets/images/logo-icon.png" alt="homepage" className="light-logo" />
                                     </b>

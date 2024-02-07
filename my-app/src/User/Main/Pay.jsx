@@ -30,7 +30,7 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay}) => {
         AxiosClient.get(`Carts/PaymentList/${userId}`).then(res => {
             setPaymentList(res.data)
         })
-    }, [userId]);
+    }, [PaymentList]);
 
     const handlePayment = ()=>{
         AxiosClient.post(`Carts/Pay`,  { ShippingAddress: Address, ShippingPhone: Phone, Total: totalInvoice }).then(() => {

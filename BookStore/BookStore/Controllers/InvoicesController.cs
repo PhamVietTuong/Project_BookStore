@@ -125,7 +125,7 @@ namespace BookStore.Controllers
 				: str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
 				: str == "transported" ? i.ApproveOrder == "Đang vận chuyển"
 				: str == "delivered" ? i.ApproveOrder == "Đã giao"
-				: str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId == userId).ToListAsync();
+				: str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId == userId).OrderByDescending(i => i.Id).ToListAsync();
 			}
 
             var detailInvoice =await _context.InvoiceDetails
