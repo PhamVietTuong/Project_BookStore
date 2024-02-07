@@ -14,7 +14,7 @@ import { faHeart, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { Rating } from "@mui/material";
 import { create } from "@mui/material/styles/createTransitions";
 import FavouritesProducts from "./FavouriteProduct";
-import InfoDetail from "./InfoDetail";
+
 
 
 const ProductDetail = () => {
